@@ -10,7 +10,7 @@ Według instrukcji na stronie https://reactnative.dev/docs/getting-started
 
 ## Klonowanie repozytorium i pierwsze uruchomienie
 1. Po sklonowaniu repozytorium trzeba użyć komendy `npm install` w głównym katalogu projektu.
-2. W terminalu użyć polecenia `npm install -g expo-cli`. Podgląd zmian w peojekcie podczas implementacji będzie realizowany przy użyciu aplikacji [Expo](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=pl) (zarówno na urządzeniu fizycznym jak i emulatorze).
+2. W terminalu użyć polecenia `npm install -g expo-cli`. Podgląd zmian w projekcie podczas implementacji będzie realizowany przy użyciu aplikacji [Expo](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=pl) (zarówno na urządzeniu fizycznym jak i emulatorze).
 3. Polecenie do uruchomienia projektu to `npm start` lub `expo start`. Rezultatem powinno być otwarcie karty "Metro builder" w przeglądarce internetowej oraz pokazanie się menu wyboru w terminalu.
  
 ## Problemy ogólne
