@@ -1,19 +1,43 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import ListContainer from "./src/components/list/ListContainer";
+import DetailsContainer from "./src/components/details/DetailsContainer";
+import AddEditContainer from "./src/components/addEdit/AddEditContainer";
+import GroupsContainer from "./src/components/groups/GroupsContainer";
+const Stack = createStackNavigator();
 
-export default function App() {
+const App = () =>{
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
-}
+      <NavigationContainer>
+        <Stack.Navigator  initialRouteName="List"
+                          screenOptions={{
+                            headerStyle: {
+                              backgroundColor: 'darkgreen'
+                            },
+                            headerTintColor: 'white',
+                          }}
+        >
+          <Stack.Screen name="List"
+                        component={ListContainer}
+                        options={{title: 'Contacts'}}
+          />
+          <Stack.Screen name="Details"
+                        component={DetailsContainer}
+                        options={{title: 'Details'}}
+          />
+          <Stack.Screen name="AddEdit"
+                        component={AddEditContainer}
+                        options={{title: 'New contact/Edit Contact'}}
+          />
+          <Stack.Screen name="Groups"
+                        component={GroupsContainer}
+                        options={{title: 'Groups'}}
+          />
+        </Stack.Navigator>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+      </NavigationContainer>
+  );
+};
+
+export default App;
