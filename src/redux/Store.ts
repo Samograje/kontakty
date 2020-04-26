@@ -1,6 +1,6 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import FilesystemStorage from 'redux-persist-filesystem-storage';
+import ExpoFileSystemStorage from 'redux-persist-expo-filesystem';
 import {persistReducer} from 'redux-persist';
 
 import { ContactsReducer } from './reducers/ContactsReducer';
@@ -8,7 +8,7 @@ import { GroupsReducer } from './reducers/GroupsReducer';
 
 const persistConfig = {
     key: 'root',
-    storage: FilesystemStorage,
+    storage: ExpoFileSystemStorage,
     whitelist: ['ContactsReducer', 'GroupsReducer'],
 };
 

@@ -8,7 +8,7 @@ import ListContainer from "./src/components/list/ListContainer";
 import DetailsContainer from "./src/components/details/DetailsContainer";
 import AddEditContainer from "./src/components/addEdit/AddEditContainer";
 import GroupsContainer from "./src/components/groups/GroupsContainer";
-import configureStore from './src/redux/store';
+import configureStore from './src/redux/Store';
 
 const Stack = createStackNavigator();
 const store = configureStore();
