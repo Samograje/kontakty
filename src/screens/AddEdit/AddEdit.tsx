@@ -7,7 +7,7 @@ interface Props {
     onGroups: (id: number) => {},
 }
 
-const AddEditComponent = (props: Props) => {
+const AddEdit = (props: Props) => {
     const {
         id,
         mode,
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddEditComponent;
+export default AddEdit;

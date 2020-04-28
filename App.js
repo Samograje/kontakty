@@ -4,10 +4,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Provider} from 'react-redux';
 import {persistStore} from 'redux-persist';
 import {PersistGate} from 'redux-persist/es/integration/react';
-import ListContainer from "./src/components/list/ListContainer";
-import DetailsContainer from "./src/components/details/DetailsContainer";
-import AddEditContainer from "./src/components/addEdit/AddEditContainer";
-import GroupsContainer from "./src/components/groups/GroupsContainer";
+import ContactsListScreen from "./src/screens/ContactsList";
+import DetailsScreen from "./src/screens/Details";
+import AddEditScreen from "./src/screens/AddEdit";
+import GroupsScreen from "./src/screens/Groups";
 import configureStore from './src/redux/Store';
 
 const Stack = createStackNavigator();
@@ -28,19 +28,19 @@ const App = () => {
                            }}
           >
             <Stack.Screen name="List"
-                          component={ListContainer}
+                          component={ContactsListScreen}
                           options={{title: 'Contacts'}}
             />
             <Stack.Screen name="Details"
-                          component={DetailsContainer}
+                          component={DetailsScreen}
                           options={{title: 'Details'}}
             />
             <Stack.Screen name="AddEdit"
-                          component={AddEditContainer}
+                          component={AddEditScreen}
                           options={{title: 'New contact/Edit Contact'}}
             />
             <Stack.Screen name="Groups"
-                          component={GroupsContainer}
+                          component={GroupsScreen}
                           options={{title: 'Groups'}}
             />
           </Stack.Navigator>
