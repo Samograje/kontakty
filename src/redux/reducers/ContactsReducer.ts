@@ -2,10 +2,6 @@ import {
     CREATE_CONTACT,
     UPDATE_CONTACT,
     REMOVE_CONTACT,
-    ADD_NUMBER,
-    REMOVE_NUMBER,
-    ADD_EMAIL,
-    REMOVE_EMAIL,
 } from '../_constants/Types';
 
 export interface ContactNumber {
@@ -51,45 +47,6 @@ export const ContactsReducer = (state = initialState, action) => {
         case REMOVE_CONTACT:
             return {
                 contacts: state.contacts.filter((contact) => contact.id !== action.id),
-            };
-        case ADD_NUMBER:
-            return {
-                contents: state.contacts.map(
-                    (contact, i) => i === action.contactIndex ? {
-                            ...contact, telNumbers: [...contact.telNumbers, action.contactNumber]
-                        }
-                        : contact
-                )
-            };
-        case REMOVE_NUMBER:
-            return {
-                contents: state.contacts.map(
-                    (contact, i) => i === action.contactIndex ? {
-                            ...contact,
-                            telNumbers: contact.telNumbers.filter((contactNumber) => contactNumber.number !== action.number)
-                        }
-                        : contact
-                )
-            };
-        case ADD_EMAIL:
-            return {
-                contents: state.contacts.map(
-                    (contact, i) => i === action.contactIndex ? {
-                            ...contact,
-                            emails: [...contact.emails, action.contactEmail]
-                        }
-                        : contact
-                )
-            };
-        case REMOVE_EMAIL:
-            return {
-                contents: state.contacts.map(
-                    (contact, i) => i === action.contactIndex ? {
-                            ...contact,
-                            emails: contact.emails.filter((contactEmail) => contactEmail.email !== action.email)
-                        }
-                        : contact
-                )
             };
         default:
             return state;
