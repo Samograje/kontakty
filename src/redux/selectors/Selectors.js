@@ -1,2 +1,2 @@
-const getGroups = (state) => state.GroupsReducer.groups;
-const getContacts = (state) => state.ContactsReducer.contacts;
+export const getGroups = (state) => state.GroupsReducer.groups;
+export const getContacts = (state) => state.ContactsReducer.contacts;
