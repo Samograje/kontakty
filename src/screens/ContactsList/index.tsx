@@ -1,53 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, {Component} from 'react';
 import ContactsList from './ContactsList';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { createContact } from "../../redux/actions/ActionCreators";
-import { getContacts } from '../../redux/selectors/Selectors';
 
+interface Props {
+  navigation: {
+    goBack: () => {},
+        navigate: (screenName: string, params?: object) => {},
+  },
+}
 
-const ContactsListScreen = () => {
-    const {navigate} = useNavigation();
-    const contacts = useSelector(getContacts);
-    const dispatch = useDispatch();
-    const [exampleInitialValue, setExampleInitialValue] = useState(0);
+interface State {
+  id: number,
+}
 
-    const onCreate = () => navigate('AddEdit', {mode: 'create'});
-    const onEdit = (id: number) => navigate('AddEdit', {id: id, mode: 'edit'});
-    const onDetails = (id: number) => navigate('Details', {id});
-
-    useEffect(()=>{
-      setExampleInitialValue(contacts.length);
-    },[contacts]);
-
-    const addContact = () => {
-      let contact = {
-        id: exampleInitialValue+1,
-        firstName: 'Testowy',
-        secondName: '',
-        surname: 'Kontakt',
-        photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
-        telNumbers: [{
-          category: 'Domowy',
-          number: '111222333',
-        }],
-        emails: [{
-          category: 'Prywatny',
-          email: 'smoczyca@hollywood.com',
-        }],
-      };
-      dispatch(createContact(contact));
+class ContactsListScreen extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      id: 0,
     };
+  }
+
+  onCreate = () => this.props.navigation.navigate('AddEdit', {mode: 'create'});
+
+  onEdit = (id: number) => this.props.navigation.navigate('AddEdit', {id: id, mode: 'edit'});
+
+  onDetails = (id: number) => this.props.navigation.navigate('Details', {id});
+
+  render() {
+    const {
+      onDetails,
+      onCreate,
+      onEdit
+    } = this;
+
+    const {
+
+    } = this.state;
+
+    const {
+    } = this.props;
 
     return (
         <ContactsList
-            addContact={addContact}
-            value={exampleInitialValue}
-            onDetails={onDetails}
-            onCreate={onCreate}
-            onEdit={onEdit}
+          onDetails={onDetails}
+          onCreate={onCreate}
+          onEdit={onEdit}
         />
     );
-};
+  }
+}
 
 export default ContactsListScreen;
