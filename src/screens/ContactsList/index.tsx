@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ListComponent from './ListComponent';
+import ContactsList from './ContactsList';
 
 interface Props {
   navigation: {
@@ -12,7 +12,7 @@ interface State {
   id: number,
 }
 
-class ListContainer extends Component<Props, State> {
+class ContactsListScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -41,7 +41,7 @@ class ListContainer extends Component<Props, State> {
     } = this.props;
 
     return (
-        <ListComponent
+        <ContactsList
           onDetails={onDetails}
           onCreate={onCreate}
           onEdit={onEdit}
@@ -50,4 +50,4 @@ class ListContainer extends Component<Props, State> {
   }
 }
 
-export default ListContainer;
+export default ContactsListScreen;

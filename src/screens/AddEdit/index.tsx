@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import DetailsComponent from "./DetailsComponent";
+import AddEdit from "./AddEdit";
 
 interface Props {
     navigation: {
@@ -11,30 +11,35 @@ interface Props {
 
 interface State {
     id: number,
+    mode: string,
 }
 
-class DetailsContainer extends Component<Props, State> {
+class AddEditScreen extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
             id: 0,
+            mode: '',
         };
     }
 
-    onEdit = (id: number) => this.props.navigation.navigate('AddEdit', {id: id, mode: 'edit'});
+    onGroups = (id: number) => this.props.navigation.navigate('Groups', {id: id});
 
     componentDidMount(): void {
-        const {id} = this.props.route.params;
-        this.setState({id: id});
+        this.setState({
+            mode: this.props.route.params.mode,
+            id: this.props.route.params.id,
+        });
     }
 
     render() {
         const {
-            onEdit,
+            onGroups,
         } = this;
 
         const {
             id,
+            mode,
         } = this.state;
 
         const {
@@ -42,11 +47,12 @@ class DetailsContainer extends Component<Props, State> {
         } = this.props;
 
         return (
-            <DetailsComponent
+            <AddEdit
                 id={id}
-                onEdit={onEdit}
+                mode={mode}
+                onGroups={onGroups}
             />
         );
     }
 }
-export default DetailsContainer;
+export default AddEditScreen;

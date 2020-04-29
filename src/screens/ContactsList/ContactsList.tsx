@@ -7,7 +7,7 @@ interface Props {
     onEdit: (id: number) => {},
 }
 
-const ListComponent = (props: Props) => {
+const ContactsList = (props: Props) => {
     const {
         onDetails,
         onCreate,
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ListComponent;
+export default ContactsList;

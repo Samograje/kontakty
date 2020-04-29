@@ -1,0 +1,9 @@
+export const CREATE_CONTACT = 'CREATE_CONTACT';
+export const UPDATE_CONTACT = 'UPDATE_CONTACT';
+export const REMOVE_CONTACT = 'REMOVE_CONTACT';
+
+export const CREATE_GROUP = 'CREATE_GROUP';
+export const UPDATE_GROUP = 'UPDATE_GROUP';
+export const REMOVE_GROUP = 'REMOVE_GROUP';
+export const ADD_CONTACT_ID = 'ADD_CONTACT_ID';
+export const REMOVE_CONTACT_ID = 'REMOVE_CONTACT_ID';
