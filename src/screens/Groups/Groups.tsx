@@ -5,7 +5,7 @@ interface Props {
     id: number,
 }
 
-const GroupComponent = (props: Props) => {
+const Groups = (props: Props) => {
     const {
         id,
     } = props;
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default GroupComponent;
+export default Groups;
