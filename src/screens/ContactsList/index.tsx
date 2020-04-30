@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { createContact } from "../../redux/actions/ActionCreators";
 import { getContacts } from '../../redux/selectors/Selectors';
+import {modes} from "../StringsHelper";
 
 
 const ContactsListScreen = () => {
@@ -12,8 +13,8 @@ const ContactsListScreen = () => {
   const dispatch = useDispatch();
   const [exampleInitialValue, setExampleInitialValue] = useState(0);
 
-  const onCreate = () => navigate('AddEdit', {mode: 'create'});
-  const onEdit = (id: number) => navigate('AddEdit', {id: id, mode: 'edit'});
+  const onCreate = () => navigate('AddEdit', {mode: modes.create});
+  const onEdit = (id: number) => navigate('AddEdit', {id: id, mode: modes.edit});
   const onDetails = (id: number) => navigate('Details', {id});
 
   useEffect(()=>{

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, ScrollView, StyleSheet, View} from 'react-native';
 import { TextInput, Avatar, IconButton, Text } from 'react-native-paper';
-import {labels, modes} from "./AddEditHelper";
+import {icons, formLabels, modes} from "../StringsHelper";
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 
 interface Props {
@@ -9,8 +9,8 @@ interface Props {
     onGroups: (id: number) => void,
     onChangeName: (name: string) => void,
     onChangeSecondName: (secondName: string) => void,
-    onChangeSurname: (surname: string) => void,
-    createContact: () => void,
+    onChangeSurname: (surname: string, index: number) => void,
+    onSaveContact: (mode: string, index: number) => void,
     numbers: {
         category: string,
         number: string,
@@ -19,10 +19,11 @@ interface Props {
         category: string,
         email: string,
     }[],
-    onChangeInputField: (test: string, index: number) => void,
-    onDeleteTextInput: (index: number) => void,
-    addInputField: () => void,
+    onChangeInputField: (label: string, test: string, index: number) => void,
+    onDeleteTextInput: (label: string, index: number) => void,
+    addInputField: (label: string) => void,
     navigation: any,
+    contact: any,
 }
 
 const AddEdit = (props: Props) => {
@@ -32,24 +33,27 @@ const AddEdit = (props: Props) => {
         onChangeName,
         onChangeSecondName,
         onChangeSurname,
-        createContact,
+        onSaveContact,
         numbers,
         emails,
         navigation,
         onChangeInputField,
         onDeleteTextInput,
         addInputField,
+        contact,
     } = props;
 
     React.useLayoutEffect(() => {
+        let isEdit = mode === modes.edit;
         navigation.setOptions({
-            title: mode === modes.create ? 'Create contact' : 'Edit contact',
+            title: isEdit ? 'Edit contact' : 'Create contact',
             headerRight: () => (
                 <IconButton
                     icon="check"
                     size={40}
                     color={'white'}
-                    onPress={createContact}
+                    //TODO: zamienić identyfikator do edycji
+                    onPress={isEdit ? (() => onSaveContact(modes.edit, -1)) : (() => onSaveContact(modes.create, 0))}
                 />
             ),
         });
@@ -67,66 +71,64 @@ const AddEdit = (props: Props) => {
         </View>
     );
 
-    const inputRow = (label: string, method) => (
+    const inputRow = (label: string, method: any, value: string) => (
         <View style={styles.row}>
             <View style={styles.iconContainer}>
-                {showIconOrEmptySpace(label === labels.name, 'account')}
+                {showIconOrEmptySpace(label === formLabels.name, icons.user)}
             </View>
             <TextInput
                 label={label}
+                value={value}
                 style={styles.inputText}
                 onChangeText={text => method(text)}
             />
         </View>
     );
 
-    //TODO: połączyc mapPhoneNumbers i mapEmails
-    const mapPhoneNumbers = () => (
+    const mapPhoneNumbers = (numbers: { category: string, number: string }[]) => (
         numbers.map((row, index) => {
             return(
-                <View key={index}>
-                    <View style={styles.row}>
-                        {showIconOrEmptySpace(index === 0, 'phone')}
-                        <TextInput
-                            label={'Number'}
-                            value={row.number}
-                            style={styles.inputText}
-                            onChangeText={text => onChangeInputField(text, index)}
-                        />
-                        <IconButton
-                            icon='trash-can-outline'
-                            size={30}
-                            onPress={() => onDeleteTextInput(index)}
-                        />
-                    </View>
-                    <Text>{row.category}</Text>
-                </View>
+                mapHelper(numbers[index].number, numbers[index].category, index, icons.phone, formLabels.number)
             )
         })
     );
 
-    const mapEmails = () => (
+    const mapEmails = (emails: {category: string, email: string, }[],) => (
         emails.map((row, index) => {
             return(
-                <View key={index}>
-                    <View style={styles.row}>
-                        {showIconOrEmptySpace(index === 0, 'email')}
-                        <TextInput
-                            label={'Number'}
-                            value={row.email}
-                            style={styles.inputText}
-                            onChangeText={text => onChangeInputField(text, index)}
-                        />
-                        <IconButton
-                            icon='trash-can-outline'
-                            size={30}
-                            onPress={() => onDeleteTextInput(index)}
-                        />
-                    </View>
-                    <Text>{row.category}</Text>
-                </View>
+                mapHelper(emails[index].email, emails[index].category, index, icons.email, formLabels.email)
             )
         })
+    );
+
+    const mapHelper = (phoneOrEmail: string, category: string, index: number, icon: string, label: string) => (
+        <View key={index}>
+            <View style={styles.row}>
+                {showIconOrEmptySpace(index === 0, icon)}
+                <TextInput
+                    label={label}
+                    value={phoneOrEmail}
+                    style={styles.inputText}
+                    onChangeText={text => onChangeInputField(label, text, index)}
+                />
+                <IconButton
+                    icon='trash-can-outline'
+                    size={30}
+                    onPress={() => onDeleteTextInput(label, index)}
+                />
+            </View>
+            <Text>{category}</Text>
+        </View>
+    );
+
+    const plusButton = (label: string) => (
+        <View style={{...styles.icon, alignSelf: "center"}}>
+            <IconButton
+                icon='plus'
+                onPress={() => addInputField(label)}
+                size={30}
+            />
+        </View>
     );
 
     return (
@@ -136,24 +138,18 @@ const AddEdit = (props: Props) => {
                     <Avatar.Text size={120} label="XD" />
                 </View>
                 {/* Dane osobowe */}
-                {inputRow('Name', onChangeName)}
-                {inputRow('Second name', onChangeSecondName)}
-                {inputRow('Surname', onChangeSurname)}
+                {inputRow('Name', onChangeName, contact.firstName)}
+                {inputRow('Second name', onChangeSecondName, contact.secondName)}
+                {inputRow('Surname', onChangeSurname, contact.surname)}
 
                 {/* Numery telefonu */}
-                {mapPhoneNumbers()}
-                <View style={{...styles.icon, alignSelf: "center"}}>
-                    <IconButton
-                        icon='plus'
-                        onPress={addInputField}
-                        size={30}
-                    />
-                </View>
+                {mapPhoneNumbers(numbers)}
+                {plusButton(formLabels.number)}
+
                 {/* Adresy email */}
-                {/*{mapEmails()}*/}
-                <Button title={"Create"}
-                        onPress={createContact}
-                />
+                {mapEmails(emails)}
+                {plusButton(formLabels.email)}
+
                 <Button title={"Grupy"}
                         onPress={() => onGroups(4)}
                 />
