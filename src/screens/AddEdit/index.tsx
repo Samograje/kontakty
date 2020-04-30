@@ -1,58 +1,79 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import AddEdit from "./AddEdit";
+import {getContacts} from "../../redux/selectors/Selectors";
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 
-interface Props {
-    navigation: {
-        goBack: () => {},
-        navigate: (screenName: string, params?: object) => {},
-    },
-    route,
-}
+const AddEditScreen  = ({route, navigation}) => {
+    const {navigate} = useNavigation();
+    const {id, mode} = route.params;
+    const contacts = useSelector(getContacts);
+    const dispatch = useDispatch();
+    const [exampleInitialValue, setExampleInitialValue] = useState(0);
+    //TODO: wczytywanie tablicy dla edycji
+    const [numbers, setNumbers] = useState([{category: '', number: '',}]);
+    const [emails, setEmails] = useState([{category: '', email: '',}]);
+    let contact = {
+        id: exampleInitialValue + 1,
+        firstName: '',
+        secondName: '',
+        surname: '',
+        photoUrl: '',
+        telNumbers: [{
+            category: '',
+            number: '',
+        }],
+        emails: [{
+            category: '',
+            email: '',
+        }],
+    };
 
-interface State {
-    id: number,
-    mode: string,
-}
+    const addInputField = () => {
+        setNumbers([...numbers, {category: '', number: ''}]);
+        // console.log(contact);
+    };
 
-class AddEditScreen extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            id: 0,
-            mode: '',
-        };
-    }
+    const onChangeInputField = (value, index) => {
+        let tmpNumbers = [...numbers];
+        tmpNumbers[index].number = value;
+        setNumbers(tmpNumbers);
+    };
 
-    onGroups = (id: number) => this.props.navigation.navigate('Groups', {id: id});
+    const onDeleteTextInput = (index) => {
+        let tmpNumbers = [...numbers];
+        tmpNumbers.splice(index, 1);
+        setNumbers(tmpNumbers);
+    };
 
-    componentDidMount(): void {
-        this.setState({
-            mode: this.props.route.params.mode,
-            id: this.props.route.params.id,
-        });
-    }
+    const onGroups = (id: number) => navigate('Groups', {id: id});
+    const onChangeName = (name: string) => {contact.firstName = name};
+    const onChangeSecondName = (secondName: string) => {contact.secondName = secondName};
+    const onChangeSurname = (surname: string) => {contact.surname = surname};
+    const createContact = () => {
+        // dispatch(createContact(contact));
+        console.log("Dodaje kontakt");
+    };
 
-    render() {
-        const {
-            onGroups,
-        } = this;
+    useEffect(()=>{
+        setExampleInitialValue(contacts.length);
+    },[contacts]);
 
-        const {
-            id,
-            mode,
-        } = this.state;
-
-        const {
-
-        } = this.props;
-
-        return (
-            <AddEdit
-                id={id}
-                mode={mode}
-                onGroups={onGroups}
-            />
-        );
-    }
-}
+    return (
+        <AddEdit
+            mode={mode}
+            onGroups={onGroups}
+            onChangeName={onChangeName}
+            onChangeSecondName={onChangeSecondName}
+            onChangeSurname={onChangeSurname}
+            createContact={createContact}
+            numbers={numbers}
+            emails={emails}
+            navigation={navigation}
+            onChangeInputField={onChangeInputField}
+            onDeleteTextInput={onDeleteTextInput}
+            addInputField={addInputField}
+        />
+    );
+};
 export default AddEditScreen;
