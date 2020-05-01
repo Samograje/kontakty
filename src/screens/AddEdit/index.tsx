@@ -4,12 +4,12 @@ import { getContacts } from "../../redux/selectors/Selectors";
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { formLabels, modes } from "../StringsHelper";
+import {createContact, updateContact} from "../../redux/actions/ActionCreators";
 
 const AddEditScreen  = ({route, navigation}) => {
     const {navigate} = useNavigation();
     const {id, mode} = route.params;
     const contacts = useSelector(getContacts);
-    const contact = contacts[0];
     const dispatch = useDispatch();
     const [exampleInitialValue, setExampleInitialValue] = useState(0);
     //TODO: zmienić indeks na id wybranego kontaktu
@@ -18,6 +18,19 @@ const AddEditScreen  = ({route, navigation}) => {
     const [surname, setSurname] = useState(mode === modes.edit ? contacts[0].surname : '');
     const [numbers, setNumbers] = useState(mode === modes.edit ? (contacts[0].telNumbers) : ([{category: '', number: '',}]));
     const [emails, setEmails] = useState(mode === modes.edit ? (contacts[0].emails) : ([{category: '', email: '',}]));
+    const buildContactObject = () => {
+        return  {
+            id: exampleInitialValue + 1,
+            firstName: firstName,
+            secondName: secondName,
+            surname: surname,
+            photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
+            telNumbers: numbers,
+            emails: emails,
+        };
+    };
+    let contact = buildContactObject();
+
     const addInputField = (label: string) => {
         if(label === formLabels.number){
             setNumbers([...numbers, {category: '', number: ''}]);
@@ -28,18 +41,7 @@ const AddEditScreen  = ({route, navigation}) => {
         }
     };
 
-    function buildContactObject () {
-        return {
-            id: exampleInitialValue+1,
-            firstName:  firstName,
-            secondName: secondName,
-            surname: surname,
-            photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
-            telNumbers: numbers,
-            emails: emails,
-        };
-    }
-
+    //TODO: zmienić nazwe, myląca
     const onChangeInputField = (label: string, value: string, index: number) => {
         let tmpData;
         if(label === formLabels.number){
@@ -89,21 +91,15 @@ const AddEditScreen  = ({route, navigation}) => {
     };
 
     const onSaveContact = (mode: string, index: number) => {
-        console.log(buildContactObject());
-        //TODO: walidacja danych ??
-        // if(mode === modes.create) {
-        //     dispatch(createContact(buildContactObject()));
-        // } else if (mode === modes.edit) {
-        //     updateContact(buildContactObject(), index);
-        // }
-        // console.log(contacts);
+        // TODO: walidacja danych ??
+        if(mode === modes.create) {
+            dispatch(createContact(buildContactObject()));
+        } else if (mode === modes.edit) {
+            dispatch(updateContact(buildContactObject(), index));
+        }
     };
 
-    const onGroups = (id: number) => {
-        // console.log(contacts);
-        // navigate('Groups', {id: id})
-    };
-
+    const onGroups = (id: number) => {navigate('Groups', {id: id})};
     const onChangeName = (name: string) => {setFirstName(name)};
     const onChangeSecondName = (secondName: string) => {setSecondName(secondName)};
     const onChangeSurname = (surname: string) => {setSurname(surname)};
@@ -114,6 +110,7 @@ const AddEditScreen  = ({route, navigation}) => {
 
     return (
         <AddEdit
+            //TODO: uporządkować kolejność
             mode={mode}
             onGroups={onGroups}
             onChangeName={onChangeName}
@@ -122,13 +119,14 @@ const AddEditScreen  = ({route, navigation}) => {
             onSaveContact={onSaveContact}
             numbers={numbers}
             emails={emails}
-            contact={contact} //TODO: podmienić to
             navigation={navigation}
             onChangeInputField={onChangeInputField}
             onDeleteTextInput={onDeleteTextInput}
             addInputField={addInputField}
+            contact={contact}
             onChangeDropdown={onChangeDropdown}
         />
     );
 };
+
 export default AddEditScreen;

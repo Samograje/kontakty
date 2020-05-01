@@ -20,10 +20,10 @@ interface Props {
         category: string,
         email: string,
     }[],
+    navigation: any,
     onChangeInputField: (label: string, test: string, index: number) => void,
     onDeleteTextInput: (label: string, index: number) => void,
     addInputField: (label: string) => void,
-    navigation: any,
     contact: any,
     onChangeDropdown: (label: string, test: string, index: number) => void,
 }
@@ -56,11 +56,11 @@ const AddEdit = (props: Props) => {
                     size={40}
                     color={'white'}
                     //TODO: zamienić identyfikator do edycji
-                    onPress={isEdit ? (() => onSaveContact(modes.edit, -1)) : (() => onSaveContact(modes.create, 0))}
+                    onPress={isEdit ? (() => onSaveContact(modes.edit, 0)) : (() => onSaveContact(modes.create, 0))}
                 />
             ),
         });
-    }, [navigation]);
+    }, [navigation, onSaveContact]);
 
     const showIconOrEmptySpace = (condition: boolean, icon: string) => (
         <View style={styles.iconContainer}>
@@ -142,7 +142,6 @@ const AddEdit = (props: Props) => {
             />
         </View>
     );
-
 
     return (
         <ScrollView style={styles.container}>
