@@ -3,10 +3,15 @@ export const modes = {
     edit: 'edit',
 };
 
-export const contactLabels = {
-    home: 'Home',
-    work: 'Work',
-};
+export const contactLabels = [
+    { label: 'Main', value: 'main' },
+    { label: 'Home', value: 'home' },
+    { label: 'Work', value: 'work' },
+    { label: 'Fax', value: 'fax' },
+    { label: 'Pager', value: 'pager' },
+    { label: 'Other', value: 'other' },
+];
+
 
 export const formLabels = {
     name: 'Name',

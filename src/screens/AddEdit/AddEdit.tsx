@@ -1,8 +1,9 @@
 import React from 'react';
-import {Button, ScrollView, StyleSheet, View} from 'react-native';
-import { TextInput, Avatar, IconButton, Text } from 'react-native-paper';
-import {icons, formLabels, modes} from "../StringsHelper";
+import { Button, ScrollView, StyleSheet, View } from 'react-native';
+import { TextInput, Avatar, IconButton } from 'react-native-paper';
+import { icons, formLabels, modes, contactLabels } from "../StringsHelper";
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import RNPickerSelect from 'react-native-picker-select';
 
 interface Props {
     mode: string,
@@ -24,6 +25,7 @@ interface Props {
     addInputField: (label: string) => void,
     navigation: any,
     contact: any,
+    onChangeDropdown: (label: string, test: string, index: number) => void,
 }
 
 const AddEdit = (props: Props) => {
@@ -41,6 +43,7 @@ const AddEdit = (props: Props) => {
         onDeleteTextInput,
         addInputField,
         contact,
+        onChangeDropdown,
     } = props;
 
     React.useLayoutEffect(() => {
@@ -117,7 +120,16 @@ const AddEdit = (props: Props) => {
                     onPress={() => onDeleteTextInput(label, index)}
                 />
             </View>
-            <Text>{category}</Text>
+            <View style={styles.row}>
+                {showIconOrEmptySpace(false, 'none')}
+                <View style={{width: '45%'}}>
+                    <RNPickerSelect
+                        value={category}
+                        onValueChange={(value) => onChangeDropdown(label, value, index)}
+                        items={contactLabels}
+                    />
+                </View>
+            </View>
         </View>
     );
 
@@ -130,6 +142,7 @@ const AddEdit = (props: Props) => {
             />
         </View>
     );
+
 
     return (
         <ScrollView style={styles.container}>
