@@ -55,18 +55,18 @@ export const removeGroup = (id: number) => {
   }
 };
 
-export const addContactToGroup = (contactId: number, groupIndex: number) => {
+export const addContactToGroup = (contactId: number, groupId: string) => {
   return {
     type: ADD_CONTACT_ID,
     contactId,
-    groupIndex
+    groupId
   }
 };
 
-export const removeContactId = (contactId: number, groupIndex: number) => {
+export const removeContactFromGroup = (contactId: number, groupId: string) => {
   return {
     type: REMOVE_CONTACT_ID,
     contactId,
-    groupIndex,
+    groupId,
   }
 };

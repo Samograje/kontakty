@@ -7,15 +7,17 @@ import {FAB} from "react-native-paper";
 
 interface Props {
     data: Data[],
+    onGroupPress: (groupId: string, isIncluded: boolean) => void,
 }
 
 const Groups = (props: Props) => {
-    const {data} = props;
+    const {data, onGroupPress} = props;
 
     const renderItem = useCallback(
         ({item}) => (
             <GroupListItem
                 item={item}
+                onGroupPress={onGroupPress}
             />
         ),
         []);

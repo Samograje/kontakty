@@ -39,7 +39,7 @@ export const GroupsReducer = (state = initialState, action) => {
         case ADD_CONTACT_ID:
             return {
                 groups: state.groups.map(
-                    (group, i) => i === action.groupIndex ? {
+                    (group, i) => group.id === action.groupId ? {
                             ...group, contactsIds: [...group.contactsIds, action.contactId]
                         }
                         : group
@@ -48,7 +48,7 @@ export const GroupsReducer = (state = initialState, action) => {
         case REMOVE_CONTACT_ID:
             return {
                 groups: state.groups.map(
-                    (group, i) => i === action.groupIndex ? {
+                    (group, i) => group.id === action.groupId ? {
                             ...group, contactsIds: group.contactsIds.filter((contactId) => contactId !== action.contactId)
                         }
                         : group

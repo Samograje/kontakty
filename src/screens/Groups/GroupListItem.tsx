@@ -3,6 +3,7 @@ import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import {RadioButton} from 'react-native-paper';
 
 interface Props {
+    onGroupPress: (groupId: string, isIncluded: boolean) => void,
     item: {
         id: string,
         name: string,
@@ -12,16 +13,19 @@ interface Props {
 }
 
 const GroupListItem = (props: Props) => {
-    const {item} = props;
+    const {item, onGroupPress} = props;
 
     return (
         <View style={styles.container}>
             <TouchableOpacity
                 onPress={() => {
+                    onGroupPress(item.id, item.isChecked)
                 }}
                 style={styles.rowContainer}
             >
-                <RadioButton value={item.id} status={item.isChecked ? 'checked' : 'unchecked'}/>
+                <RadioButton value={item.id} status={item.isChecked ? 'checked' : 'unchecked'} onPress={() => {
+                    onGroupPress(item.id, item.isChecked)
+                }}/>
                 <Text style={styles.text}>{item.name}</Text>
             </TouchableOpacity>
         </View>
