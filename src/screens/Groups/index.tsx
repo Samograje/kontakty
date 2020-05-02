@@ -1,7 +1,8 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroups } from '../../redux/selectors/Selectors';
 import GroupsView from "./Groups";
+import {createGroup} from "../../redux/actions/ActionCreators";
 
 interface Props {
     contactId: number,

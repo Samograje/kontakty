@@ -9,14 +9,14 @@ import {
 export interface Group {
     id: string,
     name: string,
-    contactsIds: [],
+    contactsIds: number[],
 }
 
 interface State {
     groups: Group[],
 }
 
-const initialState : State = {
+const initialState: State = {
     groups: [],
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import {RadioButton} from 'react-native-paper';
 
 interface Props {
     item: {
@@ -10,21 +11,38 @@ interface Props {
     },
 }
 
-const GroupListItem = (props : Props) => {
-    const { item } = props;
+const GroupListItem = (props: Props) => {
+    const {item} = props;
 
     return (
-        <View style={styles.listItem}>
-
+        <View style={styles.container}>
+            <TouchableOpacity
+                onPress={() => {
+                }}
+                style={styles.rowContainer}
+            >
+                <RadioButton value={item.id} status={item.isChecked ? 'checked' : 'unchecked'}/>
+                <Text style={styles.text}>{item.name}</Text>
+            </TouchableOpacity>
         </View>
-);
+    );
 };
 
 const styles = StyleSheet.create({
-    listItem: {
+    container: {
+        flex: 1,
+        marginTop: 10,
+    },
+    rowContainer: {
         flexDirection: 'row',
-        marginBottom: 3,
-        margin: 5
+        padding: 5,
+        margin: 10,
+        height: 20,
+        alignItems: 'center',
+    },
+    text: {
+        marginLeft: 10,
+        fontSize: 18,
     },
 });
 

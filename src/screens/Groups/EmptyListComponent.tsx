@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 const EmptyListComponent = () => {
     return (
         <View style={styles.informationContainer}>
-            <Text style={styles.message}>No items available</Text>
+            <Text style={styles.message}>No groups available. Add one!</Text>
         </View>
     );
 };
@@ -19,8 +19,7 @@ const styles = StyleSheet.create({
     },
     message: {
         fontSize: 18,
-        margin: 5,
-        color: '#80BDFF'
+        margin: 5
     }
 });
 
