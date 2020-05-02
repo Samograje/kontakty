@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import GroupComponent from "./GroupsComponent";
+import Details from "./Details";
 
 interface Props {
     navigation: {
@@ -13,7 +13,7 @@ interface State {
     id: number,
 }
 
-class GroupsContainer extends Component<Props, State> {
+class DetailsScreen extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -21,14 +21,16 @@ class GroupsContainer extends Component<Props, State> {
         };
     }
 
+    onEdit = (id: number) => this.props.navigation.navigate('AddEdit', {id: id, mode: 'edit'});
+
     componentDidMount(): void {
-        this.setState({
-            id: this.props.route.params.id,
-        });
+        const {id} = this.props.route.params;
+        this.setState({id: id});
     }
 
     render() {
         const {
+            onEdit,
         } = this;
 
         const {
@@ -40,10 +42,11 @@ class GroupsContainer extends Component<Props, State> {
         } = this.props;
 
         return (
-            <GroupComponent
+            <Details
                 id={id}
+                onEdit={onEdit}
             />
         );
     }
 }
-export default GroupsContainer;
+export default DetailsScreen;
