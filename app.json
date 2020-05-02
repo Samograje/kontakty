@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "HelloWorld",
+    "name": "Kontakty",
     "slug": "kontakty",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
