@@ -45,6 +45,7 @@ const AddGroupModal = (props: Props) => {
                     />
                     <Button
                         compact={true}
+                        color={'#0d8b0c'}
                         style={styles.addText}
                         onPress={onAddGroupPress}
                         disabled={!modalInput}>
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     textInput: {
         margin: 10,
         backgroundColor: 'white',
+        borderColor: '#0d8b0c',
     },
     addText: {
         alignSelf: 'flex-end',

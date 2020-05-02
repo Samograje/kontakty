@@ -23,9 +23,13 @@ const GroupListItem = (props: Props) => {
                 }}
                 style={styles.rowContainer}
             >
-                <RadioButton value={item.id} status={item.isChecked ? 'checked' : 'unchecked'} onPress={() => {
-                    onGroupPress(item.id, item.isChecked)
-                }}/>
+                <RadioButton
+                    value={item.id}
+                    status={item.isChecked ? 'checked' : 'unchecked'}
+                    color={'#0d8b0c'}
+                    onPress={() => {
+                        onGroupPress(item.id, item.isChecked)
+                    }}/>
                 <Text style={styles.text}>{item.name}</Text>
             </TouchableOpacity>
         </View>
