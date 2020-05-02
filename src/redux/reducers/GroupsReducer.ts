@@ -7,7 +7,8 @@ import {
 } from '../_constants/Types';
 
 export interface Group {
-    id: number,
+    id: string,
+    name: string,
     contactsIds: [],
 }
 

@@ -1,49 +1,36 @@
-import React, {Component} from 'react';
-import Groups from "./Groups";
+import React, {useMemo} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGroups } from '../../redux/selectors/Selectors';
+import GroupsView from "./Groups";
 
 interface Props {
-    navigation: {
-        goBack: () => {},
-        navigate: (screenName: string, params?: object) => {},
-    },
-    route,
+    contactId: number,
 }
 
-interface State {
-    id: number,
+export interface Data {
+    id: string,
+    name: string,
+    contactsIds: [],
+    isChecked: boolean,
 }
 
-class GroupsScreen extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            id: 0,
-        };
-    }
+const GroupsScreen = (props: Props) => {
+    const { contactId } = props;
+    const groups = useSelector(getGroups);
+    const dispatch = useDispatch();
 
-    componentDidMount(): void {
-        this.setState({
-            id: this.props.route.params.id,
+    const data : Data[] = useMemo(() => {
+        return groups.map((el, i) => {
+            return {
+                ...el,
+                isChecked: el.contactsIds.includes(contactId),
+            };
         });
-    }
+    }, [groups]);
 
-    render() {
-        const {
-        } = this;
+    return (
+        <GroupsView data={data}/>
+    );
+};
 
-        const {
-            id,
-        } = this.state;
-
-        const {
-
-        } = this.props;
-
-        return (
-            <Groups
-                id={id}
-            />
-        );
-    }
-}
 export default GroupsScreen;
