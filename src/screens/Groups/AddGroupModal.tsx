@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Dimensions, StyleSheet, TouchableOpacity, View, Text} from "react-native";
+import React, {useCallback, useState} from 'react';
+import {Dimensions, StyleSheet, View} from "react-native";
 import {Button, TextInput} from "react-native-paper";
 import Modal from 'react-native-modal';
 
@@ -14,6 +14,12 @@ interface Props {
 const AddGroupModal = (props: Props) => {
     const [modalInput, setModalInput] = useState('');
     const {modalVisible, setModalVisible, addGroup} = props;
+
+    const onAddGroupPress = useCallback(() => {
+        addGroup(modalInput);
+        setModalVisible(false);
+        setModalInput('');
+    }, [addGroup, setModalVisible, setModalInput, modalInput]);
 
     return (
         <Modal
@@ -40,10 +46,7 @@ const AddGroupModal = (props: Props) => {
                     <Button
                         compact={true}
                         style={styles.addText}
-                        onPress={() => {
-                            addGroup(modalInput);
-                            setModalVisible(false);
-                        }}
+                        onPress={onAddGroupPress}
                         disabled={!modalInput}>
                         Add group
                     </Button>
