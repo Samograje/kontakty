@@ -24,6 +24,12 @@ const GroupsScreen = (props: Props) => {
         isIncluded ? dispatch(removeContactFromGroup(id, groupId)) : dispatch(addContactToGroup(id, groupId));
     };
 
+    const addGroup = (name: string) => {
+        if(!name) return;
+        let group = {id: `${groups.length + 1}`, name: name, contactsIds: []};
+        dispatch(createGroup(group));
+    };
+
     const data: Data[] = useMemo(() => {
         return groups.map((el, i) => {
             return {
@@ -34,7 +40,7 @@ const GroupsScreen = (props: Props) => {
     }, [groups]);
 
     return (
-        <GroupsView data={data} onGroupPress={onGroupPress}/>
+        <GroupsView data={data} onGroupPress={onGroupPress} addGroup={addGroup}/>
     );
 };
 
