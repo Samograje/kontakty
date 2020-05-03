@@ -101,7 +101,7 @@ const AddEdit = (props: Props) => {
     const mapPhoneNumbers = (numbers: { category: string, number: string }[]) => (
         numbers.map((row, index) => {
             return(
-                mapHelper(numbers[index].number, numbers[index].category, index, icons.phone, formLabels.number)
+                mapHelper(numbers[index].number, numbers[index].category, index, icons.phone, formLabels.number, numbers.length)
             )
         })
     );
@@ -109,12 +109,12 @@ const AddEdit = (props: Props) => {
     const mapEmails = (emails: {category: string, email: string, }[],) => (
         emails.map((row, index) => {
             return(
-                mapHelper(emails[index].email, emails[index].category, index, icons.email, formLabels.email)
+                mapHelper(emails[index].email, emails[index].category, index, icons.email, formLabels.email, emails.length)
             )
         })
     );
 
-    const mapHelper = (phoneOrEmail: string, category: string, index: number, icon: string, label: string) => (
+    const mapHelper = (phoneOrEmail: string, category: string, index: number, icon: string, label: string, listLength: number) => (
         <View key={index}>
             <View style={styles.row}>
                 {showIconOrEmptySpace(index === 0, icon)}
@@ -124,11 +124,15 @@ const AddEdit = (props: Props) => {
                     style={styles.inputText}
                     onChangeText={text => onChangeTextInput(label, text, index)}
                 />
-                <IconButton
-                    icon='trash-can-outline'
-                    size={30}
-                    onPress={() => onDeleteTextInput(label, index)}
-                />
+                <View style={styles.iconContainer}>
+                    {listLength > 1 && (
+                        <IconButton
+                            icon='trash-can-outline'
+                            size={30}
+                            onPress={() => onDeleteTextInput(label, index)}
+                        />
+                    )}
+                </View>
             </View>
             <View style={styles.row}>
                 {showIconOrEmptySpace(false, 'none')}
