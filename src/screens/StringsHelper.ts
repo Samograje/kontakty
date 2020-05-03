@@ -12,7 +12,6 @@ export const contactLabels = [
     { label: 'Other', value: 'other' },
 ];
 
-
 export const formLabels = {
     name: 'Name',
     secondName: 'Second name',
