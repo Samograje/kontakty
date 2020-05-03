@@ -4,7 +4,9 @@ module.exports = {
     '@react-native-community',
     'prettier',
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"],
+    "plugin:@typescript-eslint/recommended",
+    'prettier/@typescript-eslint',
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -14,7 +16,4 @@ module.exports = {
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
-  "rules": {
-    "@typescript-eslint/rule-name": "error"
-  }
 };
