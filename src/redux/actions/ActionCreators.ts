@@ -18,11 +18,11 @@ export const createContact = (contact: Contact) => {
     };
 };
 
-export const updateContact = (contact: Contact, contactIndex: number) => {
+export const updateContact = (contact: Contact, contactId: number) => {
     return {
         type: UPDATE_CONTACT,
         contact,
-        contactIndex,
+        contactId,
     };
 };
 
@@ -40,11 +40,11 @@ export const createGroup = (group: Group) => {
     };
 };
 
-export const updateGroup = (group: Group, groupIndex: number) => {
+export const updateGroup = (group: Group, groupId: number) => {
     return {
         type: UPDATE_GROUP,
         group,
-        groupIndex,
+        groupId,
     };
 };
 
@@ -55,18 +55,18 @@ export const removeGroup = (id: number) => {
     };
 };
 
-export const addContactToGroup = (contactId: number, groupIndex: number) => {
+export const addContactToGroup = (contactId: number, groupId: number) => {
     return {
         type: ADD_CONTACT_ID,
         contactId,
-        groupIndex,
+        groupId,
     };
 };
 
-export const removeContactId = (contactId: number, groupIndex: number) => {
+export const removeContactFromGroup = (contactId: number, groupId: number) => {
     return {
         type: REMOVE_CONTACT_ID,
         contactId,
-        groupIndex,
+        groupId,
     };
 };
