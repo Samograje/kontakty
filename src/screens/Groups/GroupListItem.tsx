@@ -1,19 +1,16 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import {RadioButton} from 'react-native-paper';
+import {DataWithIsChecked} from "./index";
 
 interface Props {
-    onGroupPress: (groupId: string, isIncluded: boolean) => void,
-    item: {
-        id: string,
-        name: string,
-        contactsIds: [],
-        isChecked: boolean,
-    },
+    onGroupPress: (groupId: number, isIncluded: boolean) => void,
+    onLongGroupPress: (groupId: number) => void,
+    item: DataWithIsChecked,
 }
 
 const GroupListItem = (props: Props) => {
-    const {item, onGroupPress} = props;
+    const {item, onGroupPress, onLongGroupPress} = props;
 
     return (
         <View style={styles.container}>
@@ -21,10 +18,13 @@ const GroupListItem = (props: Props) => {
                 onPress={() => {
                     onGroupPress(item.id, item.isChecked)
                 }}
+                onLongPress={() => {
+                    onLongGroupPress(item.id)
+                }}
                 style={styles.rowContainer}
             >
                 <RadioButton
-                    value={item.id}
+                    value={item.id.toString()}
                     status={item.isChecked ? 'checked' : 'unchecked'}
                     color={'#0d8b0c'}
                     onPress={() => {

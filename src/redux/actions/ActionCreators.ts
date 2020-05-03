@@ -9,7 +9,7 @@ import {
   REMOVE_CONTACT_ID,
 } from '../_constants/Types';
 import { Contact } from "../reducers/ContactsReducer";
-import { Group } from "../reducers/GroupsReducer";
+import { Group, GroupWithoutId } from "../reducers/GroupsReducer";
 
 export const createContact = (contact: Contact) => {
     return {
@@ -33,18 +33,17 @@ export const removeContact = (id: number) => {
   }
 };
 
-export const createGroup = (group: Group) => {
+export const createGroup = (group: GroupWithoutId) => {
   return {
     type: CREATE_GROUP,
     group
   }
 };
 
-export const updateGroup = (group: Group, groupIndex: number) => {
+export const updateGroup = (group: Group) => {
   return {
     type: UPDATE_GROUP,
-    group,
-    groupIndex
+    group
   }
 };
 
@@ -55,7 +54,7 @@ export const removeGroup = (id: number) => {
   }
 };
 
-export const addContactToGroup = (contactId: number, groupId: string) => {
+export const addContactToGroup = (contactId: number, groupId: number) => {
   return {
     type: ADD_CONTACT_ID,
     contactId,
@@ -63,7 +62,7 @@ export const addContactToGroup = (contactId: number, groupId: string) => {
   }
 };
 
-export const removeContactFromGroup = (contactId: number, groupId: string) => {
+export const removeContactFromGroup = (contactId: number, groupId: number) => {
   return {
     type: REMOVE_CONTACT_ID,
     contactId,

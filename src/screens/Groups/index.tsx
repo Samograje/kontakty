@@ -3,13 +3,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getGroups} from '../../redux/selectors/Selectors';
 import GroupsView from "./Groups";
 import {addContactToGroup, createGroup, removeContactFromGroup} from "../../redux/actions/ActionCreators";
+import {GroupWithoutId} from "../../redux/reducers/GroupsReducer";
 
 interface Props {
     route: any
 }
 
-export interface Data {
-    id: string,
+export interface DataWithIsChecked {
+    id: number,
     name: string,
     contactsIds: number[],
     isChecked: boolean,
@@ -20,17 +21,22 @@ const GroupsScreen = (props: Props) => {
     const groups = useSelector(getGroups);
     const dispatch = useDispatch();
 
-    const onGroupPress = (groupId: string, isIncluded: boolean) => {
+    const onGroupPress = (groupId: number, isIncluded: boolean) => {
         isIncluded ? dispatch(removeContactFromGroup(id, groupId)) : dispatch(addContactToGroup(id, groupId));
     };
 
     const addGroup = (name: string) => {
-        if(!name) return;
-        let group = {id: `${groups.length + 1}`, name: name, contactsIds: []};
+        if (!name) return;
+        let group: GroupWithoutId = {name: name, contactsIds: []};
         dispatch(createGroup(group));
     };
 
-    const data: Data[] = useMemo(() => {
+    const removeGroup = (groupId: number) => {
+        if (!groupId) return;
+        dispatch(removeGroup(groupId));
+    };
+
+    const data: DataWithIsChecked[] = useMemo(() => {
         return groups.map((el, i) => {
             return {
                 ...el,
@@ -40,7 +46,7 @@ const GroupsScreen = (props: Props) => {
     }, [groups]);
 
     return (
-        <GroupsView data={data} onGroupPress={onGroupPress} addGroup={addGroup}/>
+        <GroupsView data={data} onGroupPress={onGroupPress} onLongGroupPress={removeGroup} addGroup={addGroup}/>
     );
 };
 

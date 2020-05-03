@@ -1,26 +1,28 @@
 import React, {useCallback, useState} from 'react';
-import {FlatList, StyleSheet, View, Modal} from 'react-native';
-import {Data} from "./index";
+import {FlatList, StyleSheet, View} from 'react-native';
+import {DataWithIsChecked} from "./index";
 import GroupListItem from "./GroupListItem";
 import EmptyListComponent from "./EmptyListComponent";
 import {FAB} from "react-native-paper";
 import AddGroupModal from "./AddGroupModal";
 
 interface Props {
-    data: Data[],
-    onGroupPress: (groupId: string, isIncluded: boolean) => void,
+    data: DataWithIsChecked[],
+    onGroupPress: (groupId: number, isIncluded: boolean) => void,
+    onLongGroupPress: (groupId: number) => void,
     addGroup: (name: string) => void,
 }
 
 const Groups = (props: Props) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const {data, onGroupPress, addGroup} = props;
+    const {data, onGroupPress, addGroup, onLongGroupPress} = props;
 
     const renderItem = useCallback(
         ({item}) => (
             <GroupListItem
                 item={item}
                 onGroupPress={onGroupPress}
+                onLongGroupPress={onLongGroupPress}
             />
         ),
         []);
@@ -34,7 +36,7 @@ const Groups = (props: Props) => {
                     numColumns={1}
                     contentContainerStyle={styles.listContentContainer}
                     renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.id.toString()}
                     ListEmptyComponent={<EmptyListComponent/>}
                 />
                 <FAB
