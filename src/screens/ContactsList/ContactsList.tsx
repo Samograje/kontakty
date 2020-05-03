@@ -1,43 +1,51 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import { Button, SectionList, StyleSheet, View } from 'react-native';
+import { Contact } from '../../redux/reducers/ContactsReducer';
+import ContactListItem from './ContactListItem';
+import ContactsListSectionHeader from './ContactsListSectionHeader';
+import ContactsListEmptyBanner from './ContactsListEmptyBanner';
 
 interface Props {
-    addContact: () => void,
-    onDetails: (id: number) => void,
-    onCreate: () => void,
-    onEdit: (id: number) => void,
-    value: number,
+  onCreate: () => void,
+  onView: (id: number) => void,
+  onExample: () => void,
+  data: {
+    title: string,
+    data: Contact[],
+  }[],
 }
 
 const ContactsList = (props: Props) => {
-    const {
-        addContact,
-        onDetails,
-        onCreate,
-        onEdit,
-        value,
-    } = props;
+  const {
+    onCreate,
+    onView,
+    onExample,
+    data,
+  } = props;
 
-    return (
-        <View>
-            <Text>Wyświetlam sobie ilość kontaktów: {value}</Text>
-            <Button title={"Dodaj kontakt"}
-                    onPress={addContact} />
-            <Text>Tutaj będzie lista kontaktów</Text>
-            <Button title={"Szczegóły kontaktu o id 4"}
-                    onPress={() => onDetails(4)} />
-            <Button title={"FAB dodaj nowy kontakt"}
-                    onPress={() => onCreate()} />
-            <Button title={"Przejście do edycji kontaktu z poziomu listy"}
-                    onPress={() => onEdit(4)} />
-        </View>
-    );
+  const keyExtractor = (item, index) => item + index;
+
+  return (
+    <View style={styles.container}>
+      <Button title="Szczegóły kontaktu o id 4" onPress={() => onView(4)} />
+      <Button title="FAB dodaj nowy kontakt" onPress={onCreate} />
+      <Button title="Niespodzianka xD" onPress={onExample} />
+
+      <SectionList
+        sections={data}
+        keyExtractor={keyExtractor}
+        renderItem={ContactListItem}
+        renderSectionHeader={ContactsListSectionHeader}
+        ListEmptyComponent={ContactsListEmptyBanner}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
+  container: {
+    flex: 1,
+  },
 });
 
 export default ContactsList;

@@ -18,7 +18,7 @@ export interface Contact {
     id: number,
     firstName: string,
     secondName: string,
-    surname: string,
+    lastName: string,
     photoUrl: string,
     telNumbers: ContactNumber[],
     emails: ContactEmail[],
