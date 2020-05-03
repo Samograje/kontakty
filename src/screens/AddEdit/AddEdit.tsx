@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, ScrollView, StyleSheet, View } from 'react-native';
-import { TextInput, Avatar, IconButton } from 'react-native-paper';
+import { TextInput, Avatar, IconButton, Snackbar } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from "../StringsHelper";
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
@@ -26,6 +26,14 @@ interface Props {
     addInputField: (label: string) => void,
     contact: any,
     onChangeDropdown: (label: string, test: string, index: number) => void,
+    snackbar: {
+        isVisible: boolean,
+        message: string,
+        isActionVisible: boolean,
+        label: string,
+    }
+    onDismissSnackbar: () => void,
+    onUndoPressed: (label: string) => void,
 }
 
 const AddEdit = (props: Props) => {
@@ -44,6 +52,9 @@ const AddEdit = (props: Props) => {
         addInputField,
         contact,
         onChangeDropdown,
+        snackbar,
+        onDismissSnackbar,
+        onUndoPressed,
     } = props;
 
     React.useLayoutEffect(() => {
@@ -143,6 +154,30 @@ const AddEdit = (props: Props) => {
         </View>
     );
 
+    const showSnackbar = () => (
+        snackbar.isActionVisible ? (
+            <Snackbar
+                visible={snackbar.isVisible}
+                style={styles.snackbar}
+                onDismiss={onDismissSnackbar}
+                action={{
+                    label: 'Undo',
+                    onPress: () => onUndoPressed(snackbar.label)
+                }}
+            >
+                {snackbar.message}
+            </Snackbar>
+        ) : (
+            <Snackbar
+                visible={snackbar.isVisible}
+                style={styles.snackbar}
+                onDismiss={onDismissSnackbar}
+            >
+                {snackbar.message}
+            </Snackbar>
+            )
+    );
+
     return (
         <ScrollView style={styles.container}>
             <View>
@@ -166,6 +201,7 @@ const AddEdit = (props: Props) => {
                         onPress={() => onGroups(4)}
                 />
             </View>
+            {showSnackbar()}
         </ScrollView>
     );
 };
@@ -197,7 +233,11 @@ const styles = StyleSheet.create({
     icon: {
         paddingLeft: 5,
         paddingRight: 5,
-    }
+    },
+    snackbar: {
+        position: 'absolute',
+        bottom: 0,
+    },
 });
 
 export default AddEdit;
