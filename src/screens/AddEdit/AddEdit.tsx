@@ -207,7 +207,7 @@ const AddEdit = (props: Props) => {
                     {mapEmails(emails)}
                     {plusButton(formLabels.email)}
 
-                    {groupsButton}
+                    {groupsButton()}
                 </View>
             </ScrollView>
             {showSnackbar()}
