@@ -16,7 +16,7 @@ export const contactLabels = [
 export const formLabels = {
     name: 'Name',
     secondName: 'Second name',
-    surname: 'Surname',
+    lastName: 'Surname',
     number: 'Number',
     email: 'Email',
 };

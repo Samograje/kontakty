@@ -10,7 +10,7 @@ interface Props {
     onGroups: (id: number) => void,
     onChangeName: (name: string) => void,
     onChangeSecondName: (secondName: string) => void,
-    onChangeSurname: (surname: string, index: number) => void,
+    onChangeSurname: (lastName: string, index: number) => void,
     onSaveContact: (mode: string, index: number) => void,
     numbers: {
         category: string,
@@ -152,7 +152,7 @@ const AddEdit = (props: Props) => {
                 {/* Dane osobowe */}
                 {inputRow('Name', onChangeName, contact.firstName)}
                 {inputRow('Second name', onChangeSecondName, contact.secondName)}
-                {inputRow('Surname', onChangeSurname, contact.surname)}
+                {inputRow('Surname', onChangeSurname, contact.lastName)}
 
                 {/* Numery telefonu */}
                 {mapPhoneNumbers(numbers)}

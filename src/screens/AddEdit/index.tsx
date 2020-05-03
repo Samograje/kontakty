@@ -15,7 +15,7 @@ const AddEditScreen  = ({route, navigation}) => {
     //TODO: zmienić indeks na id wybranego kontaktu
     const [firstName, setFirstName] = useState(mode === modes.edit ? contacts[0].firstName : '');
     const [secondName, setSecondName] = useState(mode === modes.edit ? contacts[0].secondName : '');
-    const [surname, setSurname] = useState(mode === modes.edit ? contacts[0].surname : '');
+    const [lastName, setSurname] = useState(mode === modes.edit ? contacts[0].lastName : '');
     const [numbers, setNumbers] = useState(mode === modes.edit ? (contacts[0].telNumbers) : ([{category: '', number: '',}]));
     const [emails, setEmails] = useState(mode === modes.edit ? (contacts[0].emails) : ([{category: '', email: '',}]));
     const buildContactObject = () => {
@@ -23,7 +23,7 @@ const AddEditScreen  = ({route, navigation}) => {
             id: exampleInitialValue + 1,
             firstName: firstName,
             secondName: secondName,
-            surname: surname,
+            lastName: lastName,
             photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
             telNumbers: numbers,
             emails: emails,
@@ -102,7 +102,7 @@ const AddEditScreen  = ({route, navigation}) => {
     const onGroups = (id: number) => {navigate('Groups', {id: id})};
     const onChangeName = (name: string) => {setFirstName(name)};
     const onChangeSecondName = (secondName: string) => {setSecondName(secondName)};
-    const onChangeSurname = (surname: string) => {setSurname(surname)};
+    const onChangeSurname = (lastName: string) => {setSurname(lastName)};
 
     useEffect(()=>{
         setExampleInitialValue(contacts.length);
