@@ -177,31 +177,37 @@ const AddEdit = (props: Props) => {
             )
     );
 
+    const groupsButton = () => (
+        <Button title={"Grupy"}
+                onPress={() => onGroups(4)}
+        />
+    );
+
     return (
-        <ScrollView style={styles.container}>
-            <View>
-                <View style={styles.avatarContainer}>
-                    <Avatar.Text size={120} label="XD" />
+        <View style={styles.container}>
+            <ScrollView>
+                <View>
+                    <View style={styles.avatarContainer}>
+                        <Avatar.Text size={120} label="XD" />
+                    </View>
+                    {/* Dane osobowe */}
+                    {inputRow('Name', onChangeName, contact.firstName)}
+                    {inputRow('Second name', onChangeSecondName, contact.secondName)}
+                    {inputRow('Surname', onChangeLastName, contact.lastName)}
+
+                    {/* Numery telefonu */}
+                    {mapPhoneNumbers(numbers)}
+                    {plusButton(formLabels.number)}
+
+                    {/* Adresy email */}
+                    {mapEmails(emails)}
+                    {plusButton(formLabels.email)}
+
+                    {groupsButton}
                 </View>
-                {/* Dane osobowe */}
-                {inputRow('Name', onChangeName, contact.firstName)}
-                {inputRow('Second name', onChangeSecondName, contact.secondName)}
-                {inputRow('Surname', onChangeLastName, contact.lastName)}
-
-                {/* Numery telefonu */}
-                {mapPhoneNumbers(numbers)}
-                {plusButton(formLabels.number)}
-
-                {/* Adresy email */}
-                {mapEmails(emails)}
-                {plusButton(formLabels.email)}
-
-                <Button title={"Grupy"}
-                        onPress={() => onGroups(4)}
-                />
-            </View>
+            </ScrollView>
             {showSnackbar()}
-        </ScrollView>
+        </View>
     );
 };
 
