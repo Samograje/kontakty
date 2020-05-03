@@ -8,21 +8,21 @@ import {
     ADD_CONTACT_ID,
     REMOVE_CONTACT_ID,
 } from '../_constants/Types';
-import { Contact } from '../reducers/ContactsReducer';
-import { Group } from '../reducers/GroupsReducer';
+import { ContactWithoutId } from '../reducers/ContactsReducer';
+import { GroupWithoutId } from '../reducers/GroupsReducer';
 
-export const createContact = (contact: Contact) => {
+export const createContact = (contact: ContactWithoutId) => {
     return {
         type: CREATE_CONTACT,
         contact,
     };
 };
 
-export const updateContact = (contact: Contact, contactIndex: number) => {
+export const updateContact = (contact: ContactWithoutId, contactId: number) => {
     return {
         type: UPDATE_CONTACT,
         contact,
-        contactIndex,
+        contactId,
     };
 };
 
@@ -33,18 +33,18 @@ export const removeContact = (id: number) => {
     };
 };
 
-export const createGroup = (group: Group) => {
+export const createGroup = (group: GroupWithoutId) => {
     return {
         type: CREATE_GROUP,
         group,
     };
 };
 
-export const updateGroup = (group: Group, groupIndex: number) => {
+export const updateGroup = (group: GroupWithoutId, groupId: number) => {
     return {
         type: UPDATE_GROUP,
         group,
-        groupIndex,
+        groupId,
     };
 };
 
@@ -55,18 +55,18 @@ export const removeGroup = (id: number) => {
     };
 };
 
-export const addContactToGroup = (contactId: number, groupIndex: number) => {
+export const addContactToGroup = (contactId: number, groupId: number) => {
     return {
         type: ADD_CONTACT_ID,
         contactId,
-        groupIndex,
+        groupId,
     };
 };
 
-export const removeContactId = (contactId: number, groupIndex: number) => {
+export const removeContactFromGroup = (contactId: number, groupId: number) => {
     return {
         type: REMOVE_CONTACT_ID,
         contactId,
-        groupIndex,
+        groupId,
     };
 };
