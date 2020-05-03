@@ -7,11 +7,6 @@ import RNPickerSelect from 'react-native-picker-select';
 
 interface Props {
     mode: string,
-    onGroups: (id: number) => void,
-    onChangeName: (name: string) => void,
-    onChangeSecondName: (secondName: string) => void,
-    onChangeSurname: (lastName: string, index: number) => void,
-    onSaveContact: (mode: string, index: number) => void,
     numbers: {
         category: string,
         number: string,
@@ -21,17 +16,22 @@ interface Props {
         email: string,
     }[],
     navigation: any,
-    onChangeInputField: (label: string, test: string, index: number) => void,
-    onDeleteTextInput: (label: string, index: number) => void,
-    addInputField: (label: string) => void,
     contact: any,
-    onChangeDropdown: (label: string, test: string, index: number) => void,
     snackbar: {
         isVisible: boolean,
         message: string,
         isActionVisible: boolean,
         label: string,
     }
+    onGroups: (id: number) => void,
+    onChangeName: (name: string) => void,
+    onChangeSecondName: (secondName: string) => void,
+    onChangeLastName: (lastName: string, index: number) => void,
+    onSaveContact: (mode: string, index: number) => void,
+    onChangeTextInput: (label: string, test: string, index: number) => void,
+    onDeleteTextInput: (label: string, index: number) => void,
+    addInputField: (label: string) => void,
+    onChangeDropdown: (label: string, test: string, index: number) => void,
     onDismissSnackbar: () => void,
     onUndoPressed: (label: string) => void,
 }
@@ -39,20 +39,20 @@ interface Props {
 const AddEdit = (props: Props) => {
     const {
         mode,
-        onGroups,
-        onChangeName,
-        onChangeSecondName,
-        onChangeSurname,
-        onSaveContact,
         numbers,
         emails,
         navigation,
-        onChangeInputField,
+        contact,
+        snackbar,
+        onGroups,
+        onChangeName,
+        onChangeSecondName,
+        onChangeLastName,
+        onSaveContact,
+        onChangeTextInput,
         onDeleteTextInput,
         addInputField,
-        contact,
         onChangeDropdown,
-        snackbar,
         onDismissSnackbar,
         onUndoPressed,
     } = props;
@@ -66,8 +66,7 @@ const AddEdit = (props: Props) => {
                     icon="check"
                     size={40}
                     color={'white'}
-                    //TODO: zamienić identyfikator do edycji
-                    onPress={isEdit ? (() => onSaveContact(modes.edit, 0)) : (() => onSaveContact(modes.create, 0))}
+                    onPress={isEdit ? (() => onSaveContact(modes.edit, contact.id)) : (() => onSaveContact(modes.create, -1))}
                 />
             ),
         });
@@ -123,7 +122,7 @@ const AddEdit = (props: Props) => {
                     label={label}
                     value={phoneOrEmail}
                     style={styles.inputText}
-                    onChangeText={text => onChangeInputField(label, text, index)}
+                    onChangeText={text => onChangeTextInput(label, text, index)}
                 />
                 <IconButton
                     icon='trash-can-outline'
@@ -187,7 +186,7 @@ const AddEdit = (props: Props) => {
                 {/* Dane osobowe */}
                 {inputRow('Name', onChangeName, contact.firstName)}
                 {inputRow('Second name', onChangeSecondName, contact.secondName)}
-                {inputRow('Surname', onChangeSurname, contact.lastName)}
+                {inputRow('Surname', onChangeLastName, contact.lastName)}
 
                 {/* Numery telefonu */}
                 {mapPhoneNumbers(numbers)}

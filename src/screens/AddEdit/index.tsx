@@ -12,13 +12,12 @@ const AddEditScreen  = ({route, navigation}) => {
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
     const [exampleInitialValue, setExampleInitialValue] = useState(0);
-    //TODO: zmienić indeks na id wybranego kontaktu
-    const [firstName, setFirstName] = useState(mode === modes.edit ? contacts[0].firstName : '');
-    const [secondName, setSecondName] = useState(mode === modes.edit ? contacts[0].secondName : '');
-    const [lastName, setSurname] = useState(mode === modes.edit ? contacts[0].lastName : '');
-    const [numbers, setNumbers] = useState(mode === modes.edit ? (contacts[0].telNumbers) : ([{category: '', number: '',}]));
+    const [firstName, setFirstName] = useState(mode === modes.edit ? contacts[id].firstName : '');
+    const [secondName, setSecondName] = useState(mode === modes.edit ? contacts[id].secondName : '');
+    const [lastName, setSurname] = useState(mode === modes.edit ? contacts[id].lastName : '');
+    const [numbers, setNumbers] = useState(mode === modes.edit ? (contacts[id].telNumbers) : ([{category: '', number: '',}]));
     const [deletedNumber, setDeletedNumber] = useState({number: '', category: ''});
-    const [emails, setEmails] = useState(mode === modes.edit ? (contacts[0].emails) : ([{category: '', email: '',}]));
+    const [emails, setEmails] = useState(mode === modes.edit ? (contacts[id].emails) : ([{category: '', email: '',}]));
     const [deletedEmail, setDeletedEmail] = useState({email: '', category: ''});
     const [snackbar, setSnackbar] = useState({isVisible: false, message: '', isActionVisible: false, label: ''});
     const buildContactObject = () => {
@@ -40,12 +39,12 @@ const AddEditScreen  = ({route, navigation}) => {
         } else if (label === formLabels.email) {
             setEmails([...emails, {category: '', email: ''}]);
         } else {
+            onShowSnackbar(true, 'Something went wrong.', false, '');
             console.log("Błąd podczas dodawania nowego pola, nieznana etykieta.")
         }
     };
 
-    //TODO: zmienić nazwe, myląca
-    const onChangeInputField = (label: string, value: string, index: number) => {
+    const onChangeTextInput = (label: string, value: string, index: number) => {
         let tmpData;
         if(label === formLabels.number){
             tmpData = [...numbers];
@@ -59,6 +58,7 @@ const AddEditScreen  = ({route, navigation}) => {
             setDeletedEmail(tmpData[index]);
         }
         else {
+            onShowSnackbar(true, 'Something went wrong.', false, '');
             console.log("Błąd pdczas zmiany danych w polu tekstowym, nieznana etykieta.")
         }
     };
@@ -77,6 +77,7 @@ const AddEditScreen  = ({route, navigation}) => {
             setDeletedEmail(tmpData[index]);
         }
         else {
+            onShowSnackbar(true, 'Something went wrong.', false, '');
             console.log("Błąd podczas zmiany danych w rozwijanym menu, nieznana etykieta.")
         }
     };
@@ -96,6 +97,7 @@ const AddEditScreen  = ({route, navigation}) => {
             setEmails(tmpData);
             onShowSnackbar(true,'Email deleted.', true, label);
         } else {
+            onShowSnackbar(true, 'Something went wrong.', false, '');
             console.log("Błąd podczas usuwania pola tekstowego, nieznana etykieta.");
         }
     };
@@ -128,7 +130,7 @@ const AddEditScreen  = ({route, navigation}) => {
     const onGroups = (id: number) => {navigate('Groups', {id: id})};
     const onChangeName = (name: string) => {setFirstName(name)};
     const onChangeSecondName = (secondName: string) => {setSecondName(secondName)};
-    const onChangeSurname = (lastName: string) => {setSurname(lastName)};
+    const onChangeLastName = (lastName: string) => {setSurname(lastName)};
     const onDismissSnackbar = () => {setSnackbar({isVisible: false, message: '', isActionVisible: false, label: ''})};
     const onShowSnackbar = (isVisible: true, message: string, isActionVisible: boolean, label: string) =>
     {setSnackbar({isVisible: true, message: message, isActionVisible: isActionVisible, label: label})};
@@ -138,22 +140,21 @@ const AddEditScreen  = ({route, navigation}) => {
 
     return (
         <AddEdit
-            //TODO: uporządkować kolejność
             mode={mode}
-            onGroups={onGroups}
-            onChangeName={onChangeName}
-            onChangeSecondName={onChangeSecondName}
-            onChangeSurname={onChangeSurname}
-            onSaveContact={onSaveContact}
             numbers={numbers}
             emails={emails}
             navigation={navigation}
-            onChangeInputField={onChangeInputField}
+            contact={contact}
+            snackbar={snackbar}
+            onGroups={onGroups}
+            onChangeName={onChangeName}
+            onChangeSecondName={onChangeSecondName}
+            onChangeLastName={onChangeLastName}
+            onSaveContact={onSaveContact}
+            onChangeTextInput={onChangeTextInput}
             onDeleteTextInput={onDeleteTextInput}
             addInputField={addInputField}
-            contact={contact}
             onChangeDropdown={onChangeDropdown}
-            snackbar={snackbar}
             onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
         />
