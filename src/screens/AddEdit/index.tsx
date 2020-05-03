@@ -18,11 +18,12 @@ const AddEditScreen  = ({route, navigation}) => {
     const [firstName, setFirstName] = useState( isEdit? contacts[id].firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
     const [lastName, setSurname] = useState(isEdit ? contacts[id].lastName : '');
-    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{category: '', number: '',}]));
+    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{number: '', category: '',}]));
     const [deletedNumber, setDeletedNumber] = useState({index: -1, delNumber: {number: '', category: ''}});
-    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{category: '', email: '',}]));
+    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{email: '', category: '',}]));
     const [deletedEmail, setDeletedEmail] = useState({index: -1, delEmail: {email: '', category: ''}});
     const [snackbar, setSnackbar] = useState({isVisible: false, message: '', isActionVisible: false, label: ''});
+    const [isDeleteClicked, setIsDeleteClicked] = useState(false); //Logika pomagająca przy procesie usuwania/cofania usunięcia,
     const buildContactObject = () => {
         return  {
             id: exampleInitialValue + 1,
@@ -49,6 +50,7 @@ const AddEditScreen  = ({route, navigation}) => {
     };
 
     const onChangeTextInput = (label: string, value: string, index: number) => {
+        onDismissSnackbar();
         let tmpData;
         if(label === formLabels.number){
             tmpData = [...numbers];
@@ -68,25 +70,29 @@ const AddEditScreen  = ({route, navigation}) => {
     };
 
     const onChangeDropdown = (label: string, value: string, index: number) => {
-        let tmpData;
-        if(label === formLabels.number){
-            tmpData = [...numbers];
-            tmpData[index].category = value;
-            setNumbers(tmpData);
-            setDeletedNumber({index, delNumber: tmpData[index]});
-        } else if (label == formLabels.email) {
-            tmpData = [...emails];
-            tmpData[index].category = value;
-            setEmails(tmpData);
-            setDeletedEmail({index, delEmail: tmpData[index]});
+        if(!isDeleteClicked) {
+            onDismissSnackbar();
+            let tmpData;
+            if(label === formLabels.number){
+                tmpData = [...numbers];
+                tmpData[index].category = value;
+                setNumbers(tmpData);
+                setDeletedNumber({index, delNumber: tmpData[index]});
+            } else if (label == formLabels.email) {
+                tmpData = [...emails];
+                tmpData[index].category = value;
+                setEmails(tmpData);
+                setDeletedEmail({index, delEmail: tmpData[index]});
+            } else {
+                onShowSnackbar(true, 'Something went wrong.', false, '');
+                console.log("Błąd podczas zmiany danych w rozwijanym menu, nieznana etykieta.")
+            }
         }
-        else {
-            onShowSnackbar(true, 'Something went wrong.', false, '');
-            console.log("Błąd podczas zmiany danych w rozwijanym menu, nieznana etykieta.")
-        }
+        setIsDeleteClicked(false);
     };
 
     const onDeleteTextInput = (label: string, index: number) => {
+        setIsDeleteClicked(true);
         let tmpData;
         if(label === formLabels.number) {
             setDeletedNumber({index, delNumber: numbers[index]});
@@ -107,6 +113,7 @@ const AddEditScreen  = ({route, navigation}) => {
     };
 
     const onUndoPressed = (label: string) => {
+        setIsDeleteClicked(false);
         let tmpData;
         if(label === formLabels.number){
             tmpData = [...numbers];
