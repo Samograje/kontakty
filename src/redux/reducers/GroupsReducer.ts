@@ -7,12 +7,7 @@ import {
 } from '../_constants/Types';
 
 export interface Group {
-    id: number;
-    name: string;
-    contactsIds: number[];
-}
-
-export interface GroupWithoutId {
+    id: number | null;
     name: string;
     contactsIds: number[];
 }

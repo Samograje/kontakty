@@ -11,16 +11,7 @@ export interface ContactEmail {
 }
 
 export interface Contact {
-    id: number;
-    firstName: string;
-    secondName: string;
-    lastName: string;
-    photoUrl: string;
-    telNumbers: ContactNumber[];
-    emails: ContactEmail[];
-}
-
-export interface ContactWithoutId {
+    id: number | null;
     firstName: string;
     secondName: string;
     lastName: string;

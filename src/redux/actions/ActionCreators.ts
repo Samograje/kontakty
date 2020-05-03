@@ -8,17 +8,17 @@ import {
     ADD_CONTACT_ID,
     REMOVE_CONTACT_ID,
 } from '../_constants/Types';
-import { ContactWithoutId } from '../reducers/ContactsReducer';
-import { GroupWithoutId } from '../reducers/GroupsReducer';
+import { Contact } from '../reducers/ContactsReducer';
+import { Group } from '../reducers/GroupsReducer';
 
-export const createContact = (contact: ContactWithoutId) => {
+export const createContact = (contact: Contact) => {
     return {
         type: CREATE_CONTACT,
         contact,
     };
 };
 
-export const updateContact = (contact: ContactWithoutId, contactId: number) => {
+export const updateContact = (contact: Contact, contactId: number) => {
     return {
         type: UPDATE_CONTACT,
         contact,
@@ -33,14 +33,14 @@ export const removeContact = (id: number) => {
     };
 };
 
-export const createGroup = (group: GroupWithoutId) => {
+export const createGroup = (group: Group) => {
     return {
         type: CREATE_GROUP,
         group,
     };
 };
 
-export const updateGroup = (group: GroupWithoutId, groupId: number) => {
+export const updateGroup = (group: Group, groupId: number) => {
     return {
         type: UPDATE_GROUP,
         group,
