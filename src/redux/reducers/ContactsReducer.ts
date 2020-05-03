@@ -1,38 +1,34 @@
-import {
-    CREATE_CONTACT,
-    UPDATE_CONTACT,
-    REMOVE_CONTACT,
-} from '../_constants/Types';
+import { CREATE_CONTACT, UPDATE_CONTACT, REMOVE_CONTACT } from '../_constants/Types';
 
 export interface ContactNumber {
-    category: string,
-    number: string,
+    category: string;
+    number: string;
 }
 
 export interface ContactEmail {
-    category: string,
-    email: string,
+    category: string;
+    email: string;
 }
 
 export interface Contact {
-    id: number,
-    firstName: string,
-    secondName: string,
-    lastName: string,
-    photoUrl: string,
-    telNumbers: ContactNumber[],
-    emails: ContactEmail[],
+    id: number;
+    firstName: string;
+    secondName: string;
+    lastName: string;
+    photoUrl: string;
+    telNumbers: ContactNumber[];
+    emails: ContactEmail[];
 }
 
 interface State {
-    contacts: Contact[],
+    contacts: Contact[];
 }
 
-const initialState : State = {
+const initialState: State = {
     contacts: [],
 };
 
-export const ContactsReducer = (state = initialState, action) => {
+export const ContactsReducer = (state = initialState, action): State => {
     switch (action.type) {
         case CREATE_CONTACT:
             return {
@@ -41,12 +37,12 @@ export const ContactsReducer = (state = initialState, action) => {
         case UPDATE_CONTACT:
             return {
                 contacts: state.contacts.map(
-                    (contact, i) => i === action.contactIndex ? action.contact : contact
-                )
+                    (contact, i): Contact => (i === action.contactIndex ? action.contact : contact),
+                ),
             };
         case REMOVE_CONTACT:
             return {
-                contacts: state.contacts.filter((contact) => contact.id !== action.id),
+                contacts: state.contacts.filter((contact): boolean => contact.id !== action.id),
             };
         default:
             return state;

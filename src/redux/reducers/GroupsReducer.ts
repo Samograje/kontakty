@@ -7,19 +7,19 @@ import {
 } from '../_constants/Types';
 
 export interface Group {
-    id: number,
-    contactsIds: [],
+    id: number;
+    contactsIds: number[];
 }
 
 interface State {
-    groups: Group[],
+    groups: Group[];
 }
 
-const initialState : State = {
+const initialState: State = {
     groups: [],
 };
 
-export const GroupsReducer = (state = initialState, action) => {
+export const GroupsReducer = (state = initialState, action): State => {
     switch (action.type) {
         case CREATE_GROUP:
             return {
@@ -28,30 +28,38 @@ export const GroupsReducer = (state = initialState, action) => {
         case UPDATE_GROUP:
             return {
                 groups: state.groups.map(
-                    (group, i) => i === action.groupIndex ? action.group : group
-                )
+                    (group, i): Group => (i === action.groupIndex ? action.group : group),
+                ),
             };
         case REMOVE_GROUP:
             return {
-                groups: state.groups.filter((group) => group.id !== action.id),
+                groups: state.groups.filter((group): boolean => group.id !== action.id),
             };
         case ADD_CONTACT_ID:
             return {
                 groups: state.groups.map(
-                    (group, i) => i === action.groupIndex ? {
-                            ...group, contactsIds: [...group.contactsIds, action.contactId]
-                        }
-                        : group
-                )
+                    (group, i): Group =>
+                        i === action.groupIndex
+                            ? {
+                                  ...group,
+                                  contactsIds: [...group.contactsIds, action.contactId],
+                              }
+                            : group,
+                ),
             };
         case REMOVE_CONTACT_ID:
             return {
                 groups: state.groups.map(
-                    (group, i) => i === action.groupIndex ? {
-                            ...group, contactsIds: group.contactsIds.filter((contactId) => contactId !== action.contactId)
-                        }
-                        : group
-                )
+                    (group, i): Group =>
+                        i === action.groupIndex
+                            ? {
+                                  ...group,
+                                  contactsIds: group.contactsIds.filter(
+                                      (contactId): boolean => contactId !== action.contactId,
+                                  ),
+                              }
+                            : group,
+                ),
             };
         default:
             return state;
