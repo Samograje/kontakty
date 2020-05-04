@@ -9,7 +9,7 @@ import AddGroupModal from './components/AddGroupModal';
 interface Props {
     data: DataWithIsChecked[];
     onGroupPress: (groupId: number, isIncluded: boolean) => void;
-    onLongGroupPress: (groupId: number) => void;
+    onLongGroupPress: (groupId: number, groupName: string) => void;
     addGroup: (name: string) => void;
 }
 

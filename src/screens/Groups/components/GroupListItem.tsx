@@ -5,7 +5,7 @@ import { DataWithIsChecked } from '../index';
 
 interface Props {
     onGroupPress: (groupId: number, isIncluded: boolean) => void;
-    onLongGroupPress: (groupId: number) => void;
+    onLongGroupPress: (groupId: number, groupName: string) => void;
     item: DataWithIsChecked;
 }
 
@@ -37,7 +37,7 @@ const GroupListItem = (props: Props) => {
                     onGroupPress(item.id, item.isChecked);
                 }}
                 onLongPress={(): void => {
-                    onLongGroupPress(item.id);
+                    onLongGroupPress(item.id, item.name);
                 }}
                 style={styles.rowContainer}
             >

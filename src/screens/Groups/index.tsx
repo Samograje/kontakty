@@ -40,11 +40,11 @@ const GroupsScreen = (props: Props) => {
         dispatch(createGroup(group));
     };
 
-    const onLongGroupPress = (groupId: number): void => {
+    const onLongGroupPress = (groupId: number, groupName: string): void => {
         if (!groupId) return;
         Alert.alert(
             'Group',
-            'Do you want to delete this group permanently?',
+            `Do you want to delete '${groupName}' permanently?`,
             [
                 {
                     text: 'Cancel',
