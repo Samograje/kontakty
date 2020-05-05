@@ -24,14 +24,13 @@ const styles = StyleSheet.create({
 const ContactsList = (props: Props): JSX.Element => {
     const { onCreate, onView, onExample, data } = props;
 
-    const keyExtractor = (item, index): number => item + index;
+    const keyExtractor = (item, index): string => item + index;
 
     return (
         <View style={styles.container}>
             <Button title='Szczegóły kontaktu o id 4' onPress={(): void => onView(4)} />
             <Button title='FAB dodaj nowy kontakt' onPress={onCreate} />
             <Button title='Click here!' onPress={onExample} />
-            // @ts-ignore XDDDD
             <SectionList
                 sections={data}
                 keyExtractor={keyExtractor}

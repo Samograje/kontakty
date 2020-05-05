@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContactsList from './ContactsList';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,7 +49,7 @@ const ContactsListScreen = (): JSX.Element => {
         dispatch(createContact(contact));
     };
 
-    const addExampleContacts = () => {
+    const addExampleContacts = (): void => {
         addExampleContact('Agata', 'Pała');
         addExampleContact('Andrzej', 'Dupa');
         addExampleContact('Wojciech', 'Puczyk');
@@ -85,7 +85,7 @@ const ContactsListScreen = (): JSX.Element => {
         }, []);
 
     return (
-        // TODO
+        // TODO: zaktualizować reguły stylu
         // eslint-disable-next-line prettier/prettier
         <ContactsList
             onCreate={onCreate}

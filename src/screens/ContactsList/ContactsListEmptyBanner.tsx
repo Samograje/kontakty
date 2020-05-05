@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ContactsListEmptyBanner = (): Element => {
+const ContactsListEmptyBanner = (): ReactElement => {
     return <Text style={styles.container}>No contacts yet</Text>;
 };
 

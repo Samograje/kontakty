@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ContactListItem = (props: Props): Element => {
+const ContactListItem = (props: Props): ReactElement => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { firstName, lastName, photoUrl } = props.item;
 

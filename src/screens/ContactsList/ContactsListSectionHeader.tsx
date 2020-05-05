@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { SectionListData, StyleSheet, Text } from 'react-native';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ContactsListSectionHeader = (props: Props): Element => {
+const ContactsListSectionHeader = (props: Props): ReactElement => {
     const { title } = props.section;
     return <Text style={styles.container}>{title}</Text>;
 };
