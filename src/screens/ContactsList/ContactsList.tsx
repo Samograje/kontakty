@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
 });
 
 const ContactsList = (props: Props): JSX.Element => {
+    // eslint-disable-next-line prettier/prettier
     const {
         onCreate,
         onView,
@@ -30,8 +31,8 @@ const ContactsList = (props: Props): JSX.Element => {
     } = props;
 
     const keyExtractor = (item, index): string => item + index;
-    const renderItem: SectionListRenderItem<Contact> = (props: SectionListRenderItemInfo<Contact>): ReactElement => (
-        <ContactListItem item={props.item} onClick={() => onView(props.item.id)} />
+    const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
+        <ContactListItem item={p.item} onClick={(): void => onView(p.item.id)} />
     );
 
     return (

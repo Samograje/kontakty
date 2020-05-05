@@ -18,21 +18,19 @@ const ContactsListScreen = (): JSX.Element => {
     const [exampleInitialValue, setExampleInitialValue] = useState(0);
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const onEdit = (id: number): void => navigate('AddEdit', { id: id, mode: 'edit' });
-    const onDetails = (id: number): void => navigate('Details', { id });
+    const onDetails = (id: number | null): void => navigate('Details', { id });
 
     useEffect(() => {
         setExampleInitialValue(contacts.length);
     }, [contacts]);
 
-    const addExampleContact = (firstName: string, lastName: string): void => {
+    const addExampleContact = (firstName: string, lastName: string, photoUrl: string | null): void => {
         const contact = {
             id: exampleInitialValue + 1,
             firstName,
             secondName: '',
             lastName,
-            photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
+            photoUrl: photoUrl || 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
             telNumbers: [
                 {
                     category: 'Domowy',
@@ -50,9 +48,13 @@ const ContactsListScreen = (): JSX.Element => {
     };
 
     const addExampleContacts = (): void => {
-        addExampleContact('Agata', 'Pała');
-        addExampleContact('Andrzej', 'Dupa');
-        addExampleContact('Wojciech', 'Puczyk');
+        addExampleContact('Agata', 'Pała', null);
+        addExampleContact('Andrzej', 'Dupa', 'https://d.wpimg.pl/1624536224--718230253/andrzej-duda.jpg');
+        addExampleContact(
+            'Wojciech',
+            'Puczyk',
+            'https://vignette.wikia.nocookie.net/serialblokekipa/images/c/c9/Wojtas_Puczyk.png/revision/latest/scale-to-width-down/340?cb=20170802081833&path-prefix=pl',
+        );
     };
 
     // sortuje i grupuje kontakty po pierwszej literze imienia
