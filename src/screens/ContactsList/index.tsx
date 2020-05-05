@@ -7,86 +7,93 @@ import { getContacts } from '../../redux/selectors/Selectors';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 
 interface ContactsSection {
-  title: string,
-  data: Contact[],
+    title: string;
+    data: Contact[];
 }
 
-const ContactsListScreen = () => {
-  const { navigate } = useNavigation();
-  const contacts = useSelector(getContacts);
-  const dispatch = useDispatch();
-  const [exampleInitialValue, setExampleInitialValue] = useState(0);
+const ContactsListScreen = (): JSX.Element => {
+    const { navigate } = useNavigation();
+    const contacts = useSelector(getContacts);
+    const dispatch = useDispatch();
+    const [exampleInitialValue, setExampleInitialValue] = useState(0);
 
-  const onCreate = () => navigate('AddEdit', { mode: 'create' });
-  const onEdit = (id: number) => navigate('AddEdit', { id: id, mode: 'edit' });
-  const onDetails = (id: number) => navigate('Details', { id });
+    const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onEdit = (id: number): void => navigate('AddEdit', { id: id, mode: 'edit' });
+    const onDetails = (id: number): void => navigate('Details', { id });
 
-  useEffect(() => {
-    setExampleInitialValue(contacts.length);
-  }, [contacts]);
+    useEffect(() => {
+        setExampleInitialValue(contacts.length);
+    }, [contacts]);
 
-  const addExampleContact = (firstName: string, lastName: string) => {
-    let contact = {
-      id: exampleInitialValue + 1,
-      firstName,
-      secondName: '',
-      lastName,
-      photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
-      telNumbers: [{
-        category: 'Domowy',
-        number: '111222333',
-      }],
-      emails: [{
-        category: 'Prywatny',
-        email: 'smoczyca@hollywood.com', // XDD
-      }],
+    const addExampleContact = (firstName: string, lastName: string): void => {
+        const contact = {
+            id: exampleInitialValue + 1,
+            firstName,
+            secondName: '',
+            lastName,
+            photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
+            telNumbers: [
+                {
+                    category: 'Domowy',
+                    number: '111222333',
+                },
+            ],
+            emails: [
+                {
+                    category: 'Prywatny',
+                    email: 'smoczyca@hollywood.com', // XDD
+                },
+            ],
+        };
+        dispatch(createContact(contact));
     };
-    dispatch(createContact(contact));
-  };
 
-  const addExampleContacts = () => {
-    addExampleContact('Agata', 'Pała');
-    addExampleContact('Andrzej', 'Dupa');
-    addExampleContact('Wojciech', 'Puczyk');
-  };
+    const addExampleContacts = (): void => {
+        addExampleContact('Agata', 'Pała');
+        addExampleContact('Andrzej', 'Dupa');
+        addExampleContact('Wojciech', 'Puczyk');
+    };
 
-  // sortuje i grupuje kontakty po pierwszej literze imienia
-  const contactsSectioned = contacts
-    .sort((a: Contact, b: Contact) => {
-      if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
-        return -1;
-      }
-      if (a.firstName.toUpperCase() > b.firstName.toUpperCase()) {
-        return 1;
-      }
-      return 0;
-    })
-    .reduce((resultValue: ContactsSection[], currValue: Contact) => {
-      const letter = currValue.firstName.charAt(0) || 'Puste';
+    // sortuje i grupuje kontakty po pierwszej literze imienia
+    const contactsSectioned = contacts
+        .sort((a: Contact, b: Contact) => {
+            if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
+                return -1;
+            }
+            if (a.firstName.toUpperCase() > b.firstName.toUpperCase()) {
+                return 1;
+            }
+            return 0;
+        })
+        .reduce((resultValue: ContactsSection[], currValue: Contact) => {
+            const letter = currValue.firstName.charAt(0) || 'Puste';
 
-      if (resultValue.length) {
-        const lastSection: ContactsSection = resultValue[resultValue.length - 1];
-        if (lastSection.title === letter) {
-          lastSection.data.push(currValue);
-          return resultValue;
-        }
-      }
+            if (resultValue.length) {
+                const lastSection: ContactsSection = resultValue[resultValue.length - 1];
+                if (lastSection.title === letter) {
+                    lastSection.data.push(currValue);
+                    return resultValue;
+                }
+            }
 
-      resultValue.push({
-        title: letter,
-        data: [currValue],
-      });
-      return resultValue;
-    }, []);
+            resultValue.push({
+                title: letter,
+                data: [currValue],
+            });
+            return resultValue;
+        }, []);
 
-  return (
-    <ContactsList
-      onCreate={onCreate}
-      onView={onDetails}
-      onExample={addExampleContacts}
-      data={contactsSectioned}
-    />
-  );
+    return (
+        // TODO: zaktualizować reguły stylu
+        // eslint-disable-next-line prettier/prettier
+        <ContactsList
+            onCreate={onCreate}
+            onView={onDetails}
+            onExample={addExampleContacts}
+            data={contactsSectioned}
+        />
+    );
 };
 
 export default ContactsListScreen;
