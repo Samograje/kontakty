@@ -1,5 +1,13 @@
 import React, { ReactElement } from 'react';
-import { Button, SectionList, SectionListRenderItem, SectionListRenderItemInfo, StyleSheet, View } from 'react-native';
+import {
+    Button,
+    SectionList,
+    SectionListRenderItem,
+    SectionListRenderItemInfo,
+    StatusBar,
+    StyleSheet,
+    View,
+} from 'react-native';
 import { FAB } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ContactListItem from './ContactListItem';
@@ -46,6 +54,8 @@ const ContactsList = (props: Props): JSX.Element => {
 
     return (
         <View style={styles.container}>
+            <StatusBar backgroundColor='darkgreen' />
+
             <Button title='Click here!' onPress={onExample} />
             <SectionList
                 sections={data}

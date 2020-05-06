@@ -32,7 +32,7 @@ const App = (): ReactElement => {
                         <Stack.Screen
                             name='List'
                             component={ContactsListScreen}
-                            options={{ title: 'Contacts' }}
+                            options={{ headerShown: false }}
                         />
                         <Stack.Screen
                             name='Details'
