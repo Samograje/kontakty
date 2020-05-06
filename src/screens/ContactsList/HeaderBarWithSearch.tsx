@@ -13,7 +13,9 @@ const styles = StyleSheet.create({
     container: {
         height: 56,
         backgroundColor: 'darkgreen',
-        padding: 10,
+        padding: 6,
+        paddingLeft: 10,
+        paddingRight: 10,
     },
     searchBar: {
         flex: 1,
