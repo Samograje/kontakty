@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 });
 
 const ContactsListEmptyBanner = (): ReactElement => {
-    return <Text style={styles.container}>No contacts yet</Text>;
+    return <Text style={styles.container}>No contacts to display</Text>;
 };
 
 export default ContactsListEmptyBanner;
