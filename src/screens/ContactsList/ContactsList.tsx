@@ -62,7 +62,7 @@ const ContactsList = (props: Props): JSX.Element => {
         <View style={styles.container}>
             <StatusBar backgroundColor='darkgreen' />
             <HeaderBarWithSearch totalElements={totalElements} onSearch={onSearch} />
-            <Button title='Click here!' onPress={onExample} />
+            <Button title='Create example contacts' onPress={onExample} />
             <SectionList
                 sections={data}
                 keyExtractor={keyExtractor}
