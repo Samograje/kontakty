@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { ReactElement, useState } from 'react';
 import ContactsList from './ContactsList';
 import { useNavigation } from '@react-navigation/native';
@@ -13,9 +14,10 @@ interface ContactsSection {
 
 const searchContacts = (contacts: Contact[], query: string): Contact[] => {
     return contacts.filter((contact: Contact): boolean => {
-        const firstNameMatches = contact.firstName.startsWith(query);
-        const lastNameMatches = contact.lastName.startsWith(query);
-        const bothMatchesWithSpace = `${contact.firstName} ${contact.lastName}`.startsWith(query);
+        const firstNameMatches = contact.firstName.toUpperCase().startsWith(query.toUpperCase());
+        const lastNameMatches = contact.lastName.toUpperCase().startsWith(query.toUpperCase());
+        const bothMatchesWithSpace = `${contact.firstName.toUpperCase()} ${contact.lastName.toUpperCase()}`
+            .startsWith(query.toUpperCase());
         return firstNameMatches || lastNameMatches || bothMatchesWithSpace;
     });
 };
