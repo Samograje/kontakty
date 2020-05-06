@@ -19,12 +19,14 @@ interface Props {
     onCreate: () => void;
     onView: (id: number | null) => void;
     onSearch: (query: string) => void;
+    onClearSearch: () => void;
     onExample: () => void;
     data: {
         title: string;
         data: Contact[];
     }[];
     totalElements: number;
+    searchText: string;
 }
 
 const styles = StyleSheet.create({
@@ -42,16 +44,7 @@ const styles = StyleSheet.create({
 });
 
 const ContactsList = (props: Props): JSX.Element => {
-    // TODO: update style rules
-    // eslint-disable-next-line prettier/prettier
-    const {
-        onCreate,
-        onView,
-        onSearch,
-        onExample,
-        data,
-        totalElements,
-    } = props;
+    const { onCreate, onView, onSearch, onClearSearch, onExample, data, totalElements, searchText } = props;
 
     const keyExtractor = (item, index): string => item + index;
     const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
@@ -61,7 +54,12 @@ const ContactsList = (props: Props): JSX.Element => {
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor='darkgreen' />
-            <HeaderBarWithSearch totalElements={totalElements} onSearch={onSearch} />
+            <HeaderBarWithSearch
+                totalElements={totalElements}
+                searchText={searchText}
+                onSearch={onSearch}
+                onClearSearch={onClearSearch}
+            />
             <Button title='Create example contacts' onPress={onExample} />
             <SectionList
                 sections={data}
@@ -71,12 +69,7 @@ const ContactsList = (props: Props): JSX.Element => {
                 ListEmptyComponent={ContactsListEmptyBanner}
             />
             <View style={styles.fixedView}>
-                {/* eslint-disable-next-line prettier/prettier */}
-                <FAB
-                    style={styles.fab}
-                    icon="plus"
-                    onPress={onCreate}
-                />
+                <FAB style={styles.fab} icon='plus' onPress={onCreate} />
             </View>
         </View>
     );

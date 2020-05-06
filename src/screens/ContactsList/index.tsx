@@ -77,12 +77,18 @@ const ContactsListScreen = (): ReactElement => {
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
     const [contactsFiltered, setContactsFiltered] = useState(contacts);
+    const [searchText, setSearchText] = useState('');
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
     const onDetails = (id: number | null): void => navigate('Details', { id });
 
     const onSearch = (query: string): void => {
+        setSearchText(query);
         setContactsFiltered(searchContacts(contacts, query));
+    };
+
+    const onClearSearch = (): void => {
+        onSearch('');
     };
 
     // TODO: remove example when adding contact image by form will be available
@@ -106,9 +112,11 @@ const ContactsListScreen = (): ReactElement => {
             onCreate={onCreate}
             onView={onDetails}
             onSearch={onSearch}
+            onClearSearch={onClearSearch}
             onExample={addExampleContacts}
             data={contactsSectioned}
             totalElements={contacts.length}
+            searchText={searchText}
         />
     );
 };
