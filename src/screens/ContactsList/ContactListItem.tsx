@@ -32,19 +32,14 @@ const styles = StyleSheet.create({
 });
 
 const ContactListItem = (props: Props): ReactElement => {
-    // eslint-disable-next-line prettier/prettier
-    const {
-        firstName,
-        lastName,
-        photoUrl,
-    } = props.item;
+    const { firstName, lastName, photoUrl } = props.item;
 
     const onPress = (): void => props.onClick(props.item);
 
     return (
         <TouchableRipple style={styles.ripple} onPress={onPress}>
             <View style={styles.container}>
-                <Image source={{ uri: photoUrl }} style={styles.avatar}/>
+                <Image source={{ uri: photoUrl }} style={styles.avatar} />
                 <Text style={styles.text}>
                     {firstName} {lastName}
                 </Text>
