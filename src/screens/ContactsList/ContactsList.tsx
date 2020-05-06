@@ -13,15 +13,18 @@ import { Contact } from '../../redux/reducers/ContactsReducer';
 import ContactListItem from './ContactListItem';
 import ContactsListSectionHeader from './ContactsListSectionHeader';
 import ContactsListEmptyBanner from './ContactsListEmptyBanner';
+import HeaderBarWithSearch from './HeaderBarWithSearch';
 
 interface Props {
     onCreate: () => void;
     onView: (id: number | null) => void;
+    onSearch: (query: string) => void;
     onExample: () => void;
     data: {
         title: string;
         data: Contact[];
     }[];
+    totalElements: number;
 }
 
 const styles = StyleSheet.create({
@@ -39,12 +42,15 @@ const styles = StyleSheet.create({
 });
 
 const ContactsList = (props: Props): JSX.Element => {
+    // TODO: update style rules
     // eslint-disable-next-line prettier/prettier
     const {
         onCreate,
         onView,
+        onSearch,
         onExample,
         data,
+        totalElements,
     } = props;
 
     const keyExtractor = (item, index): string => item + index;
@@ -55,7 +61,7 @@ const ContactsList = (props: Props): JSX.Element => {
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor='darkgreen' />
-
+            <HeaderBarWithSearch totalElements={totalElements} onSearch={onSearch} />
             <Button title='Click here!' onPress={onExample} />
             <SectionList
                 sections={data}

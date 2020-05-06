@@ -15,15 +15,26 @@ const ContactsListScreen = (): ReactElement => {
     const { navigate } = useNavigation();
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
-    const [exampleInitialValue, setExampleInitialValue] = useState(0);
+    const [contactsFiltered, setContactsFiltered] = useState(contacts);
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
     const onDetails = (id: number | null): void => navigate('Details', { id });
 
+    const onSearch = (query: string): void => {
+        const result = contacts.filter((contact: Contact): boolean => {
+            const firstNameMatches = contact.firstName.startsWith(query);
+            const lastNameMatches = contact.lastName.startsWith(query);
+            const bothMatchesWithSpace = `${contact.firstName} ${contact.lastName}`.startsWith(query);
+            return firstNameMatches || lastNameMatches || bothMatchesWithSpace;
+        });
+        setContactsFiltered(result);
+    };
+
+    // TODO: remove example when adding contact image by form will be available
+    const [exampleInitialValue, setExampleInitialValue] = useState(0);
     useEffect(() => {
         setExampleInitialValue(contacts.length);
     }, [contacts]);
-
     const addExampleContact = (firstName: string, lastName: string, photoUrl: string | null): void => {
         const contact = {
             id: exampleInitialValue + 1,
@@ -46,7 +57,6 @@ const ContactsListScreen = (): ReactElement => {
         };
         dispatch(createContact(contact));
     };
-
     const addExampleContacts = (): void => {
         addExampleContact('Agata', 'Pała', null);
         addExampleContact('Andrzej', 'Dupa', 'https://d.wpimg.pl/1624536224--718230253/andrzej-duda.jpg');
@@ -58,7 +68,7 @@ const ContactsListScreen = (): ReactElement => {
     };
 
     // sorts and groups contacts by the first letter of the first name
-    const contactsSectioned = contacts
+    const contactsSectioned = contactsFiltered
         .sort((a: Contact, b: Contact) => {
             if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
                 return -1;
@@ -87,13 +97,13 @@ const ContactsListScreen = (): ReactElement => {
         }, []);
 
     return (
-        // TODO: update style rules
-        // eslint-disable-next-line prettier/prettier
         <ContactsList
             onCreate={onCreate}
             onView={onDetails}
+            onSearch={onSearch}
             onExample={addExampleContacts}
             data={contactsSectioned}
+            totalElements={contacts.length}
         />
     );
 };
