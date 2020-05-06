@@ -1,4 +1,5 @@
-import * as React from 'react';
+/* eslint-disable prettier/prettier */
+import React, { ReactElement } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
@@ -14,7 +15,7 @@ const Stack = createStackNavigator();
 const store = configureStore();
 const persistedStore = persistStore(store);
 
-const App = () => {
+const App = (): ReactElement => {
     return (
         <Provider store={store}>
             <PersistGate persistor={persistedStore} loading={null}>

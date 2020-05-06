@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import ContactsList from './ContactsList';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ interface ContactsSection {
     data: Contact[];
 }
 
-const ContactsListScreen = (): JSX.Element => {
+const ContactsListScreen = (): ReactElement => {
     const { navigate } = useNavigation();
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
@@ -33,13 +33,13 @@ const ContactsListScreen = (): JSX.Element => {
             photoUrl: photoUrl || 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
             telNumbers: [
                 {
-                    category: 'Domowy',
+                    category: 'Home',
                     number: '111222333',
                 },
             ],
             emails: [
                 {
-                    category: 'Prywatny',
+                    category: 'Private',
                     email: 'smoczyca@hollywood.com', // XDD
                 },
             ],
@@ -57,7 +57,7 @@ const ContactsListScreen = (): JSX.Element => {
         );
     };
 
-    // sortuje i grupuje kontakty po pierwszej literze imienia
+    // sorts and groups contacts by the first letter of the first name
     const contactsSectioned = contacts
         .sort((a: Contact, b: Contact) => {
             if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
@@ -69,7 +69,7 @@ const ContactsListScreen = (): JSX.Element => {
             return 0;
         })
         .reduce((resultValue: ContactsSection[], currValue: Contact) => {
-            const letter = currValue.firstName.charAt(0) || 'Puste';
+            const letter = currValue.firstName.charAt(0) || 'Empty';
 
             if (resultValue.length) {
                 const lastSection: ContactsSection = resultValue[resultValue.length - 1];
@@ -87,7 +87,7 @@ const ContactsListScreen = (): JSX.Element => {
         }, []);
 
     return (
-        // TODO: zaktualizować reguły stylu
+        // TODO: update style rules
         // eslint-disable-next-line prettier/prettier
         <ContactsList
             onCreate={onCreate}
