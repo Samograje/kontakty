@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { TextInput, Avatar, IconButton, Snackbar } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
@@ -50,6 +50,7 @@ interface Props {
     emails: emailsT;
     navigation: navigationT;
     contact: contactT;
+    pickImage: () => void;
     snackbar: snackbarT;
     onGroups: (id: number) => void;
     onChangeName: (name: string) => void;
@@ -71,6 +72,7 @@ const AddEdit = (props: Props): JSX.Element => {
         emails,
         navigation,
         contact,
+        pickImage,
         snackbar,
         onGroups,
         onChangeName,
@@ -222,9 +224,9 @@ const AddEdit = (props: Props): JSX.Element => {
         <View style={styles.container}>
             <ScrollView>
                 <View>
-                    <View style={styles.avatarContainer}>
+                    <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
                         <Avatar.Text size={120} label='XD' />
-                    </View>
+                    </TouchableOpacity>
                     {/* Dane osobowe */}
                     {inputRow('Name', onChangeName, contact.firstName)}
                     {inputRow('Second name', onChangeSecondName, contact.secondName)}

@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import React, { useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import AddEdit from "./AddEdit";
 import { getContacts } from "../../redux/selectors/Selectors";
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import * as ImagePicker from 'expo-image-picker';
 import { formLabels, modes } from "../StringsHelper";
 import {createContact, updateContact} from "../../redux/actions/ActionCreators";
 import {contactT} from "../CustomTypes";
@@ -15,6 +16,7 @@ const AddEditScreen  = ({route, navigation}): JSX.Element => {
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
+    const [image, setImage] = useState('');
     const [firstName, setFirstName] = useState( isEdit? contacts[id].firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
     const [lastName, setSurname] = useState(isEdit ? contacts[id].lastName : '');
@@ -146,6 +148,23 @@ const AddEditScreen  = ({route, navigation}): JSX.Element => {
         onShowSnackbar(true,'Contact saved.', false, '');
     };
 
+    const pickImage = useCallback(async (): Promise<void> => {
+        try {
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1,
+            });
+            if (!result.cancelled) {
+                setImage(result.uri);
+            }
+            console.log(result);
+        } catch (error) {
+            console.log(error);
+        }
+    },[]);
+
     return (
         <AddEdit
             mode={mode}
@@ -153,6 +172,7 @@ const AddEditScreen  = ({route, navigation}): JSX.Element => {
             emails={emails}
             navigation={navigation}
             contact={contact}
+            pickImage={pickImage}
             snackbar={snackbar}
             onGroups={onGroups}
             onChangeName={onChangeName}
