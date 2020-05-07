@@ -34,7 +34,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             firstName: firstName,
             secondName: secondName,
             lastName: lastName,
-            photoUrl: 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
+            photoUrl: image,
             telNumbers: numbers,
             emails: emails,
         };
