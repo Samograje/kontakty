@@ -5,6 +5,7 @@ import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { contactT, emailsT, navigationT, numbersT, snackbarT } from '../CustomTypes';
+import CameraView from '../Camera/Camera';
 
 const styles = StyleSheet.create({
     container: {
@@ -51,7 +52,10 @@ interface Props {
     navigation: navigationT;
     contact: contactT;
     image: string;
+    isCameraOn: boolean;
     pickImage: () => void;
+    setImage: (string) => void;
+    setIsCameraOn: (boolean) => void;
     snackbar: snackbarT;
     onGroups: (id: number) => void;
     onChangeName: (name: string) => void;
@@ -74,7 +78,10 @@ const AddEdit = (props: Props): JSX.Element => {
         navigation,
         contact,
         image,
+        isCameraOn,
         pickImage,
+        setImage,
+        setIsCameraOn,
         snackbar,
         onGroups,
         onChangeName,
@@ -93,12 +100,7 @@ const AddEdit = (props: Props): JSX.Element => {
         navigation.setOptions({
             title: mode === modes.edit ? 'Edit contact' : 'Create contact',
             headerRight: (): JSX.Element => (
-                <IconButton
-                    icon='check'
-                    size={40}
-                    color={'white'}
-                    onPress={(): void => onSaveContact()}
-                />
+                <IconButton icon='check' size={40} color={'white'} onPress={(): void => onSaveContact()} />
             ),
         });
     }, [navigation, onSaveContact, contact.id, mode]);
@@ -113,9 +115,7 @@ const AddEdit = (props: Props): JSX.Element => {
     const inputRow = (label: string, method: any, value: string): JSX.Element => (
         //TODO: zrobić typ dla metod
         <View style={styles.row}>
-            <View style={styles.iconContainer}>
-                {showIconOrEmptySpace(label === formLabels.name, icons.user)}
-            </View>
+            <View style={styles.iconContainer}>{showIconOrEmptySpace(label === formLabels.name, icons.user)}</View>
             <TextInput
                 label={label}
                 value={value}
@@ -209,48 +209,47 @@ const AddEdit = (props: Props): JSX.Element => {
                 {snackbar.message}
             </Snackbar>
         ) : (
-            <Snackbar
-                visible={snackbar.isVisible}
-                style={styles.snackbar}
-                onDismiss={onDismissSnackbar}
-            >
+            <Snackbar visible={snackbar.isVisible} style={styles.snackbar} onDismiss={onDismissSnackbar}>
                 {snackbar.message}
             </Snackbar>
         );
 
-    const groupsButton = (): JSX.Element => (
-        <Button title={'Grupy'} onPress={(): void => onGroups(4)} />
-    );
+    const groupsButton = (): JSX.Element => <Button title={'Grupy'} onPress={(): void => onGroups(4)} />;
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                <View>
-                    <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
-                        {image ? (
-                            <Avatar.Image size={120} source={{ uri: image }} />
-                        ) : (
-                            <Avatar.Text size={120} label='XD' />
-                        )}
-                    </TouchableOpacity>
-                    {/* Dane osobowe */}
-                    {inputRow('Name', onChangeName, contact.firstName)}
-                    {inputRow('Second name', onChangeSecondName, contact.secondName)}
-                    {inputRow('Surname', onChangeLastName, contact.lastName)}
+            {isCameraOn ? (
+                <CameraView setImage={setImage} setIsCameraOn={setIsCameraOn} />
+            ) : (
+                <ScrollView>
+                    <View>
+                        <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
+                            {image ? (
+                                <Avatar.Image size={120} source={{ uri: image }} />
+                            ) : (
+                                <Avatar.Text size={120} label='XD' />
+                            )}
+                        </TouchableOpacity>
+                        {/* Dane osobowe */}
+                        {inputRow('Name', onChangeName, contact.firstName)}
+                        {inputRow('Second name', onChangeSecondName, contact.secondName)}
+                        {inputRow('Surname', onChangeLastName, contact.lastName)}
 
-                    {/* Numery telefonu */}
-                    {mapPhoneNumbers(numbers)}
-                    {plusButton(formLabels.number)}
+                        {/* Numery telefonu */}
+                        {mapPhoneNumbers(numbers)}
+                        {plusButton(formLabels.number)}
 
-                    {/* Adresy email */}
-                    {mapEmails(emails)}
-                    {plusButton(formLabels.email)}
+                        {/* Adresy email */}
+                        {mapEmails(emails)}
+                        {plusButton(formLabels.email)}
 
-                    {groupsButton()}
-                </View>
-            </ScrollView>
+                        {groupsButton()}
+                    </View>
+                </ScrollView>
+            )}
             {showSnackbar()}
         </View>
     );
 };
+
 export default AddEdit;

@@ -9,7 +9,6 @@ import { formLabels, modes } from '../StringsHelper';
 import { createContact, updateContact } from '../../redux/actions/ActionCreators';
 import { contactT } from '../CustomTypes';
 import { Alert } from 'react-native';
-import { getCameraPermissionsAsync, getCameraRollPermissionsAsync } from 'expo-image-picker';
 
 const AddEditScreen = ({ route, navigation }): JSX.Element => {
     //wartości początkowe
@@ -18,6 +17,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
+    const [isCameraOn, setIsCameraOn] = useState(false);
     const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
@@ -187,33 +187,34 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     }, []);
 
     const pickImage = useCallback(async (): Promise<void> => {
-        try {
-            const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
-            if (permission) {
-                const result = await ImagePicker.launchImageLibraryAsync({
-                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                    allowsEditing: true,
-                    aspect: [1, 1],
-                    quality: 1,
-                });
-                if (!result.cancelled) {
-                    setImage(result.uri);
-                }
-                console.log(result);
-            } else {
-                Alert.alert(
-                    'Permissions',
-                    'We need camera and camera roll permissions in order to change avatar.',
-                    [
-                        { text: 'OK' },
-                    ],
-                    { cancelable: true },
-                );
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }, [checkCameraPermissions, checkCameraRollPermissions]);
+        setIsCameraOn(true);
+        // try {
+        //     const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
+        //     if (permission) {
+        //         const result = await ImagePicker.launchImageLibraryAsync({
+        //             mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        //             allowsEditing: true,
+        //             aspect: [1, 1],
+        //             quality: 1,
+        //         });
+        //         if (!result.cancelled) {
+        //             setImage(result.uri);
+        //         }
+        //         console.log(result);
+        //     } else {
+        //         Alert.alert(
+        //             'Permissions',
+        //             'We need camera and camera roll permissions in order to change avatar.',
+        //             [
+        //                 { text: 'OK' },
+        //             ],
+        //             { cancelable: true },
+        //         );
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
+    }, [setIsCameraOn, checkCameraPermissions, checkCameraRollPermissions]);
 
     return (
         <AddEdit
@@ -223,7 +224,10 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             navigation={navigation}
             contact={contact}
             image={image}
+            isCameraOn={isCameraOn}
             pickImage={pickImage}
+            setImage={setImage}
+            setIsCameraOn={setIsCameraOn}
             snackbar={snackbar}
             onGroups={onGroups}
             onChangeName={onChangeName}
