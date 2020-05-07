@@ -50,6 +50,7 @@ interface Props {
     emails: emailsT;
     navigation: navigationT;
     contact: contactT;
+    image: string;
     pickImage: () => void;
     snackbar: snackbarT;
     onGroups: (id: number) => void;
@@ -72,6 +73,7 @@ const AddEdit = (props: Props): JSX.Element => {
         emails,
         navigation,
         contact,
+        image,
         pickImage,
         snackbar,
         onGroups,
@@ -225,7 +227,11 @@ const AddEdit = (props: Props): JSX.Element => {
             <ScrollView>
                 <View>
                     <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
-                        <Avatar.Text size={120} label='XD' />
+                        {image ? (
+                            <Avatar.Image size={120} source={{ uri: image }} />
+                        ) : (
+                            <Avatar.Text size={120} label='XD' />
+                        )}
                     </TouchableOpacity>
                     {/* Dane osobowe */}
                     {inputRow('Name', onChangeName, contact.firstName)}

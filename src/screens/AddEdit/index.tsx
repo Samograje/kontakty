@@ -18,7 +18,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
     const [lastName, setSurname] = useState(isEdit ? contacts[id].lastName : '');
@@ -222,6 +222,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             emails={emails}
             navigation={navigation}
             contact={contact}
+            image={image}
             pickImage={pickImage}
             snackbar={snackbar}
             onGroups={onGroups}
