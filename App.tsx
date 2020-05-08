@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/es/integration/react';
+import { Provider as PaperProvider } from 'react-native-paper';
 import ContactsListScreen from './src/screens/ContactsList';
 import DetailsScreen from './src/screens/Details';
 import AddEditScreen from './src/screens/AddEdit';
@@ -19,6 +20,7 @@ const App = (): ReactElement => {
     return (
         <Provider store={store}>
             <PersistGate persistor={persistedStore} loading={null}>
+                <PaperProvider>
                 <NavigationContainer>
                     <Stack.Navigator
                         initialRouteName='List'
@@ -51,6 +53,7 @@ const App = (): ReactElement => {
                         />
                     </Stack.Navigator>
                 </NavigationContainer>
+                </PaperProvider>
             </PersistGate>
         </Provider>
     );

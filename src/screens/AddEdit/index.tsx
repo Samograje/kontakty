@@ -10,6 +10,17 @@ import { createContact, updateContact } from '../../redux/actions/ActionCreators
 import { contactT } from '../CustomTypes';
 import { Alert } from 'react-native';
 
+const showDeclinedPermissionAlert = () => {
+    Alert.alert(
+        'Permissions',
+        'We need camera and camera roll permissions in order to change avatar.',
+        [
+            { text: 'OK' },
+        ],
+        { cancelable: true },
+    );
+};
+
 const AddEditScreen = ({ route, navigation }): JSX.Element => {
     //wartości początkowe
     const { navigate } = useNavigation();
@@ -17,6 +28,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
+    const [isMenuVisible, setIsMenuVisible] = useState(false);
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
@@ -150,6 +162,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     };
 
     const onSaveContact = (): void => {
+        if(isCameraOn) return;
         // TODO: walidacja danych
         // TODO: wyświetlanie grup należących do kontaktu
         if (mode === modes.create) {
@@ -187,34 +200,36 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     }, []);
 
     const pickImage = useCallback(async (): Promise<void> => {
-        setIsCameraOn(true);
-        // try {
-        //     const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
-        //     if (permission) {
-        //         const result = await ImagePicker.launchImageLibraryAsync({
-        //             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        //             allowsEditing: true,
-        //             aspect: [1, 1],
-        //             quality: 1,
-        //         });
-        //         if (!result.cancelled) {
-        //             setImage(result.uri);
-        //         }
-        //         console.log(result);
-        //     } else {
-        //         Alert.alert(
-        //             'Permissions',
-        //             'We need camera and camera roll permissions in order to change avatar.',
-        //             [
-        //                 { text: 'OK' },
-        //             ],
-        //             { cancelable: true },
-        //         );
-        //     }
-        // } catch (error) {
-        //     console.log(error);
-        // }
-    }, [setIsCameraOn, checkCameraPermissions, checkCameraRollPermissions]);
+        try {
+            const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
+            if (permission) {
+                const result = await ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    allowsEditing: true,
+                    aspect: [1, 1],
+                    quality: 1,
+                });
+                if (!result.cancelled) {
+                    setImage(result.uri);
+                }
+                console.log(result);
+            } else {
+                showDeclinedPermissionAlert();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }, [checkCameraPermissions, checkCameraRollPermissions]);
+
+    const useCamera = useCallback(async ()=>{
+        try{
+            const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
+            permission ? setIsCameraOn(true) : showDeclinedPermissionAlert();
+        }
+        catch (error) {
+            console.log(error);
+        }
+    },[checkCameraRollPermissions, checkCameraPermissions]);
 
     return (
         <AddEdit
@@ -225,9 +240,11 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             contact={contact}
             image={image}
             isCameraOn={isCameraOn}
+            isMenuVisible={isMenuVisible}
             pickImage={pickImage}
             setImage={setImage}
             setIsCameraOn={setIsCameraOn}
+            setIsMenuVisible={setIsMenuVisible}
             snackbar={snackbar}
             onGroups={onGroups}
             onChangeName={onChangeName}
@@ -240,6 +257,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             onChangeDropdown={onChangeDropdown}
             onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
+            useCamera={useCamera}
         />
     );
 };

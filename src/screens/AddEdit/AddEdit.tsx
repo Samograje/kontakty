@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { TextInput, Avatar, IconButton, Snackbar } from 'react-native-paper';
+import { Button, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TextInput, Avatar, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
@@ -22,6 +22,11 @@ const styles = StyleSheet.create({
     inputText: {
         backgroundColor: 'white',
         flex: 2,
+    },
+    menu: {
+        paddingLeft: Dimensions.get('window').width / 2 - 20,
+        paddingTop: 50,
+        justifyContent: 'center',
     },
     row: {
         flexDirection: 'row',
@@ -53,9 +58,11 @@ interface Props {
     contact: contactT;
     image: string;
     isCameraOn: boolean;
+    isMenuVisible: boolean;
     pickImage: () => void;
     setImage: (string) => void;
     setIsCameraOn: (boolean) => void;
+    setIsMenuVisible: (boolean) => void;
     snackbar: snackbarT;
     onGroups: (id: number) => void;
     onChangeName: (name: string) => void;
@@ -68,6 +75,7 @@ interface Props {
     onChangeDropdown: (label: string, test: string, index: number) => void;
     onDismissSnackbar: () => void;
     onUndoPressed: (label: string) => void;
+    useCamera: () => void;
 }
 
 const AddEdit = (props: Props): JSX.Element => {
@@ -79,9 +87,11 @@ const AddEdit = (props: Props): JSX.Element => {
         contact,
         image,
         isCameraOn,
+        isMenuVisible,
         pickImage,
         setImage,
         setIsCameraOn,
+        setIsMenuVisible,
         snackbar,
         onGroups,
         onChangeName,
@@ -94,16 +104,22 @@ const AddEdit = (props: Props): JSX.Element => {
         onChangeDropdown,
         onDismissSnackbar,
         onUndoPressed,
+        useCamera,
     } = props;
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             title: mode === modes.edit ? 'Edit contact' : 'Create contact',
             headerRight: (): JSX.Element => (
-                <IconButton icon='check' size={40} color={'white'} onPress={(): void => onSaveContact()} />
+                <IconButton
+                    icon='check'
+                    size={40}
+                    color={isCameraOn ? 'grey' : 'white'}
+                    onPress={(): void => onSaveContact()}
+                />
             ),
         });
-    }, [navigation, onSaveContact, contact.id, mode]);
+    }, [isCameraOn, navigation, onSaveContact, contact.id, mode]);
 
     const showIconOrEmptySpace = (condition: boolean, icon: string): JSX.Element => (
         <View style={styles.iconContainer}>
@@ -223,13 +239,33 @@ const AddEdit = (props: Props): JSX.Element => {
             ) : (
                 <ScrollView>
                     <View>
-                        <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
-                            {image ? (
-                                <Avatar.Image size={120} source={{ uri: image }} />
-                            ) : (
-                                <Avatar.Text size={120} label='XD' />
-                            )}
-                        </TouchableOpacity>
+                        <Menu
+                            style={styles.menu}
+                            visible={isMenuVisible}
+                            onDismiss={(): void => setIsMenuVisible(false)}
+                            anchor={
+                                <TouchableOpacity
+                                    style={styles.avatarContainer}
+                                    onPress={(): void => setIsMenuVisible(true)}
+                                >
+                                    {image ? (
+                                        <Avatar.Image size={120} source={{ uri: image }} />
+                                    ) : (
+                                        <Avatar.Text size={120} label='XD' />
+                                    )}
+                                </TouchableOpacity>
+                            }
+                        >
+                            <Menu.Item onPress={useCamera} title='Take Photo' />
+                            <Menu.Item onPress={pickImage} title='Choose Image' />
+                            <Divider />
+                            <Menu.Item
+                                onPress={(): void => {
+                                    setIsMenuVisible(false);
+                                }}
+                                title='Cancel'
+                            />
+                        </Menu>
                         {/* Dane osobowe */}
                         {inputRow('Name', onChangeName, contact.firstName)}
                         {inputRow('Second name', onChangeSecondName, contact.secondName)}
