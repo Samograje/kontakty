@@ -5,7 +5,7 @@ import { getContacts, getGroups } from '../../redux/selectors/Selectors';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
-import { formLabels, modes } from '../StringsHelper';
+import { contactLabels, defaultCathegory, formLabels, modes } from '../StringsHelper';
 import { createContact, updateContact } from '../../redux/actions/ActionCreators';
 import { contactT } from '../CustomTypes';
 import { Alert } from 'react-native';
@@ -35,9 +35,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
     const [lastName, setSurname] = useState(isEdit ? contacts[id].lastName : '');
-    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{ number: '', category: '' }]));
+    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{ number: '', category: defaultCathegory}]));
     const [deletedNumber, setDeletedNumber] = useState({ index: -1, delNumber: { number: '', category: '' } });
-    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{ email: '', category: '' }]));
+    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{ email: '', category: defaultCathegory }]));
     const [deletedEmail, setDeletedEmail] = useState({ index: -1, delEmail: { email: '', category: '' } });
     const [snackbar, setSnackbar] = useState({ isVisible: false, message: '', isActionVisible: false, label: '' });
     const [isDeleteClicked, setIsDeleteClicked] = useState(false); //Logika pomagająca przy procesie usuwania/cofania usunięcia,
@@ -84,9 +84,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     //metody
     const addInputField = (label: string): void => {
         if (label === formLabels.number) {
-            setNumbers([...numbers, { category: '', number: '' }]);
+            setNumbers([...numbers, { number: '', category: defaultCathegory }]);
         } else if (label === formLabels.email) {
-            setEmails([...emails, { category: '', email: '' }]);
+            setEmails([...emails, { email: '' , category: defaultCathegory }]);
         } else {
             onShowSnackbar(true, 'Something went wrong.', false, '');
             console.log('Błąd podczas dodawania nowego pola, nieznana etykieta.');
