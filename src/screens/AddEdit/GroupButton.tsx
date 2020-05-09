@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
         height: '100%',
         paddingTop: 10,
         paddingBottom: 10,
+        paddingRight: 10,
     },
     text: {
         width: '80%',
@@ -54,7 +55,7 @@ const GroupButton = (props: Props): JSX.Element => {
             <TouchableOpacity onPress={(): void => onGroups(id)}>
                 <View style={styles.row}>
                     <Text style={styles.text}>{groupString}</Text>
-                    <MaterialCommunityIcons size={50} name={'greater-than'} />
+                    <MaterialCommunityIcons size={30} name={'greater-than'} />
                 </View>
             </TouchableOpacity>
         </View>
