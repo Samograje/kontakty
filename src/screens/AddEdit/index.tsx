@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useCallback, useState } from 'react';
 import AddEdit from './AddEdit';
-import { getContacts } from '../../redux/selectors/Selectors';
+import { getContacts, getGroups } from '../../redux/selectors/Selectors';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
@@ -9,6 +9,7 @@ import { formLabels, modes } from '../StringsHelper';
 import { createContact, updateContact } from '../../redux/actions/ActionCreators';
 import { contactT } from '../CustomTypes';
 import { Alert } from 'react-native';
+import { Group } from '../../redux/reducers/GroupsReducer';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -26,6 +27,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const { navigate } = useNavigation();
     const { id, mode } = route.params;
     const contacts = useSelector(getContacts);
+    const groups = useSelector(getGroups);
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
     const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -39,6 +41,15 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const [deletedEmail, setDeletedEmail] = useState({ index: -1, delEmail: { email: '', category: '' } });
     const [snackbar, setSnackbar] = useState({ isVisible: false, message: '', isActionVisible: false, label: '' });
     const [isDeleteClicked, setIsDeleteClicked] = useState(false); //Logika pomagająca przy procesie usuwania/cofania usunięcia,
+
+    const filterGroupsForContact = ():Group[] => {
+        return groups.filter((row) => {
+            return row.contactsIds.indexOf(id) >= 0;
+        })
+    };
+
+    const filteredGroups = filterGroupsForContact();
+
     const buildContactObject = (): contactT => {
         return {
             id: null,
@@ -70,7 +81,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         setSnackbar({ isVisible: true, message: message, isActionVisible: isActionVisible, label: label });
     };
 
-    // metody
+    //metody
     const addInputField = (label: string): void => {
         if (label === formLabels.number) {
             setNumbers([...numbers, { category: '', number: '' }]);
@@ -162,7 +173,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
     const onSaveContact = (): void => {
         // TODO: walidacja danych
-        // TODO: wyświetlanie grup należących do kontaktu
         if (mode === modes.create) {
             dispatch(createContact(buildContactObject()));
         } else if (mode === modes.edit && id !== null) {
@@ -249,6 +259,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             emails={emails}
             navigation={navigation}
             contact={contact}
+            groups={filteredGroups}
             image={image}
             isMenuVisible={isMenuVisible}
             pickImage={pickImage}

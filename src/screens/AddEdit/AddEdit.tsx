@@ -5,6 +5,8 @@ import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { contactT, emailsT, navigationT, numbersT, snackbarT } from '../CustomTypes';
+import GroupButton from './GroupButton';
+import { Group } from '../../redux/reducers/GroupsReducer';
 
 const styles = StyleSheet.create({
     container: {
@@ -55,6 +57,7 @@ interface Props {
     emails: emailsT;
     navigation: navigationT;
     contact: contactT;
+    groups: Group[];
     image: string;
     isMenuVisible: boolean;
     pickImage: () => void;
@@ -82,6 +85,7 @@ const AddEdit = (props: Props): JSX.Element => {
         emails,
         navigation,
         contact,
+        groups,
         image,
         isMenuVisible,
         pickImage,
@@ -220,8 +224,6 @@ const AddEdit = (props: Props): JSX.Element => {
             </Snackbar>
         );
 
-    const groupsButton = (): JSX.Element => <Button title={'Grupy'} onPress={(): void => onGroups(4)} />;
-
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -266,7 +268,7 @@ const AddEdit = (props: Props): JSX.Element => {
                     {mapEmails(emails)}
                     {plusButton(formLabels.email)}
 
-                    {groupsButton()}
+                    <GroupButton onGroups={onGroups} groups={groups} />
                 </View>
             </ScrollView>
             {showSnackbar()}
