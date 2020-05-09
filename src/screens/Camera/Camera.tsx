@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity, BackHandler, EasingFunction } from 'react-native';
 import { Camera } from 'expo-camera';
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -30,68 +30,100 @@ interface Props {
     setIsCameraOn: (boolean) => void;
 }
 
-const CameraView = (props: Props): JSX.Element => {
-    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
-    const camera = useRef(null);
-    const { setImage, setIsCameraOn } = props;
+interface State {
+    cameraType: EasingFunction;
+}
 
-    const handleCameraType = useCallback(() => {
-        setCameraType(
-            cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back,
-        );
-    }, [cameraType]);
+export default class CameraView extends React.Component<Props, State> {
+    state = {
+        cameraType: Camera.Constants.Type.back,
+    };
 
-    const takePicture = useCallback(async () => {
-        if (camera) {
+    backAction = (): boolean => {
+        const { setIsCameraOn } = this.props;
+        setIsCameraOn(false);
+        return true;
+    };
+
+    componentDidMount(): void {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.backAction);
+    }
+
+    componentWillUnmount(): void {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        this.backHandler.remove();
+    }
+
+    handleCameraType = (): void => {
+        const { cameraType } = this.state;
+
+        this.setState({
+            cameraType:
+                cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back,
+        });
+    };
+
+    takePicture = async (): Promise<void> => {
+        try {
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
-            const photo = await camera.takePictureAsync();
-            photo && setImage(photo.uri);
-            setIsCameraOn(false);
+            if (this.camera) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore
+                const photo = await this.camera.takePictureAsync();
+                photo && this.props.setImage(photo.uri);
+                this.props.setIsCameraOn(false);
+            }
+        } catch (error) {
+            console.warn(error);
         }
-    }, [setImage, setIsCameraOn]);
+    };
 
-    const pickImage = useCallback(async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-        if (!result.cancelled) {
-            setImage(result.uri);
-            setIsCameraOn(false);
+    pickImage = async (): Promise<void> => {
+        try {
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1,
+            });
+            if (!result.cancelled) {
+                this.props.setImage(result.uri);
+                this.props.setIsCameraOn(false);
+            }
+        } catch (error) {
+            console.warn(error);
         }
-    }, [setImage, setIsCameraOn]);
+    };
 
-    useEffect(() => {
-        const backAction = (): boolean => {
-            setIsCameraOn(false);
-            return true;
-        };
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-        return (): void => backHandler.remove();
-    }, [setIsCameraOn]);
-
-    return (
-        <View style={styles.container}>
-            <Camera style={styles.container} type={cameraType} ref={camera}>
-                <View style={styles.iconRow}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={(): Promise<void> => pickImage()}>
-                        <Ionicons name='ios-photos' style={styles.icon} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={(): Promise<void> => takePicture()}>
-                        <FontAwesome name='camera' style={styles.icon} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={(): void => handleCameraType()}>
-                        <MaterialCommunityIcons name='camera-switch' style={styles.icon} />
-                    </TouchableOpacity>
-                </View>
-            </Camera>
-        </View>
-    );
-};
-
-export default CameraView;
+    render(): JSX.Element {
+        return (
+            <View style={styles.container}>
+                <Camera
+                    style={styles.container}
+                    type={this.state.cameraType}
+                    ref={(ref): void => {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                        // @ts-ignore
+                        this.camera = ref;
+                    }}
+                >
+                    <View style={styles.iconRow}>
+                        <TouchableOpacity style={styles.iconContainer} onPress={(): Promise<void> => this.pickImage()}>
+                            <Ionicons name='ios-photos' style={styles.icon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.iconContainer} onPress={this.takePicture.bind(this)}>
+                            <FontAwesome name='camera' style={styles.icon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.iconContainer} onPress={(): void => this.handleCameraType()}>
+                            <MaterialCommunityIcons name='camera-switch' style={styles.icon} />
+                        </TouchableOpacity>
+                    </View>
+                </Camera>
+            </View>
+        );
+    }
+}

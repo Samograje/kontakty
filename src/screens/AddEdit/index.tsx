@@ -201,6 +201,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
     const pickImage = useCallback(async (): Promise<void> => {
         try {
+            setIsMenuVisible(false);
             const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
             if (permission) {
                 const result = await ImagePicker.launchImageLibraryAsync({
@@ -217,17 +218,18 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
                 showDeclinedPermissionAlert();
             }
         } catch (error) {
-            console.log(error);
+            console.warn(error);
         }
     }, [checkCameraPermissions, checkCameraRollPermissions]);
 
     const useCamera = useCallback(async ()=>{
         try{
+            setIsMenuVisible(false);
             const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
             permission ? setIsCameraOn(true) : showDeclinedPermissionAlert();
         }
         catch (error) {
-            console.log(error);
+            console.warn(error);
         }
     },[checkCameraRollPermissions, checkCameraPermissions]);
 
