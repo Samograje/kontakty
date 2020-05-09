@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, ScrollView, StyleSheet, View } from 'react-native';
-import { TextInput, Avatar, IconButton, Snackbar } from 'react-native-paper';
+import { Button, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TextInput, Avatar, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
@@ -21,6 +21,11 @@ const styles = StyleSheet.create({
     inputText: {
         backgroundColor: 'white',
         flex: 2,
+    },
+    menu: {
+        paddingLeft: Dimensions.get('window').width / 2 - 20,
+        paddingTop: 50,
+        justifyContent: 'center',
     },
     row: {
         flexDirection: 'row',
@@ -50,6 +55,11 @@ interface Props {
     emails: emailsT;
     navigation: navigationT;
     contact: contactT;
+    image: string;
+    isMenuVisible: boolean;
+    pickImage: () => void;
+    setImage: (string) => void;
+    setIsMenuVisible: (boolean) => void;
     snackbar: snackbarT;
     onGroups: (id: number) => void;
     onChangeName: (name: string) => void;
@@ -62,6 +72,7 @@ interface Props {
     onChangeDropdown: (label: string, test: string, index: number) => void;
     onDismissSnackbar: () => void;
     onUndoPressed: (label: string) => void;
+    useCamera: () => void;
 }
 
 const AddEdit = (props: Props): JSX.Element => {
@@ -71,6 +82,11 @@ const AddEdit = (props: Props): JSX.Element => {
         emails,
         navigation,
         contact,
+        image,
+        isMenuVisible,
+        pickImage,
+        setImage,
+        setIsMenuVisible,
         snackbar,
         onGroups,
         onChangeName,
@@ -83,18 +99,14 @@ const AddEdit = (props: Props): JSX.Element => {
         onChangeDropdown,
         onDismissSnackbar,
         onUndoPressed,
+        useCamera,
     } = props;
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             title: mode === modes.edit ? 'Edit contact' : 'Create contact',
             headerRight: (): JSX.Element => (
-                <IconButton
-                    icon='check'
-                    size={40}
-                    color={'white'}
-                    onPress={(): void => onSaveContact()}
-                />
+                <IconButton icon='check' size={40} color={'white'} onPress={(): void => onSaveContact()} />
             ),
         });
     }, [navigation, onSaveContact, contact.id, mode]);
@@ -109,9 +121,7 @@ const AddEdit = (props: Props): JSX.Element => {
     const inputRow = (label: string, method: any, value: string): JSX.Element => (
         //TODO: zrobić typ dla metod
         <View style={styles.row}>
-            <View style={styles.iconContainer}>
-                {showIconOrEmptySpace(label === formLabels.name, icons.user)}
-            </View>
+            <View style={styles.iconContainer}>{showIconOrEmptySpace(label === formLabels.name, icons.user)}</View>
             <TextInput
                 label={label}
                 value={value}
@@ -205,26 +215,44 @@ const AddEdit = (props: Props): JSX.Element => {
                 {snackbar.message}
             </Snackbar>
         ) : (
-            <Snackbar
-                visible={snackbar.isVisible}
-                style={styles.snackbar}
-                onDismiss={onDismissSnackbar}
-            >
+            <Snackbar visible={snackbar.isVisible} style={styles.snackbar} onDismiss={onDismissSnackbar}>
                 {snackbar.message}
             </Snackbar>
         );
 
-    const groupsButton = (): JSX.Element => (
-        <Button title={'Grupy'} onPress={(): void => onGroups(4)} />
-    );
+    const groupsButton = (): JSX.Element => <Button title={'Grupy'} onPress={(): void => onGroups(4)} />;
 
     return (
         <View style={styles.container}>
             <ScrollView>
                 <View>
-                    <View style={styles.avatarContainer}>
-                        <Avatar.Text size={120} label='XD' />
-                    </View>
+                    <Menu
+                        style={styles.menu}
+                        visible={isMenuVisible}
+                        onDismiss={(): void => setIsMenuVisible(false)}
+                        anchor={
+                            <TouchableOpacity
+                                style={styles.avatarContainer}
+                                onPress={(): void => setIsMenuVisible(true)}
+                            >
+                                {image ? (
+                                    <Avatar.Image size={120} source={{ uri: image }} />
+                                ) : (
+                                    <Avatar.Text size={120} label='XD' />
+                                )}
+                            </TouchableOpacity>
+                        }
+                    >
+                        <Menu.Item onPress={useCamera} title='Take Photo' />
+                        <Menu.Item onPress={pickImage} title='Choose Image' />
+                        <Divider />
+                        <Menu.Item
+                            onPress={(): void => {
+                                setIsMenuVisible(false);
+                            }}
+                            title='Cancel'
+                        />
+                    </Menu>
                     {/* Dane osobowe */}
                     {inputRow('Name', onChangeName, contact.firstName)}
                     {inputRow('Second name', onChangeSecondName, contact.secondName)}
@@ -245,4 +273,5 @@ const AddEdit = (props: Props): JSX.Element => {
         </View>
     );
 };
+
 export default AddEdit;
