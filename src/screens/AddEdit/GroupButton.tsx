@@ -7,33 +7,37 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignSelf: 'center',
+        justifyContent: 'center',
         backgroundColor: '#dcedc8',
         marginBottom: 10,
-    },
-    touchableOpacity: {
-        paddingVertical: 15,
-        paddingHorizontal: 10,
+        borderRadius: 20,
     },
     row: {
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
+        height: '100%',
+        paddingTop: 10,
+        paddingBottom: 10,
     },
     text: {
         width: '80%',
         alignSelf: 'center',
         fontSize: 15,
+        paddingLeft: 15,
     },
 });
 
 interface Props {
-    onGroups: (id: number) => void;
+    onGroups: (id: number | null) => void;
     groups: Group[];
+    id: number | null;
 }
 
 const GroupButton = (props: Props): JSX.Element => {
-    const { onGroups, groups } = props;
+    const { onGroups, groups, id } = props;
     let groupString = '';
-    if(groups.length === 0) {
+    if (groups.length === 0) {
         groupString = 'Click to add contact to groups!';
     } else {
         groups.map((row, index) => {
@@ -45,10 +49,9 @@ const GroupButton = (props: Props): JSX.Element => {
         });
     }
 
-
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={(): void => onGroups(4)} style={styles.touchableOpacity}>
+            <TouchableOpacity onPress={(): void => onGroups(id)}>
                 <View style={styles.row}>
                     <Text style={styles.text}>{groupString}</Text>
                     <MaterialCommunityIcons size={50} name={'greater-than'} />

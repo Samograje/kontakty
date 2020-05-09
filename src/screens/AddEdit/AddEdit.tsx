@@ -64,7 +64,7 @@ interface Props {
     setImage: (string) => void;
     setIsMenuVisible: (boolean) => void;
     snackbar: snackbarT;
-    onGroups: (id: number) => void;
+    onGroups: (id: number | null) => void;
     onChangeName: (name: string) => void;
     onChangeSecondName: (secondName: string) => void;
     onChangeLastName: (lastName: string) => void;
@@ -268,7 +268,7 @@ const AddEdit = (props: Props): JSX.Element => {
                     {mapEmails(emails)}
                     {plusButton(formLabels.email)}
 
-                    <GroupButton onGroups={onGroups} groups={groups} />
+                    <GroupButton onGroups={onGroups} groups={groups} id={contact.id} />
                 </View>
             </ScrollView>
             {showSnackbar()}
