@@ -1,5 +1,11 @@
 import React from 'react';
-import { Button, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { TextInput, Avatar, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
@@ -142,6 +148,7 @@ const AddEdit = (props: Props): JSX.Element => {
         icon: string,
         label: string,
         listLength: number,
+        isNumeric: boolean,
     ): JSX.Element => (
         <View key={index}>
             <View style={styles.row}>
@@ -151,6 +158,7 @@ const AddEdit = (props: Props): JSX.Element => {
                     value={phoneOrEmail}
                     style={styles.inputText}
                     onChangeText={(text): void => onChangeTextInput(label, text, index)}
+                    keyboardType={isNumeric ? 'numeric' : 'email-address'}
                 />
                 <View style={styles.iconContainer}>
                     {listLength > 1 && (
@@ -184,6 +192,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 icons.phone,
                 formLabels.number,
                 value.length,
+                true,
             );
         });
 
@@ -196,6 +205,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 icons.email,
                 formLabels.email,
                 value.length,
+                false,
             );
         });
 
