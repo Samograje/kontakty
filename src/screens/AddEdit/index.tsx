@@ -10,7 +10,7 @@ import { createContact, updateContact } from '../../redux/actions/ActionCreators
 import { contactT } from '../CustomTypes';
 import { Alert } from 'react-native';
 
-const showDeclinedPermissionAlert = () => {
+const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
         'Permissions',
         'We need camera and camera roll permissions in order to change avatar.',
@@ -29,7 +29,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
     const [isMenuVisible, setIsMenuVisible] = useState(false);
-    const [isCameraOn, setIsCameraOn] = useState(false);
     const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
@@ -162,7 +161,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     };
 
     const onSaveContact = (): void => {
-        if(isCameraOn) return;
         // TODO: walidacja danych
         // TODO: wyświetlanie grup należących do kontaktu
         if (mode === modes.create) {
@@ -213,12 +211,11 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
                 if (!result.cancelled) {
                     setImage(result.uri);
                 }
-                console.log(result);
             } else {
                 showDeclinedPermissionAlert();
             }
         } catch (error) {
-            console.warn(error);
+            console.log(error);
         }
     }, [checkCameraPermissions, checkCameraRollPermissions]);
 
@@ -226,10 +223,22 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         try{
             setIsMenuVisible(false);
             const permission = await checkCameraPermissions() && await checkCameraRollPermissions();
-            permission ? setIsCameraOn(true) : showDeclinedPermissionAlert();
+            if (permission) {
+                const result = await ImagePicker.launchCameraAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    allowsEditing: true,
+                    aspect: [1, 1],
+                    quality: 1,
+                });
+                if (!result.cancelled) {
+                    setImage(result.uri);
+                }
+            } else {
+                showDeclinedPermissionAlert();
+            }
         }
         catch (error) {
-            console.warn(error);
+            console.log(error);
         }
     },[checkCameraRollPermissions, checkCameraPermissions]);
 
@@ -241,11 +250,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             navigation={navigation}
             contact={contact}
             image={image}
-            isCameraOn={isCameraOn}
             isMenuVisible={isMenuVisible}
             pickImage={pickImage}
             setImage={setImage}
-            setIsCameraOn={setIsCameraOn}
             setIsMenuVisible={setIsMenuVisible}
             snackbar={snackbar}
             onGroups={onGroups}

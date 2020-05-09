@@ -5,7 +5,6 @@ import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { contactT, emailsT, navigationT, numbersT, snackbarT } from '../CustomTypes';
-import CameraView from '../Camera/Camera';
 
 const styles = StyleSheet.create({
     container: {
@@ -57,11 +56,9 @@ interface Props {
     navigation: navigationT;
     contact: contactT;
     image: string;
-    isCameraOn: boolean;
     isMenuVisible: boolean;
     pickImage: () => void;
     setImage: (string) => void;
-    setIsCameraOn: (boolean) => void;
     setIsMenuVisible: (boolean) => void;
     snackbar: snackbarT;
     onGroups: (id: number) => void;
@@ -86,11 +83,9 @@ const AddEdit = (props: Props): JSX.Element => {
         navigation,
         contact,
         image,
-        isCameraOn,
         isMenuVisible,
         pickImage,
         setImage,
-        setIsCameraOn,
         setIsMenuVisible,
         snackbar,
         onGroups,
@@ -111,15 +106,10 @@ const AddEdit = (props: Props): JSX.Element => {
         navigation.setOptions({
             title: mode === modes.edit ? 'Edit contact' : 'Create contact',
             headerRight: (): JSX.Element => (
-                <IconButton
-                    icon='check'
-                    size={40}
-                    color={isCameraOn ? 'grey' : 'white'}
-                    onPress={(): void => onSaveContact()}
-                />
+                <IconButton icon='check' size={40} color={'white'} onPress={(): void => onSaveContact()} />
             ),
         });
-    }, [isCameraOn, navigation, onSaveContact, contact.id, mode]);
+    }, [navigation, onSaveContact, contact.id, mode]);
 
     const showIconOrEmptySpace = (condition: boolean, icon: string): JSX.Element => (
         <View style={styles.iconContainer}>
@@ -234,55 +224,51 @@ const AddEdit = (props: Props): JSX.Element => {
 
     return (
         <View style={styles.container}>
-            {isCameraOn ? (
-                <CameraView setImage={setImage} setIsCameraOn={setIsCameraOn} />
-            ) : (
-                <ScrollView>
-                    <View>
-                        <Menu
-                            style={styles.menu}
-                            visible={isMenuVisible}
-                            onDismiss={(): void => setIsMenuVisible(false)}
-                            anchor={
-                                <TouchableOpacity
-                                    style={styles.avatarContainer}
-                                    onPress={(): void => setIsMenuVisible(true)}
-                                >
-                                    {image ? (
-                                        <Avatar.Image size={120} source={{ uri: image }} />
-                                    ) : (
-                                        <Avatar.Text size={120} label='XD' />
-                                    )}
-                                </TouchableOpacity>
-                            }
-                        >
-                            <Menu.Item onPress={useCamera} title='Take Photo' />
-                            <Menu.Item onPress={pickImage} title='Choose Image' />
-                            <Divider />
-                            <Menu.Item
-                                onPress={(): void => {
-                                    setIsMenuVisible(false);
-                                }}
-                                title='Cancel'
-                            />
-                        </Menu>
-                        {/* Dane osobowe */}
-                        {inputRow('Name', onChangeName, contact.firstName)}
-                        {inputRow('Second name', onChangeSecondName, contact.secondName)}
-                        {inputRow('Surname', onChangeLastName, contact.lastName)}
+            <ScrollView>
+                <View>
+                    <Menu
+                        style={styles.menu}
+                        visible={isMenuVisible}
+                        onDismiss={(): void => setIsMenuVisible(false)}
+                        anchor={
+                            <TouchableOpacity
+                                style={styles.avatarContainer}
+                                onPress={(): void => setIsMenuVisible(true)}
+                            >
+                                {image ? (
+                                    <Avatar.Image size={120} source={{ uri: image }} />
+                                ) : (
+                                    <Avatar.Text size={120} label='XD' />
+                                )}
+                            </TouchableOpacity>
+                        }
+                    >
+                        <Menu.Item onPress={useCamera} title='Take Photo' />
+                        <Menu.Item onPress={pickImage} title='Choose Image' />
+                        <Divider />
+                        <Menu.Item
+                            onPress={(): void => {
+                                setIsMenuVisible(false);
+                            }}
+                            title='Cancel'
+                        />
+                    </Menu>
+                    {/* Dane osobowe */}
+                    {inputRow('Name', onChangeName, contact.firstName)}
+                    {inputRow('Second name', onChangeSecondName, contact.secondName)}
+                    {inputRow('Surname', onChangeLastName, contact.lastName)}
 
-                        {/* Numery telefonu */}
-                        {mapPhoneNumbers(numbers)}
-                        {plusButton(formLabels.number)}
+                    {/* Numery telefonu */}
+                    {mapPhoneNumbers(numbers)}
+                    {plusButton(formLabels.number)}
 
-                        {/* Adresy email */}
-                        {mapEmails(emails)}
-                        {plusButton(formLabels.email)}
+                    {/* Adresy email */}
+                    {mapEmails(emails)}
+                    {plusButton(formLabels.email)}
 
-                        {groupsButton()}
-                    </View>
-                </ScrollView>
-            )}
+                    {groupsButton()}
+                </View>
+            </ScrollView>
             {showSnackbar()}
         </View>
     );
