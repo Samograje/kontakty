@@ -1,14 +1,16 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import { TouchableRipple, FAB } from 'react-native-paper';
 import EmptyListComponent from '../Groups/components/EmptyListComponent';
+import AddGroupModal from '../Groups/components/AddGroupModal';
 
 interface Props {
     groups: Group[];
     onPress: () => void;
-    onGroups: () => void;
+    addGroup: (name: string) => void;
+    onLongGroupPress: (groupId: number | null, groupName: string) => void;
 }
 
 const styles = StyleSheet.create({
@@ -41,10 +43,18 @@ const styles = StyleSheet.create({
 });
 
 const GroupsList = (props: Props): JSX.Element => {
-    const { groups, onPress, onGroups } = props;
+    const [modalVisible, setModalVisible] = useState(false);
+    const { groups, onPress, addGroup, onLongGroupPress } = props;
 
     const listElement = (row: Group, index: number): JSX.Element => (
-        <TouchableRipple style={styles.listElementContainer} key={index} onPress={onPress}>
+        <TouchableRipple
+            style={styles.listElementContainer}
+            key={index}
+            onPress={onPress}
+            onLongPress={(): void => {
+                onLongGroupPress(row.id, row.name);
+            }}
+        >
             <View style={styles.row}>
                 <Text style={styles.text}>{row.name + ' (' + row.contactsIds.length + ')'}</Text>
                 <MaterialCommunityIcons size={30} name={'greater-than'} />
@@ -54,6 +64,7 @@ const GroupsList = (props: Props): JSX.Element => {
 
     return (
         <View style={styles.container}>
+            <AddGroupModal modalVisible={modalVisible} setModalVisible={setModalVisible} addGroup={addGroup} />
             {groups.length === 0 ? (
                 <EmptyListComponent />
             ) : (
@@ -65,7 +76,13 @@ const GroupsList = (props: Props): JSX.Element => {
                     )}
                 </>
             )}
-            <FAB style={styles.fab} icon='plus' onPress={(): void => onGroups()} />
+            <FAB
+                style={styles.fab}
+                icon='plus'
+                onPress={(): void => {
+                    setModalVisible(true);
+                }}
+            />
         </View>
     );
 };
