@@ -2,11 +2,12 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-import { TouchableRipple } from 'react-native-paper';
+import { TouchableRipple, FAB } from 'react-native-paper';
 
 interface Props {
     groups: Group[];
     onPress: () => void;
+    onGroups: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -29,10 +30,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingRight: 20,
     },
+    fab: {
+        position: 'absolute',
+        right: 30,
+        bottom: 35,
+        zIndex: 200,
+        backgroundColor: 'darkgreen',
+    },
 });
 
 const GroupsList = (props: Props): JSX.Element => {
-    const { groups, onPress } = props;
+    const { groups, onPress, onGroups } = props;
 
     const listElement = (row: Group, index: number): JSX.Element => (
         <TouchableRipple style={styles.listElementContainer} key={index} onPress={onPress}>
@@ -50,6 +58,7 @@ const GroupsList = (props: Props): JSX.Element => {
                     return listElement(row, index);
                 },
             )}
+            <FAB style={styles.fab} icon='plus' onPress={(): void => onGroups()} />
         </View>
     );
 };
