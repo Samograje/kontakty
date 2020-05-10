@@ -50,12 +50,12 @@ const App = (): ReactElement => {
                         <Stack.Screen
                             name='Groups'
                             component={GroupsScreen}
-                            options={{ title: 'Groups' }}
+                            options={{ title: 'Select groups' }}
                         />
                         <Stack.Screen
                             name='GroupsList'
                             component={GroupsListScreen}
-                            options={{ title: 'Groups' }}
+                            options={{ title: 'My groups' }}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>

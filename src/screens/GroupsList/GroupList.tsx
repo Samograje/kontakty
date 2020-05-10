@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import { TouchableRipple, FAB } from 'react-native-paper';
+import EmptyListComponent from '../Groups/components/EmptyListComponent';
 
 interface Props {
     groups: Group[];
@@ -53,10 +54,16 @@ const GroupsList = (props: Props): JSX.Element => {
 
     return (
         <View style={styles.container}>
-            {groups.map(
-                (row, index): JSX.Element => {
-                    return listElement(row, index);
-                },
+            {groups.length === 0 ? (
+                <EmptyListComponent />
+            ) : (
+                <>
+                    {groups.map(
+                        (row, index): JSX.Element => {
+                            return listElement(row, index);
+                        },
+                    )}
+                </>
             )}
             <FAB style={styles.fab} icon='plus' onPress={(): void => onGroups()} />
         </View>
