@@ -12,6 +12,8 @@ const GroupsListScreen = (): JSX.Element => {
     const { navigate } = useNavigation();
     const dispatch = useDispatch();
     const onPress = (): void => console.log('Przenieś mnie do listy kontaktów.');
+
+    //TODO: metody z Group index, spróować zrobić wspólne
     const addGroup = (name: string): void => {
         if (!name) return;
         const group: Group = { id: null, name: name, contactsIds: [] };
