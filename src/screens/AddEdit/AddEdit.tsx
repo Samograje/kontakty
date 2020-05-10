@@ -1,10 +1,18 @@
 import React from 'react';
-import { Button, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { TextInput, Avatar, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { contactT, emailsT, navigationT, numbersT, snackbarT } from '../CustomTypes';
+import GroupButton from './GroupButton';
+import { Group } from '../../redux/reducers/GroupsReducer';
 
 const styles = StyleSheet.create({
     container: {
@@ -55,13 +63,14 @@ interface Props {
     emails: emailsT;
     navigation: navigationT;
     contact: contactT;
+    groups: Group[];
     image: string;
     isMenuVisible: boolean;
     pickImage: () => void;
     setImage: (string) => void;
     setIsMenuVisible: (boolean) => void;
     snackbar: snackbarT;
-    onGroups: (id: number) => void;
+    onGroups: (id: number | null) => void;
     onChangeName: (name: string) => void;
     onChangeSecondName: (secondName: string) => void;
     onChangeLastName: (lastName: string) => void;
@@ -82,6 +91,7 @@ const AddEdit = (props: Props): JSX.Element => {
         emails,
         navigation,
         contact,
+        groups,
         image,
         isMenuVisible,
         pickImage,
@@ -138,6 +148,7 @@ const AddEdit = (props: Props): JSX.Element => {
         icon: string,
         label: string,
         listLength: number,
+        isNumeric: boolean,
     ): JSX.Element => (
         <View key={index}>
             <View style={styles.row}>
@@ -147,6 +158,7 @@ const AddEdit = (props: Props): JSX.Element => {
                     value={phoneOrEmail}
                     style={styles.inputText}
                     onChangeText={(text): void => onChangeTextInput(label, text, index)}
+                    keyboardType={isNumeric ? 'numeric' : 'email-address'}
                 />
                 <View style={styles.iconContainer}>
                     {listLength > 1 && (
@@ -180,6 +192,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 icons.phone,
                 formLabels.number,
                 value.length,
+                true,
             );
         });
 
@@ -192,6 +205,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 icons.email,
                 formLabels.email,
                 value.length,
+                false,
             );
         });
 
@@ -219,8 +233,6 @@ const AddEdit = (props: Props): JSX.Element => {
                 {snackbar.message}
             </Snackbar>
         );
-
-    const groupsButton = (): JSX.Element => <Button title={'Grupy'} onPress={(): void => onGroups(4)} />;
 
     return (
         <View style={styles.container}>
@@ -266,7 +278,7 @@ const AddEdit = (props: Props): JSX.Element => {
                     {mapEmails(emails)}
                     {plusButton(formLabels.email)}
 
-                    {groupsButton()}
+                    <GroupButton onGroups={onGroups} groups={groups} id={contact.id} />
                 </View>
             </ScrollView>
             {showSnackbar()}
