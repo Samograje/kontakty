@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import AddEdit from './AddEdit';
 import { getContacts, getGroups } from '../../redux/selectors/Selectors';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
-import { contactLabels, defaultCathegory, formLabels, modes } from '../StringsHelper';
-import { createContact, updateContact } from '../../redux/actions/ActionCreators';
-import { contactT } from '../CustomTypes';
+import { defaultCathegory, formLabels, modes } from '../StringsHelper';
+import { contactT, emailsT, numbersT, validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
+import { createContact, updateContact } from '../../redux/actions/ActionCreators';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -35,14 +35,26 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
     const [lastName, setSurname] = useState(isEdit ? contacts[id].lastName : '');
-    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{ number: '', category: defaultCathegory}]));
+    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{
+        number: '',
+        category: defaultCathegory
+    }]));
     const [deletedNumber, setDeletedNumber] = useState({ index: -1, delNumber: { number: '', category: '' } });
-    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{ email: '', category: defaultCathegory }]));
+    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{
+        email: '',
+        category: defaultCathegory
+    }]));
     const [deletedEmail, setDeletedEmail] = useState({ index: -1, delEmail: { email: '', category: '' } });
     const [snackbar, setSnackbar] = useState({ isVisible: false, message: '', isActionVisible: false, label: '' });
     const [isDeleteClicked, setIsDeleteClicked] = useState(false); //Logika pomagająca przy procesie usuwania/cofania usunięcia,
+    const [dataValid, setDataValid] = useState({
+        nameOrOneNumberEmpty: true,
+        oneOfNumbersEmpty: true,
+        oneOfEmailsEmpty: true
+    });
 
-    const filterGroupsForContact = ():Group[] => {
+
+    const filterGroupsForContact = (): Group[] => {
         return groups.filter((row) => {
             return row.contactsIds.indexOf(id) >= 0;
         })
@@ -81,12 +93,46 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         setSnackbar({ isVisible: true, message: message, isActionVisible: isActionVisible, label: label });
     };
 
+    const checkDataValidation = (): validationT => {
+        //Sprawdza czy jest imie i co najmniej jeden numer telefonu
+        const nameAndOneNumberEmpty: boolean = !(!firstName || firstName.length === 0) && !(!numbers[0].number || numbers[0].number.length === 0) && !(!numbers[0].category || numbers[0].category.length === 0);
+        //Sprawdza czy wszystkie dodane pola tekstowe dla numerów telefonów i adresów email mają wartości
+        const tmpNumbers: numbersT = [...numbers];
+        let numbersEmpty = true;
+        const tmpEmails: emailsT = [...emails];
+        let emailsEmpty = true;
+        tmpNumbers.forEach((row) => {
+            if (!(!row.number || row.number.length === 0) && !(!row.category || row.category.length === 0)) {
+                numbersEmpty = false;
+            } else {
+                numbersEmpty = true;
+            }
+        });
+
+        if (tmpEmails.length > 1) {
+            tmpEmails.forEach((row) => {
+                if (!(!row.email || row.email.length === 0) && !(!row.category || row.category.length === 0)) {
+                    emailsEmpty = false;
+                } else {
+                    emailsEmpty = true;
+                }
+            });
+        } else {
+            emailsEmpty = false;
+        }
+        return {nameOrOneNumberEmpty: !nameAndOneNumberEmpty, oneOfNumbersEmpty: numbersEmpty, oneOfEmailsEmpty: emailsEmpty};
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //Nie mogę przekazać w deeps nazwy metody, bo robi się nieskończona pętla
+    useEffect(() => setDataValid(checkDataValidation()), [firstName, emails, numbers]);
+
     //metody
     const addInputField = (label: string): void => {
         if (label === formLabels.number) {
             setNumbers([...numbers, { number: '', category: defaultCathegory }]);
         } else if (label === formLabels.email) {
-            setEmails([...emails, { email: '' , category: defaultCathegory }]);
+            setEmails([...emails, { email: '', category: defaultCathegory }]);
         } else {
             onShowSnackbar(true, 'Something went wrong.', false, '');
             console.log('Błąd podczas dodawania nowego pola, nieznana etykieta.');
@@ -131,7 +177,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
                 console.log('Błąd podczas zmiany danych w rozwijanym menu, nieznana etykieta.');
             }
         }
-        setIsDeleteClicked(false);
+        setIsDeleteClicked(false)
     };
 
     const onDeleteTextInput = (label: string, index: number): void => {
@@ -171,14 +217,28 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         }
     };
 
-    const onSaveContact = (): void => {
-        // TODO: walidacja danych
-        if (mode === modes.create) {
-            dispatch(createContact(buildContactObject()));
-        } else if (mode === modes.edit && id !== null) {
-            dispatch(updateContact(buildContactObject(), id));
+    const saveMessage = (dataValidOk: boolean): void => {
+        if (dataValidOk) {
+            onShowSnackbar(true, 'Contact saved.', false, '');
+        } else if (dataValid.nameOrOneNumberEmpty) {
+            onShowSnackbar(true, 'Please enter your name and at least one phone number', false, '');
+        } else if (dataValid.oneOfNumbersEmpty) {
+            onShowSnackbar(true, 'Fill out the fields with the phone number', false, '');
+        } else if (dataValid.oneOfEmailsEmpty) {
+            onShowSnackbar(true, 'Fill out the fields with the email adress', false, '');
         }
-        onShowSnackbar(true, 'Contact saved.', false, '');
+    };
+
+    const onSaveContact = (): void => {
+        const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
+        if (dataValidOk) {
+            if (mode === modes.create) {
+                dispatch(createContact(buildContactObject()));
+            } else if (mode === modes.edit && id !== null) {
+                dispatch(updateContact(buildContactObject(), id));
+            }
+        }
+        saveMessage(dataValidOk);
     };
 
     const checkCameraPermissions = useCallback(async (): Promise<boolean> => {

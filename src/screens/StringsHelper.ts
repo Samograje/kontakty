@@ -9,8 +9,10 @@ export const contactLabels = [
     { label: 'Work', value: 'work' },
     { label: 'Fax', value: 'fax' },
     { label: 'Pager', value: 'pager' },
-    { label: 'Other', value: 'other' },
+    { label: 'Other', value: 'other' }, //Zostawić zawsze na końcu
 ];
+
+export const defaultCathegory = contactLabels[contactLabels.length - 1].value;
 
 export const formLabels = {
     name: 'Name',
