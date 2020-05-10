@@ -230,6 +230,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     };
 
     const onSaveContact = (): void => {
+        //Walidacja odbywa się przy pomocy metody checkDataValidation
         const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
         if (dataValidOk) {
             if (mode === modes.create) {
