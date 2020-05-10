@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import { TouchableRipple, FAB } from 'react-native-paper';
