@@ -123,8 +123,8 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         return {nameOrOneNumberEmpty: !nameAndOneNumberEmpty, oneOfNumbersEmpty: numbersEmpty, oneOfEmailsEmpty: emailsEmpty};
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     //Nie mogę przekazać w deeps nazwy metody, bo robi się nieskończona pętla
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => setDataValid(checkDataValidation()), [firstName, emails, numbers]);
 
     //metody
