@@ -82,6 +82,7 @@ const ContactsListScreen = (): ReactElement => {
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
     const onDetails = (id: number | null): void => navigate('Details', { id });
+    const onGroupList = ():void => navigate('GroupsList');
     const onSearch = (query: string): void => setSearchText(query);
     const onClearSearch = (): void => setSearchText('');
 
@@ -112,6 +113,7 @@ const ContactsListScreen = (): ReactElement => {
             data={contactsSectioned}
             totalElements={contacts.length}
             searchText={searchText}
+            onGroupList={onGroupList}
         />
     );
 };

@@ -27,6 +27,7 @@ interface Props {
     }[];
     totalElements: number;
     searchText: string;
+    onGroupList: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
 });
 
 const ContactsList = (props: Props): JSX.Element => {
-    const { onCreate, onView, onSearch, onClearSearch, onExample, data, totalElements, searchText } = props;
+    const { onCreate, onView, onSearch, onClearSearch, onExample, data, totalElements, searchText, onGroupList } = props;
 
     const keyExtractor = (item, index): string => item + index;
     const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
@@ -61,6 +62,7 @@ const ContactsList = (props: Props): JSX.Element => {
                 onClearSearch={onClearSearch}
             />
             <Button title='Create example contacts' onPress={onExample} />
+            <Button title='GroupsList' onPress={onGroupList} />
             <SectionList
                 sections={data}
                 keyExtractor={keyExtractor}

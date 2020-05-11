@@ -11,6 +11,7 @@ import DetailsScreen from './src/screens/Details';
 import AddEditScreen from './src/screens/AddEdit';
 import GroupsScreen from './src/screens/Groups';
 import configureStore from './src/redux/Store';
+import GroupsListScreen from './src/screens/GroupsList';
 
 const Stack = createStackNavigator();
 const store = configureStore();
@@ -49,7 +50,12 @@ const App = (): ReactElement => {
                         <Stack.Screen
                             name='Groups'
                             component={GroupsScreen}
-                            options={{ title: 'Groups' }}
+                            options={{ title: 'Select groups' }}
+                        />
+                        <Stack.Screen
+                            name='GroupsList'
+                            component={GroupsListScreen}
+                            options={{ title: 'My groups' }}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>
