@@ -6,7 +6,7 @@ interface Props {
     onEdit: (id: number) => {},
 }
 
-const DetailsComponent = (props: Props) => {
+const Details = (props: Props) => {
     const {
         id,
         onEdit,
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DetailsComponent;
+export default Details;

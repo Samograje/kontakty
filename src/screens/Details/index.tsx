@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import DetailsComponent from "./DetailsComponent";
+import Details from "./Details";
 
 interface Props {
     navigation: {
@@ -13,7 +13,7 @@ interface State {
     id: number,
 }
 
-class DetailsContainer extends Component<Props, State> {
+class DetailsScreen extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -42,11 +42,11 @@ class DetailsContainer extends Component<Props, State> {
         } = this.props;
 
         return (
-            <DetailsComponent
+            <Details
                 id={id}
                 onEdit={onEdit}
             />
         );
     }
 }
-export default DetailsContainer;
+export default DetailsScreen;
