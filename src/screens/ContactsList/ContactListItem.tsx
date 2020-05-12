@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
+import ProperAvatar from '../ProperAvatar';
 
 interface Props {
     item: Contact;
@@ -39,7 +40,8 @@ const ContactListItem = (props: Props): ReactElement => {
     return (
         <TouchableRipple style={styles.ripple} onPress={onPress}>
             <View style={styles.container}>
-                <Image source={{ uri: photoUrl }} style={styles.avatar} />
+                <ProperAvatar path={photoUrl} name={firstName} size={40} />
+                {/*<Image source={{ uri: photoUrl }} style={styles.avatar} />*/}
                 <Text style={styles.text}>
                     {firstName} {lastName}
                 </Text>
