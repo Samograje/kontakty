@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
 interface Props {
     onGroups: (id: number | null) => void;
     groups: Group[];
+    userGroups: number[];
     id: number | null;
 }
 

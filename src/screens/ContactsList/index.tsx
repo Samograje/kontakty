@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createContact } from '../../redux/actions/ActionCreators';
 import { getContacts } from '../../redux/selectors/Selectors';
 import { Contact } from '../../redux/reducers/ContactsReducer';
+import { modes } from '../StringsHelper';
 
 interface ContactsSection {
     title: string;
@@ -81,7 +82,7 @@ const ContactsListScreen = (): ReactElement => {
     const [searchText, setSearchText] = useState('');
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
-    const onDetails = (id: number | null): void => navigate('Details', { id });
+    const onDetails = (id: number | null): void => navigate('Details', { id, mode: modes.edit });
     const onGroupList = ():void => navigate('GroupsList');
     const onSearch = (query: string): void => setSearchText(query);
     const onClearSearch = (): void => setSearchText('');

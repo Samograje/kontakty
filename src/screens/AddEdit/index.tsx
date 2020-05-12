@@ -9,7 +9,7 @@ import { defaultCathegory, formLabels, modes } from '../StringsHelper';
 import { contactT, emailsT, numbersT, validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
-import { createContact, updateContact } from '../../redux/actions/ActionCreators';
+import { addContactToGroup, createContact, updateContact } from '../../redux/actions/ActionCreators';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -30,6 +30,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const groups = useSelector(getGroups);
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
+    const [userGroups, setUserGroups] = useState([]);
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
@@ -74,9 +75,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         };
     };
     const contact = buildContactObject();
-    const onGroups = (): void => {
-        navigate('Groups', { id: id });
-    };
     const onChangeName = (value: string): void => {
         setFirstName(value);
     };
@@ -231,15 +229,25 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
     const onSaveContact = (): void => {
         //Walidacja odbywa się przy pomocy metody checkDataValidation
-        const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
-        if (dataValidOk) {
-            if (mode === modes.create) {
-                dispatch(createContact(buildContactObject()));
-            } else if (mode === modes.edit && id !== null) {
-                dispatch(updateContact(buildContactObject(), id));
+        try{
+            const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
+            if (dataValidOk) {
+                if (mode === modes.create) {
+                    dispatch(createContact(buildContactObject()));
+                    const newContactId = contacts[contacts.length-1].id;
+                    if(userGroups.length !== 0){
+                        userGroups.forEach((groupId) => {
+                            dispatch(addContactToGroup(newContactId,groupId));
+                        });
+                    }
+                } else if (mode === modes.edit && id !== null) {
+                    dispatch(updateContact(buildContactObject(), id));
+                }
             }
+            saveMessage(dataValidOk);
+        } catch (e) {
+            console.log(e);
         }
-        saveMessage(dataValidOk);
     };
 
     const checkCameraPermissions = useCallback(async (): Promise<boolean> => {
@@ -313,6 +321,21 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         }
     },[checkCameraRollPermissions, checkCameraPermissions]);
 
+    const setGroupsState = useCallback((chosenGroups: number[])=>{
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        setUserGroups(chosenGroups);
+        console.warn('back pressed: ' + chosenGroups);
+    },[]);
+
+    const onGroups = (): void => {
+        if(!isEdit) {
+            navigate('Groups',
+                { id: '', mode, userGroups, setGroupsState: (chosenGroups: number[]) => setGroupsState(chosenGroups) });
+        } else
+            navigate('Groups', {id, mode})
+    };
+
     return (
         <AddEdit
             mode={mode}
@@ -339,6 +362,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
             useCamera={useCamera}
+            userGroups={userGroups}
         />
     );
 };
