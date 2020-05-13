@@ -27,13 +27,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 20,
-        marginBottom: 10,
+        marginBottom: 20,
+        marginRight: 20,
+        marginLeft: 20,
     },
     container: {
         flex: 4,
     },
     button: {
-        width: '20%',
+        width: '25%',
     },
     header: {
         fontSize: 20,
@@ -127,58 +129,55 @@ const Details = (props: Props) => {
         }
     }
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.avatar}>
-                <Avatar size='large' rounded={true} icon={{ name: 'user', type: 'font-awesome' }} />
-                <Text style={styles.name}>
-                    {contact.firstName} {contact.lastName}
-                </Text>
+    if (contact !== undefined) {
+        return (
+            <View style={styles.container}>
+                <View style={styles.avatar}>
+                    <Avatar size='large' rounded={true} icon={{ name: 'user', type: 'font-awesome' }} />
+                    <Text style={styles.name}>
+                        {contact.firstName} {contact.lastName}
+                    </Text>
+                </View>
+
+                <View style={styles.actions}>
+                    <IconButton
+                        style={styles.button}
+                        icon='account-edit'
+                        color={Colors.grey500}
+                        size={50}
+                        onPress={() => {
+                            onEdit(id);
+                        }}
+                    />
+                    <IconButton
+                        style={styles.button}
+                        icon='delete'
+                        color={Colors.grey500}
+                        size={50}
+                        onPress={() => {
+                            onDelete();
+                        }}
+                    />
+                    <IconButton
+                        icon='account-group'
+                        color={Colors.grey500}
+                        size={50}
+                        onPress={() => console.log('account-group')}
+                    />
+                </View>
+
+                <SafeAreaView style={styles.container}>
+                    <FlatList data={contact.telNumbers} renderItem={({ item }) => <PhoneNumberItem item={item} />} />
+                </SafeAreaView>
+
+                <SafeAreaView style={styles.container}>
+                    <FlatList data={contact.emails} renderItem={({ item }) => <EMailItem item={item} />} />
+                </SafeAreaView>
             </View>
-
-            <View style={styles.actions}>
-                <IconButton
-                    style={styles.button}
-                    icon='account-heart'
-                    color={Colors.grey500}
-                    size={50}
-                    onPress={() => console.log('<3')}
-                />
-                <IconButton
-                    style={styles.button}
-                    icon='account-edit'
-                    color={Colors.grey500}
-                    size={50}
-                    onPress={() => {
-                        onEdit(id);
-                    }}
-                />
-                <IconButton
-                    style={styles.button}
-                    icon='delete'
-                    color={Colors.grey500}
-                    size={50}
-                    onPress={() => {
-                        onDelete();
-                    }}
-                />
-                <IconButton
-                    icon='account-group'
-                    color={Colors.grey500}
-                    size={50}
-                    onPress={() => console.log('account-group')}
-                />
-            </View>
-
-            <SafeAreaView style={styles.container}>
-                <FlatList data={contact.telNumbers} renderItem={({ item }) => <PhoneNumberItem item={item} />} />
-            </SafeAreaView>
-
-            <SafeAreaView style={styles.container}>
-                <FlatList data={contact.emails} renderItem={({ item }) => <EMailItem item={item} />} />
-            </SafeAreaView>
-        </View>
-    );
+        );
+    } else {
+        return <View></View>;
+    }
 };
 
 export default Details;

@@ -2,13 +2,7 @@ import React from 'react';
 import Details from './Details';
 import { getContacts, getGroups } from '../../redux/selectors/Selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    createContact,
-    removeContact,
-    removeContactFromGroup,
-    updateContact,
-} from '../../redux/actions/ActionCreators';
-import { modes } from '../StringsHelper';
+import { removeContact, removeContactFromGroup } from '../../redux/actions/ActionCreators';
 
 interface Props {
     navigation: {
@@ -26,15 +20,12 @@ const DetailsScreen = (props: Props) => {
     const groups = useSelector(getGroups);
     const contact = contacts.find((c) => c.id == id);
     const contactGroups = groups.filter((g) => g.contactsIds.includes(id));
-    console.log(contactGroups);
 
     const onEdit = (id: number) => navigate('AddEdit', { id: id, mode: 'edit' });
     const onContactDelete = () => {
-        console.log(id);
-        navigate('List');
-
         dispatch(removeContact(id));
         contactGroups.forEach((g) => dispatch(removeContactFromGroup(id, g.id)));
+        props.navigation.goBack();
     };
 
     return <Details id={id} onEdit={onEdit} onDelete={onContactDelete} contact={contact} />;
