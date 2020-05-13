@@ -107,7 +107,7 @@ const Details = (props: Props) => {
     }
 
     function EMailItem({ item }) {
-        if (contact.emails.length > 0) {
+        if (contact.emails != null) {
             console.log(contact.emails);
             return (
                 <View style={styles.details}>

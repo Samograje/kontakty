@@ -31,6 +31,8 @@ const DetailsScreen = (props: Props) => {
     const onEdit = (id: number) => navigate('AddEdit', { id: id, mode: 'edit' });
     const onContactDelete = () => {
         console.log(id);
+        navigate('List');
+
         dispatch(removeContact(id));
         contactGroups.forEach((g) => dispatch(removeContactFromGroup(id, g.id)));
     };
