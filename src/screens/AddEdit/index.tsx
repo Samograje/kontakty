@@ -6,10 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { defaultCathegory, formLabels, modes } from '../StringsHelper';
-import { contactT, emailsT, numbersT, validationT } from '../CustomTypes';
+import { validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { createContact, updateContact } from '../../redux/actions/ActionCreators';
+import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -62,7 +63,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
     const filteredGroups = filterGroupsForContact();
 
-    const buildContactObject = (): contactT => {
+    const buildContactObject = (): Contact => {
         return {
             id: null,
             firstName: firstName,
@@ -70,7 +71,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             lastName: lastName,
             photoUrl: image,
             telNumbers: numbers,
-            emails: emails,
+            emails:  emails.length === 1 && emails[0].email === '' ? null : emails,
         };
     };
     const contact = buildContactObject();
@@ -97,9 +98,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         //Sprawdza czy jest imie i co najmniej jeden numer telefonu
         const nameAndOneNumberEmpty: boolean = !(!firstName || firstName.length === 0) && !(!numbers[0].number || numbers[0].number.length === 0) && !(!numbers[0].category || numbers[0].category.length === 0);
         //Sprawdza czy wszystkie dodane pola tekstowe dla numerów telefonów i adresów email mają wartości
-        const tmpNumbers: numbersT = [...numbers];
+        const tmpNumbers: ContactNumber[] = [...numbers];
         let numbersEmpty = true;
-        const tmpEmails: emailsT = [...emails];
+        const tmpEmails: ContactEmail[] = [...emails];
         let emailsEmpty = true;
         tmpNumbers.forEach((row) => {
             if (!(!row.number || row.number.length === 0) && !(!row.category || row.category.length === 0)) {

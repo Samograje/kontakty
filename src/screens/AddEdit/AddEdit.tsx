@@ -1,18 +1,13 @@
 import React from 'react';
-import {
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { TextInput, Avatar, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
-import { contactT, emailsT, navigationT, numbersT, snackbarT } from '../CustomTypes';
+import { navigationT, snackbarT } from '../CustomTypes';
 import GroupButton from './GroupButton';
 import { Group } from '../../redux/reducers/GroupsReducer';
+import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
 
 const styles = StyleSheet.create({
     container: {
@@ -59,10 +54,10 @@ const styles = StyleSheet.create({
 
 interface Props {
     mode: string;
-    numbers: numbersT;
-    emails: emailsT;
+    numbers: ContactNumber;
+    emails: ContactEmail;
     navigation: navigationT;
-    contact: contactT;
+    contact: Contact;
     groups: Group[];
     image: string;
     isMenuVisible: boolean;
@@ -183,7 +178,7 @@ const AddEdit = (props: Props): JSX.Element => {
         </View>
     );
 
-    const mapPhoneNumbers = (value): numbersT =>
+    const mapPhoneNumbers = (value): ContactNumber =>
         value.map((row, index) => {
             return mapHelper(
                 value[index].number,
@@ -196,7 +191,7 @@ const AddEdit = (props: Props): JSX.Element => {
             );
         });
 
-    const mapEmails = (value): emailsT =>
+    const mapEmails = (value): ContactEmail =>
         value.map((row, index) => {
             return mapHelper(
                 value[index].email,
