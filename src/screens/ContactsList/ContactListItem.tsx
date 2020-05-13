@@ -25,11 +25,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlignVertical: 'center',
     },
-    avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-    },
 });
 
 const ContactListItem = (props: Props): ReactElement => {
@@ -40,8 +35,7 @@ const ContactListItem = (props: Props): ReactElement => {
     return (
         <TouchableRipple style={styles.ripple} onPress={onPress}>
             <View style={styles.container}>
-                <ProperAvatar path={photoUrl} name={firstName} size={40} />
-                {/*<Image source={{ uri: photoUrl }} style={styles.avatar} />*/}
+                <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
                 <Text style={styles.text}>
                     {firstName} {lastName}
                 </Text>

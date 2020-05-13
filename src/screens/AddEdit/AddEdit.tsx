@@ -90,7 +90,6 @@ const AddEdit = (props: Props): JSX.Element => {
         image,
         isMenuVisible,
         pickImage,
-        setImage,
         setIsMenuVisible,
         snackbar,
         onGroups,
@@ -242,7 +241,12 @@ const AddEdit = (props: Props): JSX.Element => {
                                 style={styles.avatarContainer}
                                 onPress={(): void => setIsMenuVisible(true)}
                             >
-                                <ProperAvatar path={image} name={contact.firstName} size={120} />
+                                <ProperAvatar
+                                    path={image}
+                                    firstName={contact.firstName}
+                                    lastName={contact.lastName}
+                                    size={120}
+                                />
                             </TouchableOpacity>
                         }
                     >
