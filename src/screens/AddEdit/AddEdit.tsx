@@ -1,18 +1,13 @@
 import React from 'react';
-import {
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-} from 'react-native';
-import { TextInput, Avatar, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
+import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TextInput, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { contactT, emailsT, navigationT, numbersT, snackbarT } from '../CustomTypes';
 import GroupButton from './GroupButton';
 import { Group } from '../../redux/reducers/GroupsReducer';
+import ProperAvatar from '../ProperAvatar';
 
 const styles = StyleSheet.create({
     container: {
@@ -95,7 +90,6 @@ const AddEdit = (props: Props): JSX.Element => {
         image,
         isMenuVisible,
         pickImage,
-        setImage,
         setIsMenuVisible,
         snackbar,
         onGroups,
@@ -247,11 +241,12 @@ const AddEdit = (props: Props): JSX.Element => {
                                 style={styles.avatarContainer}
                                 onPress={(): void => setIsMenuVisible(true)}
                             >
-                                {image ? (
-                                    <Avatar.Image size={120} source={{ uri: image }} />
-                                ) : (
-                                    <Avatar.Text size={120} label='XD' />
-                                )}
+                                <ProperAvatar
+                                    path={image}
+                                    firstName={contact.firstName}
+                                    lastName={contact.lastName}
+                                    size={120}
+                                />
                             </TouchableOpacity>
                         }
                     >
