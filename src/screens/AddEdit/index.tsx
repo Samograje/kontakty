@@ -29,19 +29,30 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const { id, mode } = route.params;
     const contacts = useSelector(getContacts);
     const groups = useSelector(getGroups);
-    const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
+    let contact;
+    if(isEdit){
+        contacts.forEach((row) => {
+            if(row.id === id){
+                contact = row;
+            }
+        })
+    }
+    const dispatch = useDispatch();
     const [isMenuVisible, setIsMenuVisible] = useState(false);
-    const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
-    const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
-    const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
-    const [lastName, setSurname] = useState(isEdit ? contacts[id].lastName : '');
-    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{
+    const [image, setImage] = useState(isEdit ? contact.photoUrl : '');
+    const [firstName, setFirstName] = useState(isEdit ? contact.firstName : '');
+    const [secondName, setSecondName] = useState(isEdit ? contact.secondName : '');
+    const [lastName, setSurname] = useState(isEdit ? contact.lastName : '');
+    const [numbers, setNumbers] = useState(isEdit ? (contact.telNumbers) : ([{
         number: '',
         category: defaultCathegory
     }]));
     const [deletedNumber, setDeletedNumber] = useState({ index: -1, delNumber: { number: '', category: '' } });
-    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{
+    const [emails, setEmails] = useState(isEdit ? (contact.emails != null ? (contact.emails) : ([{
+        email: '',
+        category: defaultCathegory
+    }])) : ([{
         email: '',
         category: defaultCathegory
     }]));
@@ -74,7 +85,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             emails:  emails.length === 1 && emails[0].email === '' ? null : emails,
         };
     };
-    const contact = buildContactObject();
+    if(!isEdit){
+        contact = buildContactObject();
+    }
     const onGroups = (): void => {
         navigate('Groups', { id: id });
     };
