@@ -333,7 +333,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             numbers={numbers}
             emails={emails}
             navigation={navigation}
-            contact={contact}
+            contact={buildContactObject()}
             groups={filteredGroups}
             image={image}
             isMenuVisible={isMenuVisible}
