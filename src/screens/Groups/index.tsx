@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroups } from '../../redux/selectors/Selectors';
+import { getGroups, getTempGroupsIds } from '../../redux/selectors/Selectors';
 import GroupsView from './Groups';
 import {
     addContactToGroup,
+    addGroupToTempGroups,
     createGroup,
     removeContactFromGroup,
     removeGroup,
+    removeGroupFromTempGroups,
 } from '../../redux/actions/ActionCreators';
 import { Group } from '../../redux/reducers/GroupsReducer';
-import { Alert, BackHandler } from 'react-native';
+import { Alert } from 'react-native';
 import { modes } from '../StringsHelper';
 
 interface Props {
@@ -25,30 +27,20 @@ export interface DataWithIsChecked {
 }
 
 const GroupsScreen = (props: Props) => {
-    const { id, mode, userGroups, setGroupsState } = props.route.params;
+    const { id, mode } = props.route.params;
     const groups = useSelector(getGroups);
+    const tempGroups = useSelector(getTempGroupsIds);
     const dispatch = useDispatch();
-    const [chosenGroups, setChosenGroups] = useState(userGroups);
 
     const onGroupPress = useCallback(
         (groupId: number, isIncluded: boolean): void => {
             if (mode === modes.create) {
-                if (isIncluded) {
-                    const temp = chosenGroups.filter((chosenGroupId: number): boolean => chosenGroupId !== groupId);
-                    console.warn('before: ' + chosenGroups);
-                    console.warn('after: ' + temp);
-                    setChosenGroups(temp);
-                } else {
-                    const tempGroups = chosenGroups;
-                    tempGroups.push(groupId);
-                    setChosenGroups(tempGroups);
-                    console.warn('added: ' + tempGroups);
-                }
+                isIncluded ? dispatch(removeGroupFromTempGroups(groupId)) : dispatch(addGroupToTempGroups(groupId));
             } else {
                 isIncluded ? dispatch(removeContactFromGroup(id, groupId)) : dispatch(addContactToGroup(id, groupId));
             }
         },
-        [chosenGroups, dispatch, id, mode],
+        [dispatch, id, mode],
     );
 
     const addGroup = (name: string): void => {
@@ -78,7 +70,7 @@ const GroupsScreen = (props: Props) => {
             return groups.map((el) => {
                 return {
                     ...el,
-                    isChecked: chosenGroups.includes(el.id),
+                    isChecked: tempGroups.includes(el.id),
                 };
             });
         } else {
@@ -89,20 +81,7 @@ const GroupsScreen = (props: Props) => {
                 };
             });
         }
-    }, [chosenGroups, mode, groups, id]);
-
-    useEffect(() => {
-        const onBackPress = (): boolean => {
-            if (mode === modes.create) {
-                setGroupsState([1]);
-            }
-            return true;
-        };
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-        return () => backHandler.remove();
-    }, [chosenGroups, mode, setGroupsState]);
+    }, [tempGroups, mode, groups, id]);
 
     return (
         <GroupsView data={data} onGroupPress={onGroupPress} onLongGroupPress={onLongGroupPress} addGroup={addGroup} />

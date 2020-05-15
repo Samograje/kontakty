@@ -7,6 +7,9 @@ import {
     REMOVE_GROUP,
     ADD_CONTACT_ID,
     REMOVE_CONTACT_ID,
+    REMOVE_TEMP_GROUPS,
+    ADD_GROUP_TO_TEMP_GROUPS,
+    REMOVE_GROUP_FROM_TEMP_GROUPS,
 } from '../_constants/Types';
 import { Contact } from '../reducers/ContactsReducer';
 import { Group } from '../reducers/GroupsReducer';
@@ -67,6 +70,26 @@ export const removeContactFromGroup = (contactId: number, groupId: number) => {
     return {
         type: REMOVE_CONTACT_ID,
         contactId,
+        groupId,
+    };
+};
+
+export const removeTempGroups = () => {
+    return {
+        type: REMOVE_TEMP_GROUPS,
+    };
+};
+
+export const addGroupToTempGroups = (groupId: number) => {
+    return {
+        type: ADD_GROUP_TO_TEMP_GROUPS,
+        groupId,
+    };
+};
+
+export const removeGroupFromTempGroups = (groupId: number) => {
+    return {
+        type: REMOVE_GROUP_FROM_TEMP_GROUPS,
         groupId,
     };
 };

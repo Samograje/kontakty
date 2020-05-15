@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useCallback, useEffect, useState } from 'react';
 import AddEdit from './AddEdit';
-import { getContacts, getGroups } from '../../redux/selectors/Selectors';
+import { getContacts, getGroups, getTempGroupsIds } from '../../redux/selectors/Selectors';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
@@ -9,7 +9,8 @@ import { defaultCathegory, formLabels, modes } from '../StringsHelper';
 import { contactT, emailsT, numbersT, validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
-import { addContactToGroup, createContact, updateContact } from '../../redux/actions/ActionCreators';
+import { createContact, updateContact } from '../../redux/actions/ActionCreators';
+import addNewestContactToGroup from '../../redux/actions/addNewestContactToGroups';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -28,9 +29,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const { id, mode } = route.params;
     const contacts = useSelector(getContacts);
     const groups = useSelector(getGroups);
+    const tempGroupsIds = useSelector(getTempGroupsIds);
     const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
-    const [userGroups, setUserGroups] = useState([]);
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
     const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
@@ -84,6 +85,11 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const onChangeLastName = (value: string): void => {
         setSurname(value);
     };
+
+    const onGroups = (): void => {
+        navigate('Groups', {id, mode})
+    };
+
     const onDismissSnackbar = (): void => {
         setSnackbar({ isVisible: false, message: '', isActionVisible: false, label: '' });
     };
@@ -234,12 +240,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             if (dataValidOk) {
                 if (mode === modes.create) {
                     dispatch(createContact(buildContactObject()));
-                    const newContactId = contacts[contacts.length-1].id;
-                    if(userGroups.length !== 0){
-                        userGroups.forEach((groupId) => {
-                            dispatch(addContactToGroup(newContactId,groupId));
-                        });
-                    }
+                    dispatch(addNewestContactToGroup(tempGroupsIds));
                 } else if (mode === modes.edit && id !== null) {
                     dispatch(updateContact(buildContactObject(), id));
                 }
@@ -321,21 +322,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         }
     },[checkCameraRollPermissions, checkCameraPermissions]);
 
-    const setGroupsState = useCallback((chosenGroups: number[])=>{
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        setUserGroups(chosenGroups);
-        console.warn('back pressed: ' + chosenGroups);
-    },[]);
-
-    const onGroups = (): void => {
-        if(!isEdit) {
-            navigate('Groups',
-                { id: '', mode, userGroups, setGroupsState: (chosenGroups: number[]) => setGroupsState(chosenGroups) });
-        } else
-            navigate('Groups', {id, mode})
-    };
-
     return (
         <AddEdit
             mode={mode}
@@ -362,7 +348,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
             useCamera={useCamera}
-            userGroups={userGroups}
+            userGroups={tempGroupsIds}
         />
     );
 };
