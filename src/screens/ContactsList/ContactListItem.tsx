@@ -11,12 +11,10 @@ interface Props {
 
 const styles = StyleSheet.create({
     ripple: {
-        flex: 1,
         padding: 10,
         paddingLeft: 20,
     },
     container: {
-        flex: 1,
         flexDirection: 'row',
     },
     text: {

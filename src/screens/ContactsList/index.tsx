@@ -2,8 +2,7 @@
 import React, { ReactElement, useState } from 'react';
 import ContactsList from './ContactsList';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { createContact } from '../../redux/actions/ActionCreators';
+import { useSelector } from 'react-redux';
 import { getContacts } from '../../redux/selectors/Selectors';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 
@@ -52,53 +51,16 @@ const groupContactsByFirstNameFirstLetter = (contacts: Contact[]): ContactsSecti
         }, []);
 };
 
-const getExampleContact = (firstName: string, lastName: string, photoUrl: string | null): Contact => {
-    return {
-        id: null,
-        firstName,
-        secondName: '',
-        lastName,
-        photoUrl: photoUrl || 'https://i.ytimg.com/vi/e5kVnW7E2YM/maxresdefault.jpg',
-        telNumbers: [
-            {
-                category: 'Home',
-                number: '111222333',
-            },
-        ],
-        emails: [
-            {
-                category: 'Private',
-                email: 'smoczyca@hollywood.com', // XDD
-            },
-        ],
-    };
-};
-
 const ContactsListScreen = (): ReactElement => {
     const { navigate } = useNavigation();
     const contacts = useSelector(getContacts);
-    const dispatch = useDispatch();
     const [searchText, setSearchText] = useState('');
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
     const onDetails = (id: number | null): void => navigate('Details', { id });
-    const onGroupList = ():void => navigate('GroupsList');
+    const onGroupList = (): void => navigate('GroupsList');
     const onSearch = (query: string): void => setSearchText(query);
     const onClearSearch = (): void => setSearchText('');
-
-    // TODO: remove example when adding contact image by form will be available
-    const addExampleContact = (firstName: string, lastName: string, photoUrl: string | null): void => {
-        dispatch(createContact(getExampleContact(firstName, lastName, photoUrl)));
-    };
-    const addExampleContacts = (): void => {
-        addExampleContact('Agata', 'Pała', null);
-        addExampleContact('Andrzej', 'Dupa', 'https://d.wpimg.pl/1624536224--718230253/andrzej-duda.jpg');
-        addExampleContact(
-            'Wojciech',
-            'Puczyk',
-            'https://vignette.wikia.nocookie.net/serialblokekipa/images/c/c9/Wojtas_Puczyk.png/revision/latest/scale-to-width-down/340?cb=20170802081833&path-prefix=pl',
-        );
-    };
 
     const contactsFiltered = searchContacts(contacts, searchText);
     const contactsSectioned = groupContactsByFirstNameFirstLetter(contactsFiltered);
@@ -109,7 +71,6 @@ const ContactsListScreen = (): ReactElement => {
             onView={onDetails}
             onSearch={onSearch}
             onClearSearch={onClearSearch}
-            onExample={addExampleContacts}
             data={contactsSectioned}
             totalElements={contacts.length}
             searchText={searchText}

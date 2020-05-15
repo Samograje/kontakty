@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import {
-    Button,
     SectionList,
     SectionListRenderItem,
     SectionListRenderItemInfo,
@@ -20,7 +19,6 @@ interface Props {
     onView: (id: number | null) => void;
     onSearch: (query: string) => void;
     onClearSearch: () => void;
-    onExample: () => void;
     data: {
         title: string;
         data: Contact[];
@@ -34,6 +32,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    list: {
+        flex: 1,
+    },
     fixedView: {
         position: 'absolute',
         right: 30,
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
 });
 
 const ContactsList = (props: Props): JSX.Element => {
-    const { onCreate, onView, onSearch, onClearSearch, onExample, data, totalElements, searchText, onGroupList } = props;
+    const { onCreate, onView, onSearch, onClearSearch, data, totalElements, searchText, onGroupList } = props;
 
     const keyExtractor = (item, index): string => item + index;
     const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
@@ -61,9 +62,18 @@ const ContactsList = (props: Props): JSX.Element => {
                 onSearch={onSearch}
                 onClearSearch={onClearSearch}
             />
-            <Button title='Create example contacts' onPress={onExample} />
-            <Button title='GroupsList' onPress={onGroupList} />
+            <ContactListItem
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore
+                item={{
+                    firstName: 'My',
+                    lastName: 'groups',
+                    photoUrl: '',
+                }}
+                onClick={onGroupList}
+            />
             <SectionList
+                style={styles.list}
                 sections={data}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
