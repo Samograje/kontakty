@@ -4,10 +4,7 @@ import { StyleSheet, Text } from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        margin: 10,
-        padding: 10,
-        backgroundColor: 'lightgrey',
-        borderRadius: 2,
+        marginTop: 20,
         fontSize: 16,
         textAlign: 'center',
     },

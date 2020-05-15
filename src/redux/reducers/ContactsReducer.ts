@@ -17,7 +17,7 @@ export interface Contact {
     lastName: string;
     photoUrl: string;
     telNumbers: ContactNumber[];
-    emails: ContactEmail[];
+    emails: ContactEmail[] | null;
 }
 
 interface State {
