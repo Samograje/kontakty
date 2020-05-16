@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FlatList, Image, Platform, SafeAreaView, SectionList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
 import { Linking } from 'react-native';
 import { Avatar } from 'react-native-elements';
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     },
 });
 
-const Details = (props: Props) => {
+const Details = (props: Props): JSX.Element => {
     const { id, onEdit, onDelete, contact } = props;
 
-    function makeCall(phoneNumber: string) {
+    function makeCall(phoneNumber: string): void {
         if (phoneNumber !== null && phoneNumber !== 'undefined') {
             if (Platform.OS === 'android') {
                 phoneNumber = 'tel:${phoneNumber}';
@@ -76,7 +76,7 @@ const Details = (props: Props) => {
         }
     }
 
-    function sendSMS(phoneNumber: string) {
+    function sendSMS(phoneNumber: string): void {
         if (phoneNumber !== null && phoneNumber !== 'undefined') {
             if (Platform.OS === 'android') {
                 phoneNumber = `tel:${phoneNumber}`;
@@ -87,13 +87,13 @@ const Details = (props: Props) => {
         }
     }
 
-    function sendEMail(eMail: string) {
+    function sendEMail(eMail: string): void {
         if (eMail !== null && eMail !== 'undefined') {
             Linking.openURL(`mailto:${eMail}?subject=&body=`);
         }
     }
 
-    function PhoneNumberItem({ item }) {
+    function PhoneNumberItem({ item }): JSX.Element {
         return (
             <View style={styles.details}>
                 <View style={styles.item}>
@@ -101,16 +101,25 @@ const Details = (props: Props) => {
                     <Text style={styles.title}>{item.category}</Text>
                 </View>
                 <View style={styles.itemActions}>
-                    <IconButton icon='phone' color={Colors.green500} size={25} onPress={() => makeCall(item.number)} />
-                    <IconButton icon='message' color={Colors.green500} size={25} onPress={() => sendSMS(item.number)} />
+                    <IconButton
+                        icon='phone'
+                        color={Colors.green500}
+                        size={25}
+                        onPress={(): void => makeCall(item.number)}
+                    />
+                    <IconButton
+                        icon='message'
+                        color={Colors.green500}
+                        size={25}
+                        onPress={(): void => sendSMS(item.number)}
+                    />
                 </View>
             </View>
         );
     }
 
-    function EMailItem({ item }) {
+    function EMailItem({ item }): JSX.Element {
         if (contact.emails != null) {
-            console.log(contact.emails);
             return (
                 <View style={styles.details}>
                     <Text style={styles.title}>{item.email}</Text>
@@ -119,13 +128,13 @@ const Details = (props: Props) => {
                             icon='email'
                             color={Colors.green500}
                             size={25}
-                            onPress={() => sendEMail(item.email)}
+                            onPress={(): void => sendEMail(item.email)}
                         />
                     </View>
                 </View>
             );
         } else {
-            return <View style={styles.details}></View>;
+            return <View style={styles.details} />;
         }
     }
 
@@ -145,7 +154,7 @@ const Details = (props: Props) => {
                         icon='account-edit'
                         color={Colors.grey500}
                         size={50}
-                        onPress={() => {
+                        onPress={(): void => {
                             onEdit(id);
                         }}
                     />
@@ -154,7 +163,7 @@ const Details = (props: Props) => {
                         icon='delete'
                         color={Colors.grey500}
                         size={50}
-                        onPress={() => {
+                        onPress={(): void => {
                             onDelete();
                         }}
                     />
@@ -162,21 +171,23 @@ const Details = (props: Props) => {
                         icon='account-group'
                         color={Colors.grey500}
                         size={50}
-                        onPress={() => console.log('account-group')}
+                        onPress={(): void => console.log('account-group')}
                     />
                 </View>
 
                 <SafeAreaView style={styles.container}>
+                    {/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */}
                     <FlatList data={contact.telNumbers} renderItem={({ item }) => <PhoneNumberItem item={item} />} />
                 </SafeAreaView>
 
                 <SafeAreaView style={styles.container}>
+                    {/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */}
                     <FlatList data={contact.emails} renderItem={({ item }) => <EMailItem item={item} />} />
                 </SafeAreaView>
             </View>
         );
     } else {
-        return <View></View>;
+        return <View />;
     }
 };
 
