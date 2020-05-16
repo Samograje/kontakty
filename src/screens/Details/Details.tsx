@@ -2,8 +2,8 @@ import React from 'react';
 import { Alert, FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
 import { Linking } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import { Contact } from '../../redux/reducers/ContactsReducer';
+import ProperAvatar from '../ProperAvatar';
 
 interface Props {
     id: number;
@@ -76,7 +76,7 @@ const Details = (props: Props): JSX.Element => {
             Linking.openURL(phoneNumber)
                 .then((r) => console.log(r))
                 .catch(function(error) {
-                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                    console.log('There has been a problem with operation: ' + error.message);
                     // ADD THIS THROW error
                     throw error;
                 });
@@ -93,7 +93,7 @@ const Details = (props: Props): JSX.Element => {
             Linking.openURL(`sms:&addresses=${phoneNumber}&body=`)
                 .then((r) => console.log(r))
                 .catch(function(error) {
-                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                    console.log('There has been a problem with operation: ' + error.message);
                     // ADD THIS THROW error
                     throw error;
                 });
@@ -176,7 +176,12 @@ const Details = (props: Props): JSX.Element => {
         return (
             <View style={styles.container}>
                 <View style={styles.avatar}>
-                    <Avatar size='large' rounded={true} icon={{ name: 'user', type: 'font-awesome' }} />
+                    <ProperAvatar
+                        path={contact.photoUrl}
+                        firstName={contact.firstName}
+                        lastName={contact.lastName}
+                        size={70}
+                    />
                     <Text style={styles.name}>
                         {contact.firstName} {contact.lastName}
                     </Text>
