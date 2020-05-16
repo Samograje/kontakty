@@ -72,7 +72,13 @@ const Details = (props: Props): JSX.Element => {
             } else {
                 phoneNumber = 'telprompt:${phoneNumber}';
             }
-            Linking.openURL(phoneNumber);
+            Linking.openURL(phoneNumber)
+                .then((r) => console.log(r))
+                .catch(function(error) {
+                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                    // ADD THIS THROW error
+                    throw error;
+                });
         }
     }
 
@@ -83,13 +89,25 @@ const Details = (props: Props): JSX.Element => {
             } else {
                 phoneNumber = `telprompt:${phoneNumber}`;
             }
-            Linking.openURL(`sms:&addresses=${phoneNumber}&body=`);
+            Linking.openURL(`sms:&addresses=${phoneNumber}&body=`)
+                .then((r) => console.log(r))
+                .catch(function(error) {
+                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                    // ADD THIS THROW error
+                    throw error;
+                });
         }
     }
 
     function sendEMail(eMail: string): void {
         if (eMail !== null && eMail !== 'undefined') {
-            Linking.openURL(`mailto:${eMail}?subject=&body=`);
+            Linking.openURL(`mailto:${eMail}?subject=&body=`)
+                .then((r) => console.log(r))
+                .catch(function(error) {
+                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                    // ADD THIS THROW error
+                    throw error;
+                });
         }
     }
 
@@ -180,7 +198,6 @@ const Details = (props: Props): JSX.Element => {
                         size={50}
                         onPress={(): void => {
                             createAlert();
-                            //onDelete();
                         }}
                     />
                     <IconButton
@@ -192,13 +209,19 @@ const Details = (props: Props): JSX.Element => {
                 </View>
 
                 <SafeAreaView style={styles.container}>
-                    {/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */}
-                    <FlatList data={contact.telNumbers} renderItem={({ item }) => <PhoneNumberItem item={item} />} />
+                    <FlatList
+                        data={contact.telNumbers}
+                        keyExtractor={(item) => item.number}
+                        renderItem={({ item }) => <PhoneNumberItem item={item} />}
+                    />
                 </SafeAreaView>
 
                 <SafeAreaView style={styles.container}>
-                    {/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */}
-                    <FlatList data={contact.emails} renderItem={({ item }) => <EMailItem item={item} />} />
+                    <FlatList
+                        data={contact.emails}
+                        keyExtractor={(item) => item.email}
+                        renderItem={({ item }) => <EMailItem item={item} />}
+                    />
                 </SafeAreaView>
             </View>
         );
