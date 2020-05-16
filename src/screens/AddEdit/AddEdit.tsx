@@ -1,18 +1,14 @@
 import React from 'react';
-import {
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-} from 'react-native';
-import { TextInput, Avatar, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
+import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TextInput, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
-import { contactT, emailsT, navigationT, numbersT, snackbarT } from '../CustomTypes';
+import { navigationT, snackbarT } from '../CustomTypes';
 import GroupButton from './GroupButton';
 import { Group } from '../../redux/reducers/GroupsReducer';
+import ProperAvatar from '../ProperAvatar';
+import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
 
 const styles = StyleSheet.create({
     container: {
@@ -59,10 +55,10 @@ const styles = StyleSheet.create({
 
 interface Props {
     mode: string;
-    numbers: numbersT;
-    emails: emailsT;
+    numbers: ContactNumber[];
+    emails: ContactEmail[];
     navigation: navigationT;
-    contact: contactT;
+    contact: Contact;
     groups: Group[];
     image: string;
     isMenuVisible: boolean;
@@ -95,7 +91,6 @@ const AddEdit = (props: Props): JSX.Element => {
         image,
         isMenuVisible,
         pickImage,
-        setImage,
         setIsMenuVisible,
         snackbar,
         onGroups,
@@ -183,7 +178,7 @@ const AddEdit = (props: Props): JSX.Element => {
         </View>
     );
 
-    const mapPhoneNumbers = (value): numbersT =>
+    const mapPhoneNumbers = (value): ContactNumber[] =>
         value.map((row, index) => {
             return mapHelper(
                 value[index].number,
@@ -196,7 +191,7 @@ const AddEdit = (props: Props): JSX.Element => {
             );
         });
 
-    const mapEmails = (value): emailsT =>
+    const mapEmails = (value): ContactEmail[] =>
         value.map((row, index) => {
             return mapHelper(
                 value[index].email,
@@ -247,11 +242,12 @@ const AddEdit = (props: Props): JSX.Element => {
                                 style={styles.avatarContainer}
                                 onPress={(): void => setIsMenuVisible(true)}
                             >
-                                {image ? (
-                                    <Avatar.Image size={120} source={{ uri: image }} />
-                                ) : (
-                                    <Avatar.Text size={120} label='XD' />
-                                )}
+                                <ProperAvatar
+                                    path={image}
+                                    firstName={contact.firstName}
+                                    lastName={contact.lastName}
+                                    size={120}
+                                />
                             </TouchableOpacity>
                         }
                     >

@@ -6,10 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { defaultCathegory, formLabels, modes } from '../StringsHelper';
-import { contactT, emailsT, numbersT, validationT } from '../CustomTypes';
+import { validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { createContact, updateContact } from '../../redux/actions/ActionCreators';
+import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -28,19 +29,30 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const { id, mode } = route.params;
     const contacts = useSelector(getContacts);
     const groups = useSelector(getGroups);
-    const dispatch = useDispatch();
     const isEdit = mode === modes.edit;
+    let contact;
+    if(isEdit){
+        contacts.forEach((row) => {
+            if(row.id === id){
+                contact = row;
+            }
+        })
+    }
+    const dispatch = useDispatch();
     const [isMenuVisible, setIsMenuVisible] = useState(false);
-    const [image, setImage] = useState(isEdit ? contacts[id].photoUrl : '');
-    const [firstName, setFirstName] = useState(isEdit ? contacts[id].firstName : '');
-    const [secondName, setSecondName] = useState(isEdit ? contacts[id].secondName : '');
-    const [lastName, setSurname] = useState(isEdit ? contacts[id].lastName : '');
-    const [numbers, setNumbers] = useState(isEdit ? (contacts[id].telNumbers) : ([{
+    const [image, setImage] = useState(isEdit ? contact.photoUrl : '');
+    const [firstName, setFirstName] = useState(isEdit ? contact.firstName : '');
+    const [secondName, setSecondName] = useState(isEdit ? contact.secondName : '');
+    const [lastName, setSurname] = useState(isEdit ? contact.lastName : '');
+    const [numbers, setNumbers] = useState(isEdit ? (contact.telNumbers) : ([{
         number: '',
         category: defaultCathegory
     }]));
     const [deletedNumber, setDeletedNumber] = useState({ index: -1, delNumber: { number: '', category: '' } });
-    const [emails, setEmails] = useState(isEdit ? (contacts[id].emails) : ([{
+    const [emails, setEmails] = useState(isEdit ? (contact.emails != null ? (contact.emails) : ([{
+        email: '',
+        category: defaultCathegory
+    }])) : ([{
         email: '',
         category: defaultCathegory
     }]));
@@ -62,7 +74,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
     const filteredGroups = filterGroupsForContact();
 
-    const buildContactObject = (): contactT => {
+    const buildContactObject = (): Contact => {
         return {
             id: null,
             firstName: firstName,
@@ -70,10 +82,12 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             lastName: lastName,
             photoUrl: image,
             telNumbers: numbers,
-            emails: emails,
+            emails:  emails.length === 1 && emails[0].email === '' ? null : emails,
         };
     };
-    const contact = buildContactObject();
+    if(!isEdit){
+        contact = buildContactObject();
+    }
     const onGroups = (): void => {
         navigate('Groups', { id: id });
     };
@@ -97,9 +111,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         //Sprawdza czy jest imie i co najmniej jeden numer telefonu
         const nameAndOneNumberEmpty: boolean = !(!firstName || firstName.length === 0) && !(!numbers[0].number || numbers[0].number.length === 0) && !(!numbers[0].category || numbers[0].category.length === 0);
         //Sprawdza czy wszystkie dodane pola tekstowe dla numerów telefonów i adresów email mają wartości
-        const tmpNumbers: numbersT = [...numbers];
+        const tmpNumbers: ContactNumber[] = [...numbers];
         let numbersEmpty = true;
-        const tmpEmails: emailsT = [...emails];
+        const tmpEmails: ContactEmail[] = [...emails];
         let emailsEmpty = true;
         tmpNumbers.forEach((row) => {
             if (!(!row.number || row.number.length === 0) && !(!row.category || row.category.length === 0)) {
@@ -319,7 +333,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             numbers={numbers}
             emails={emails}
             navigation={navigation}
-            contact={contact}
+            contact={buildContactObject()}
             groups={filteredGroups}
             image={image}
             isMenuVisible={isMenuVisible}
