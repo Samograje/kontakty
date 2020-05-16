@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
 import { Linking } from 'react-native';
 import { Avatar } from 'react-native-elements';
@@ -138,6 +138,21 @@ const Details = (props: Props): JSX.Element => {
         }
     }
 
+    const createAlert = (): void =>
+        Alert.alert(
+            'Operation Confirm',
+            'Are you sure you want to delete this contact?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: (): void => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: (): void => onDelete() },
+            ],
+            { cancelable: false },
+        );
+
     if (contact !== undefined) {
         return (
             <View style={styles.container}>
@@ -164,7 +179,8 @@ const Details = (props: Props): JSX.Element => {
                         color={Colors.grey500}
                         size={50}
                         onPress={(): void => {
-                            onDelete();
+                            createAlert();
+                            //onDelete();
                         }}
                     />
                     <IconButton
