@@ -9,6 +9,7 @@ interface Props {
     id: number;
     onEdit: (id: number) => {};
     onDelete: () => void;
+    onGroupList: () => void;
     contact: Contact;
 }
 
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
 });
 
 const Details = (props: Props): JSX.Element => {
-    const { id, onEdit, onDelete, contact } = props;
+    const { id, onEdit, onDelete, onGroupList, contact } = props;
 
     function makeCall(phoneNumber: string): void {
         if (phoneNumber !== null && phoneNumber !== 'undefined') {
@@ -200,27 +201,22 @@ const Details = (props: Props): JSX.Element => {
                             createAlert();
                         }}
                     />
-                    <IconButton
-                        icon='account-group'
-                        color={Colors.grey500}
-                        size={50}
-                        onPress={(): void => console.log('account-group')}
-                    />
+                    <IconButton icon='account-group' color={Colors.grey500} size={50} onPress={onGroupList} />
                 </View>
 
                 <SafeAreaView style={styles.container}>
                     <FlatList
                         data={contact.telNumbers}
-                        keyExtractor={(item) => item.number}
-                        renderItem={({ item }) => <PhoneNumberItem item={item} />}
+                        keyExtractor={(item): string => item.number}
+                        renderItem={({ item }): JSX.Element => <PhoneNumberItem item={item} />}
                     />
                 </SafeAreaView>
 
                 <SafeAreaView style={styles.container}>
                     <FlatList
                         data={contact.emails}
-                        keyExtractor={(item) => item.email}
-                        renderItem={({ item }) => <EMailItem item={item} />}
+                        keyExtractor={(item): string => item.email}
+                        renderItem={({ item }): JSX.Element => <EMailItem item={item} />}
                     />
                 </SafeAreaView>
             </View>
