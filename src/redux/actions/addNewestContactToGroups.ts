@@ -4,7 +4,6 @@ const addNewestContactToGroup = (tempGroupsIds) => {
     return (dispatch, getState) => {
         const { contacts } = getState().ContactsReducer;
 
-        console.log('addcontact' + contacts.length);
         const newContactId = contacts[contacts.length - 1].id;
         if (tempGroupsIds.length > 0) {
             tempGroupsIds.forEach((groupId) => {
