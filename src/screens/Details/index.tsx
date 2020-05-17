@@ -21,7 +21,7 @@ const DetailsScreen = (props: Props): ReactElement => {
     const contact = contacts.find((c) => c.id === id);
     const contactGroups = groups.filter((g) => g.contactsIds.includes(id));
 
-    const onGroupList = (): {} => navigate('GroupsList');
+    const onGroupList = (): {} => navigate('Groups', { id: id });
     const onEdit = (contactId: number): {} => navigate('AddEdit', { id: contactId, mode: 'edit' });
     const onContactDelete = (): void => {
         dispatch(removeContact(id));
