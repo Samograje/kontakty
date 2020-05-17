@@ -4,6 +4,9 @@ import {
     REMOVE_GROUP,
     ADD_CONTACT_ID,
     REMOVE_CONTACT_ID,
+    REMOVE_TEMP_GROUPS,
+    ADD_GROUP_TO_TEMP_GROUPS,
+    REMOVE_GROUP_FROM_TEMP_GROUPS,
 } from '../_constants/Types';
 
 export interface Group {
@@ -15,17 +18,20 @@ export interface Group {
 interface State {
     generalId: number;
     groups: Group[];
+    tempGroupsIds: number[];
 }
 
 const initialState: State = {
     generalId: 0,
     groups: [],
+    tempGroupsIds: [],
 };
 
 export const GroupsReducer = (state = initialState, action): State => {
     switch (action.type) {
         case CREATE_GROUP:
             return {
+                ...state,
                 groups: [...state.groups, { ...action.group, id: state.generalId + 1 }],
                 generalId: state.generalId + 1,
             };
@@ -33,10 +39,7 @@ export const GroupsReducer = (state = initialState, action): State => {
             return {
                 ...state,
                 groups: state.groups.map(
-                    (group): Group =>
-                        group.id === action.groupId
-                            ? { ...action.group, id: action.groupId }
-                            : group,
+                    (group): Group => (group.id === action.groupId ? { ...action.group, id: action.groupId } : group),
                 ),
             };
         case REMOVE_GROUP:
@@ -70,6 +73,21 @@ export const GroupsReducer = (state = initialState, action): State => {
                           }
                         : group,
                 ),
+            };
+        case REMOVE_TEMP_GROUPS:
+            return {
+                ...state,
+                tempGroupsIds: [],
+            };
+        case ADD_GROUP_TO_TEMP_GROUPS:
+            return {
+                ...state,
+                tempGroupsIds: [...state.tempGroupsIds, action.groupId],
+            };
+        case REMOVE_GROUP_FROM_TEMP_GROUPS:
+            return {
+                ...state,
+                tempGroupsIds: state.tempGroupsIds.filter((id): boolean => id !== action.groupId),
             };
         default:
             return state;

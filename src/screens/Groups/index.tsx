@@ -1,15 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroups } from '../../redux/selectors/Selectors';
+import { getGroups, getTempGroupsIds } from '../../redux/selectors/Selectors';
 import GroupsView from './Groups';
 import {
     addContactToGroup,
+    addGroupToTempGroups,
     createGroup,
     removeContactFromGroup,
     removeGroup,
+    removeGroupFromTempGroups,
 } from '../../redux/actions/ActionCreators';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { Alert } from 'react-native';
+import { modes } from '../StringsHelper';
 
 interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,15 +27,21 @@ export interface DataWithIsChecked {
 }
 
 const GroupsScreen = (props: Props) => {
-    const { id } = props.route.params;
+    const { id, mode } = props.route.params;
     const groups = useSelector(getGroups);
+    const tempGroups = useSelector(getTempGroupsIds);
     const dispatch = useDispatch();
 
-    const onGroupPress = (groupId: number, isIncluded: boolean): void => {
-        isIncluded
-            ? dispatch(removeContactFromGroup(id, groupId))
-            : dispatch(addContactToGroup(id, groupId));
-    };
+    const onGroupPress = useCallback(
+        (groupId: number, isIncluded: boolean): void => {
+            if (mode === modes.create) {
+                isIncluded ? dispatch(removeGroupFromTempGroups(groupId)) : dispatch(addGroupToTempGroups(groupId));
+            } else {
+                isIncluded ? dispatch(removeContactFromGroup(id, groupId)) : dispatch(addContactToGroup(id, groupId));
+            }
+        },
+        [dispatch, id, mode],
+    );
 
     const addGroup = (name: string): void => {
         if (!name) return;
@@ -57,21 +66,25 @@ const GroupsScreen = (props: Props) => {
     };
 
     const data: DataWithIsChecked[] = useMemo(() => {
-        return groups.map((el) => {
-            return {
-                ...el,
-                isChecked: el.contactsIds.includes(id),
-            };
-        });
-    }, [groups, id]);
+        if (mode === modes.create) {
+            return groups.map((el) => {
+                return {
+                    ...el,
+                    isChecked: tempGroups.includes(el.id),
+                };
+            });
+        } else {
+            return groups.map((el) => {
+                return {
+                    ...el,
+                    isChecked: el.contactsIds.includes(id),
+                };
+            });
+        }
+    }, [tempGroups, mode, groups, id]);
 
     return (
-        <GroupsView
-            data={data}
-            onGroupPress={onGroupPress}
-            onLongGroupPress={onLongGroupPress}
-            addGroup={addGroup}
-        />
+        <GroupsView data={data} onGroupPress={onGroupPress} onLongGroupPress={onLongGroupPress} addGroup={addGroup} />
     );
 };
 
