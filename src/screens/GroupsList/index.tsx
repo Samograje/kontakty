@@ -11,7 +11,7 @@ const GroupsListScreen = (): JSX.Element => {
     const groups = useSelector(getGroups);
     const { navigate } = useNavigation();
     const dispatch = useDispatch();
-    const onPress = (): void => console.log('Przenieś mnie do listy kontaktów.');
+    const onPress = (group: Group): void => navigate('ContactsListForGroup', { groupId: group.id });
 
     //TODO: metody z Group index, spróować zrobić wspólne
     const addGroup = (name: string): void => {

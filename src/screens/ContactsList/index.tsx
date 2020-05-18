@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React, { ReactElement, useState } from 'react';
-import ContactsList from './ContactsList';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { getContacts } from '../../redux/selectors/Selectors';
+import ContactsList from './ContactsList';
+import { getContacts, getGroups } from '../../redux/selectors/Selectors';
 import { Contact } from '../../redux/reducers/ContactsReducer';
+import { Group } from '../../redux/reducers/GroupsReducer';
 import { modes } from '../StringsHelper';
 
 interface ContactsSection {
@@ -52,9 +53,15 @@ const groupContactsByFirstNameFirstLetter = (contacts: Contact[]): ContactsSecti
         }, []);
 };
 
-const ContactsListScreen = (): ReactElement => {
+const ContactsListScreen = ({ route }): ReactElement => {
     const { navigate } = useNavigation();
-    const contacts = useSelector(getContacts);
+    const group: Group = useSelector(getGroups).filter((g: Group) => g.id === route.params?.groupId)[0];
+    let contacts = useSelector(getContacts);
+    if (group) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        contacts = contacts.filter((contact: Contact) => group.contactsIds.includes(contact.id));
+    }
     const [searchText, setSearchText] = useState('');
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
@@ -75,6 +82,7 @@ const ContactsListScreen = (): ReactElement => {
             data={contactsSectioned}
             totalElements={contacts.length}
             searchText={searchText}
+            forGroupModeEnabled={!!group}
             onGroupList={onGroupList}
         />
     );
