@@ -8,7 +8,7 @@ import AddGroupModal from '../Groups/components/AddGroupModal';
 
 interface Props {
     groups: Group[];
-    onPress: () => void;
+    onPress: (group: Group) => void;
     addGroup: (name: string) => void;
     onLongGroupPress: (groupId: number | null, groupName: string) => void;
 }
@@ -50,7 +50,7 @@ const GroupsList = (props: Props): JSX.Element => {
         <TouchableRipple
             style={styles.listElementContainer}
             key={index}
-            onPress={onPress}
+            onPress={(): void => onPress(row)}
             onLongPress={(): void => {
                 onLongGroupPress(row.id, row.name);
             }}

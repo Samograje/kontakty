@@ -26,6 +26,7 @@ interface Props {
     totalElements: number;
     searchText: string;
     onGroupList: () => void;
+    forGroupModeEnabled: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -41,12 +42,23 @@ const styles = StyleSheet.create({
         bottom: 30,
     },
     fab: {
+        zIndex: 200,
         backgroundColor: 'darkgreen',
     },
 });
 
 const ContactsList = (props: Props): JSX.Element => {
-    const { onCreate, onView, onSearch, onClearSearch, data, totalElements, searchText, onGroupList } = props;
+    const {
+        onCreate,
+        onView,
+        onSearch,
+        onClearSearch,
+        data,
+        totalElements,
+        searchText,
+        onGroupList,
+        forGroupModeEnabled,
+    } = props;
 
     const keyExtractor = (item, index): string => item + index;
     const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
@@ -56,22 +68,29 @@ const ContactsList = (props: Props): JSX.Element => {
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor='darkgreen' />
-            <HeaderBarWithSearch
-                totalElements={totalElements}
-                searchText={searchText}
-                onSearch={onSearch}
-                onClearSearch={onClearSearch}
-            />
-            <ContactListItem
-                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                // @ts-ignore
-                item={{
-                    firstName: 'My',
-                    lastName: 'groups',
-                    photoUrl: '',
-                }}
-                onClick={onGroupList}
-            />
+            {!forGroupModeEnabled && (
+                <>
+                    <HeaderBarWithSearch
+                        totalElements={totalElements}
+                        searchText={searchText}
+                        onSearch={onSearch}
+                        onClearSearch={onClearSearch}
+                    />
+                    <ContactListItem
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                        // @ts-ignore
+                        item={{
+                            firstName: 'My',
+                            lastName: 'groups',
+                            photoUrl: '',
+                        }}
+                        onClick={onGroupList}
+                    />
+                    <View style={styles.fixedView}>
+                        <FAB style={styles.fab} icon='plus' onPress={onCreate} />
+                    </View>
+                </>
+            )}
             <SectionList
                 style={styles.list}
                 sections={data}
@@ -80,9 +99,6 @@ const ContactsList = (props: Props): JSX.Element => {
                 renderSectionHeader={ContactsListSectionHeader}
                 ListEmptyComponent={ContactsListEmptyBanner}
             />
-            <View style={styles.fixedView}>
-                <FAB style={styles.fab} icon='plus' onPress={onCreate} />
-            </View>
         </View>
     );
 };
