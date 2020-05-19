@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         bottom: 30,
     },
     fab: {
+        zIndex: 200,
         backgroundColor: 'darkgreen',
     },
 });
