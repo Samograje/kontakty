@@ -9,7 +9,7 @@ import { defaultCathegory, formLabels, modes } from '../StringsHelper';
 import { validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
-import { createContact, updateContact } from '../../redux/actions/ActionCreators';
+import { createContact, removeTempGroups, updateContact } from '../../redux/actions/ActionCreators';
 import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
 import addNewestContactToGroup from '../../redux/actions/addNewestContactToGroups';
 
@@ -148,6 +148,11 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     //Nie mogę przekazać w deeps nazwy metody, bo robi się nieskończona pętla
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => setDataValid(checkDataValidation()), [firstName, emails, numbers]);
+    //Czyszczenie grup za każdym razem przy wejściu w dodawanie kontaktu
+    useEffect(() => {
+        dispatch(removeTempGroups());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     //metody
     const addInputField = (label: string): void => {
@@ -366,7 +371,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
             useCamera={useCamera}
-            userGroups={filteredGroups}
         />
     );
 };

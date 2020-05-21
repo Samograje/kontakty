@@ -32,13 +32,12 @@ const styles = StyleSheet.create({
 interface Props {
     onGroups: (id: number | null) => void;
     groups: Group[];
-    userGroups: Group[];
     id: number | null;
 }
 
 const GroupButton = (props: Props): JSX.Element => {
-    const { onGroups, groups, userGroups, id } = props;
-    console.log(userGroups);
+    const { onGroups, groups, id} = props;
+
     let groupString = '';
     if (groups.length === 0) {
         groupString = 'Click to add contact to groups!';
