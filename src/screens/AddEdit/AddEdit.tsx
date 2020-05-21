@@ -9,6 +9,7 @@ import GroupButton from './GroupButton';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import ProperAvatar from '../ProperAvatar';
 import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
+import { dimensions, fonts, margin, padding } from '../../styles/common';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,19 +17,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     avatarContainer: {
-        marginTop: 25,
+        marginTop: margin.md,
         alignItems: 'center',
     },
     headerText: {
-        fontSize: 30,
+        fontSize: fonts.lg,
     },
     inputText: {
         backgroundColor: 'white',
         flex: 2,
     },
     menu: {
-        paddingLeft: Dimensions.get('window').width / 2 - 20,
-        paddingTop: 50,
+        paddingLeft: dimensions.fullWidth / 2 - 20,
+        paddingTop: padding.xl,
         justifyContent: 'center',
     },
     row: {
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
     },
     icon: {
         alignSelf: 'center',
-        paddingLeft: 5,
-        paddingRight: 5,
+        paddingLeft: padding.sm,
+        paddingRight: padding.sm,
     },
     snackbar: {
         position: 'absolute',
