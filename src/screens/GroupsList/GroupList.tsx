@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import { TouchableRipple, FAB } from 'react-native-paper';
 import EmptyListComponent from '../Groups/components/EmptyListComponent';
 import AddGroupModal from '../Groups/components/AddGroupModal';
+import { fonts, margin, padding } from '../../styles/common';
 
 interface Props {
     groups: Group[];
@@ -16,22 +17,22 @@ interface Props {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 5,
+        paddingTop: padding.sm,
     },
     listElementContainer: {
         justifyContent: 'center',
         height: 60,
-        marginBottom: 10,
+        marginBottom: margin.sm,
     },
     text: {
-        paddingHorizontal: 20,
-        fontSize: 20,
+        paddingHorizontal: padding.md,
+        fontSize: fonts.md,
         alignSelf: 'center',
     },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingRight: 20,
+        paddingRight: padding.md,
     },
     fab: {
         position: 'absolute',
