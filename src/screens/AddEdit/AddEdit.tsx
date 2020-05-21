@@ -78,7 +78,7 @@ interface Props {
     onDismissSnackbar: () => void;
     onUndoPressed: (label: string) => void;
     useCamera: () => void;
-    userGroups: number[];
+    userGroups: Group[];
 }
 
 const AddEdit = (props: Props): JSX.Element => {

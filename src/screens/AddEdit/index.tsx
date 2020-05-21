@@ -69,9 +69,15 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
 
     const filterGroupsForContact = (): Group[] => {
-        return groups.filter((row) => {
-            return row.contactsIds.indexOf(id) >= 0;
-        })
+        if(isEdit) {
+            return groups.filter((row) => {
+                return row.contactsIds.indexOf(id) >= 0;
+            })
+        } else {
+            return groups.filter((row) => {
+                return tempGroupsIds.indexOf(row.id) >= 0;
+            })
+        }
     };
 
     const filteredGroups = filterGroupsForContact();
@@ -360,7 +366,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
             useCamera={useCamera}
-            userGroups={tempGroupsIds}
+            userGroups={filteredGroups}
         />
     );
 };
