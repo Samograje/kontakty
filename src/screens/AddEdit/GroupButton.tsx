@@ -36,7 +36,8 @@ interface Props {
 }
 
 const GroupButton = (props: Props): JSX.Element => {
-    const { onGroups, groups, id } = props;
+    const { onGroups, groups, id} = props;
+
     let groupString = '';
     if (groups.length === 0) {
         groupString = 'Click to add contact to groups!';

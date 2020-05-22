@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useCallback, useEffect, useState } from 'react';
 import AddEdit from './AddEdit';
-import { getContacts, getGroups } from '../../redux/selectors/Selectors';
+import { getContacts, getGroups, getTempGroupsIds } from '../../redux/selectors/Selectors';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
@@ -9,8 +9,9 @@ import { defaultCathegory, formLabels, modes } from '../StringsHelper';
 import { validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
-import { createContact, updateContact } from '../../redux/actions/ActionCreators';
+import { createContact, removeTempGroups, updateContact } from '../../redux/actions/ActionCreators';
 import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
+import addNewestContactToGroup from '../../redux/actions/addNewestContactToGroups';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -29,6 +30,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const { id, mode } = route.params;
     const contacts = useSelector(getContacts);
     const groups = useSelector(getGroups);
+    const tempGroupsIds = useSelector(getTempGroupsIds);
     const isEdit = mode === modes.edit;
     let contact;
     if(isEdit){
@@ -67,9 +69,15 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
 
     const filterGroupsForContact = (): Group[] => {
-        return groups.filter((row) => {
-            return row.contactsIds.indexOf(id) >= 0;
-        })
+        if(isEdit) {
+            return groups.filter((row) => {
+                return row.contactsIds.indexOf(id) >= 0;
+            })
+        } else {
+            return groups.filter((row) => {
+                return tempGroupsIds.indexOf(row.id) >= 0;
+            })
+        }
     };
 
     const filteredGroups = filterGroupsForContact();
@@ -89,7 +97,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         contact = buildContactObject();
     }
     const onGroups = (): void => {
-        navigate('Groups', { id: id });
+        navigate('Groups', {id, mode});
     };
     const onChangeName = (value: string): void => {
         setFirstName(value);
@@ -140,6 +148,11 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     //Nie mogę przekazać w deeps nazwy metody, bo robi się nieskończona pętla
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => setDataValid(checkDataValidation()), [firstName, emails, numbers]);
+    //Czyszczenie grup za każdym razem przy wejściu w dodawanie kontaktu
+    useEffect(() => {
+        dispatch(removeTempGroups());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     //metody
     const addInputField = (label: string): void => {
@@ -245,15 +258,20 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
 
     const onSaveContact = (): void => {
         //Walidacja odbywa się przy pomocy metody checkDataValidation
-        const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
-        if (dataValidOk) {
-            if (mode === modes.create) {
-                dispatch(createContact(buildContactObject()));
-            } else if (mode === modes.edit && id !== null) {
-                dispatch(updateContact(buildContactObject(), id));
+        try{
+            const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
+            if (dataValidOk) {
+                if (mode === modes.create) {
+                    dispatch(createContact(buildContactObject()));
+                    dispatch(addNewestContactToGroup(tempGroupsIds));
+                } else if (mode === modes.edit && id !== null) {
+                    dispatch(updateContact(buildContactObject(), id));
+                }
             }
+            saveMessage(dataValidOk);
+        } catch (e) {
+            console.log(e);
         }
-        saveMessage(dataValidOk);
     };
 
     const checkCameraPermissions = useCallback(async (): Promise<boolean> => {

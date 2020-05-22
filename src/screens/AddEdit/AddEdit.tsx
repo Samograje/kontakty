@@ -2,6 +2,8 @@ import React from 'react';
 import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { TextInput, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { navigationT, snackbarT } from '../CustomTypes';

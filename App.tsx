@@ -57,6 +57,11 @@ const App = (): ReactElement => {
                             component={GroupsListScreen}
                             options={{ title: 'My groups' }}
                         />
+                        <Stack.Screen
+                            name='ContactsListForGroup'
+                            component={ContactsListScreen}
+                            options={{ title: 'Contacts in group' }}
+                        />
                     </Stack.Navigator>
                 </NavigationContainer>
                 </PaperProvider>
@@ -65,4 +70,5 @@ const App = (): ReactElement => {
     );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default App;
