@@ -6,15 +6,13 @@ export const dimensions = {
 };
 
 export const colors = {
-    //TODO: Oliwia
-    primary: '',
-    primaryLight: '',
-    primaryDark: '',
-    tertiary: '',
-    tintColor: '',
-    callCancelColor: '',
-    blackLighter: '',
-    blackDeep: '',
+    primary: '#2195f2',
+    primaryLight: '#6ec5ff',
+    primaryDark: '#0068bf',
+    secondary: '#ffc107',
+    secondaryLight: '#fff350',
+    secondaryDark: '#c79100',
+    text: '#000000',
 };
 
 export const padding = {
