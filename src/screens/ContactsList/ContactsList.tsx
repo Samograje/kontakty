@@ -3,7 +3,6 @@ import {
     SectionList,
     SectionListRenderItem,
     SectionListRenderItemInfo,
-    StatusBar,
     StyleSheet,
     View,
 } from 'react-native';
@@ -13,6 +12,7 @@ import ContactListItem from './ContactListItem';
 import ContactsListSectionHeader from './ContactsListSectionHeader';
 import ContactsListEmptyBanner from './ContactsListEmptyBanner';
 import HeaderBarWithSearch from './HeaderBarWithSearch';
+import { colors } from '../../styles/common';
 
 interface Props {
     onCreate: () => void;
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     fab: {
         zIndex: 200,
-        backgroundColor: 'darkgreen',
+        backgroundColor: colors.secondaryDark,
     },
 });
 
@@ -67,7 +67,6 @@ const ContactsList = (props: Props): JSX.Element => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor='darkgreen' />
             {!forGroupModeEnabled && (
                 <>
                     <HeaderBarWithSearch
@@ -87,7 +86,7 @@ const ContactsList = (props: Props): JSX.Element => {
                         onClick={onGroupList}
                     />
                     <View style={styles.fixedView}>
-                        <FAB style={styles.fab} icon='plus' onPress={onCreate} />
+                        <FAB style={styles.fab} icon='plus' onPress={onCreate} color={colors.text}/>
                     </View>
                 </>
             )}

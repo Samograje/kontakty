@@ -2,14 +2,14 @@ import React from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-import { fonts, margin, padding, radius } from '../../styles/common';
+import { colors, fonts, margin, padding, radius } from '../../styles/common';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignSelf: 'center',
         justifyContent: 'center',
-        backgroundColor: '#dcedc8',
+        backgroundColor: colors.secondaryDark,
         marginBottom: margin.sm,
         borderRadius: radius.md,
     },

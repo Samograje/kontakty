@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import Modal from 'react-native-modal';
+import { colors, fonts, margin, padding } from '../../../styles/common';
 
 const { width } = Dimensions.get('window');
 
@@ -18,18 +19,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     modalContent: {
-        padding: 5,
+        padding: padding.sm,
         borderRadius: 10,
-        borderColor: '#0d8b0c',
+        borderColor: colors.primaryDark,
         borderWidth: 1,
         backgroundColor: 'white',
         width: width - 30,
         height: 150,
     },
     textInput: {
-        margin: 10,
-        backgroundColor: 'white',
-        borderColor: '#0d8b0c',
+        margin: margin.sm,
+        fontSize: fonts.md,
+        backgroundColor: '#fff',
     },
     addText: {
         alignSelf: 'flex-end',
@@ -61,20 +62,20 @@ const AddGroupModal = (props: Props) => {
             onBackdropPress={(): void => {
                 setModalVisible(false);
             }}
-            backdropColor={'#c8c8c8'}
-            backdropOpacity={0.2}
+            backdropOpacity={0.3}
         >
             <View style={styles.container}>
                 <View style={styles.modalContent}>
                     <TextInput
                         numberOfLines={1}
                         style={styles.textInput}
+                        theme={{ colors: { primary: colors.primaryDark } }}
                         label={'Group name'}
                         onChangeText={(text) => setModalInput(text)}
                     />
                     <Button
                         compact={true}
-                        color={'#0d8b0c'}
+                        color={colors.primaryDark}
                         style={styles.addText}
                         onPress={onAddGroupPress}
                         disabled={!modalInput}

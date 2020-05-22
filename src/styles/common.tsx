@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import { Colors } from 'react-native-paper';
 
 export const dimensions = {
     fullHeight: Dimensions.get('window').height,
@@ -13,6 +14,9 @@ export const colors = {
     secondaryLight: '#fff350',
     secondaryDark: '#c79100',
     text: '#000000',
+    background: '#e0e0e0',
+    tint: '#E8EAF6',
+    icon: Colors.grey600,
 };
 
 export const padding = {

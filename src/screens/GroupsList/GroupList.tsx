@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import { TouchableRipple, FAB } from 'react-native-paper';
 import EmptyListComponent from '../Groups/components/EmptyListComponent';
 import AddGroupModal from '../Groups/components/AddGroupModal';
-import { fonts, margin, padding } from '../../styles/common';
+import { colors, fonts, margin, padding } from '../../styles/common';
 
 interface Props {
     groups: Group[];
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         right: 30,
         bottom: 35,
         zIndex: 200,
-        backgroundColor: 'darkgreen',
+        backgroundColor: colors.secondaryDark,
     },
 });
 
@@ -55,6 +55,7 @@ const GroupsList = (props: Props): JSX.Element => {
             onLongPress={(): void => {
                 onLongGroupPress(row.id, row.name);
             }}
+            rippleColor={colors.secondaryDark}
         >
             <View style={styles.row}>
                 <Text style={styles.text}>{row.name + ' (' + row.contactsIds.length + ')'}</Text>
@@ -80,6 +81,7 @@ const GroupsList = (props: Props): JSX.Element => {
             <FAB
                 style={styles.fab}
                 icon='plus'
+                color={colors.text}
                 onPress={(): void => {
                     setModalVisible(true);
                 }}

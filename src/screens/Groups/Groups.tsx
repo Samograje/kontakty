@@ -5,6 +5,7 @@ import GroupListItem from './components/GroupListItem';
 import EmptyListComponent from './components/EmptyListComponent';
 import { FAB } from 'react-native-paper';
 import AddGroupModal from './components/AddGroupModal';
+import { colors } from '../../styles/common';
 
 interface Props {
     data: DataWithIsChecked[];
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
         right: 30,
         bottom: 35,
         zIndex: 200,
+        backgroundColor: colors.secondaryDark,
     },
 });
 
@@ -64,6 +66,7 @@ const Groups = (props: Props) => {
                 <FAB
                     visible={!modalVisible}
                     style={styles.fab}
+                    color={colors.text}
                     icon='plus'
                     onPress={(): void => {
                         setModalVisible(true);

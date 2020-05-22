@@ -1,9 +1,10 @@
 import React from 'react';
 import { Alert, FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { IconButton, Colors } from 'react-native-paper';
+import { IconButton, } from 'react-native-paper';
 import { Linking } from 'react-native';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ProperAvatar from '../ProperAvatar';
+import { colors, fonts, margin, padding } from '../../styles/common';
 
 interface Props {
     id: number;
@@ -17,20 +18,16 @@ const styles = StyleSheet.create({
     avatar: {
         alignItems: 'center',
         flex: 1,
-        marginTop: 10,
-        marginBottom: 10,
+        marginVertical: margin.sm,
     },
     name: {
-        fontSize: 24,
+        fontSize: fonts.lg,
     },
     actions: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
-        marginBottom: 20,
-        marginRight: 20,
-        marginLeft: 20,
+        margin: margin.md,
     },
     container: {
         flex: 4,
@@ -38,22 +35,17 @@ const styles = StyleSheet.create({
     button: {
         width: '25%',
     },
-    header: {
-        fontSize: 20,
-        backgroundColor: '#fff',
-    },
     item: {
-        marginHorizontal: 8,
+        marginHorizontal: margin.sm,
     },
     title: {
-        fontSize: 16,
+        fontSize: fonts.md,
         justifyContent: 'center',
     },
     details: {
         flex: 1,
-        backgroundColor: Colors.grey50,
-        padding: 8,
-        marginVertical: 8,
+        padding: padding.sm,
+        marginVertical: margin.sm,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -122,13 +114,15 @@ const Details = (props: Props): JSX.Element => {
                 <View style={styles.itemActions}>
                     <IconButton
                         icon='phone'
-                        color={Colors.green500}
+                        color={colors.primaryDark}
+                        rippleColor={colors.secondaryDark}
                         size={25}
                         onPress={(): void => makeCall(item.number)}
                     />
                     <IconButton
                         icon='message'
-                        color={Colors.green500}
+                        color={colors.primaryDark}
+                        rippleColor={colors.secondaryDark}
                         size={25}
                         onPress={(): void => sendSMS(item.number)}
                     />
@@ -145,7 +139,8 @@ const Details = (props: Props): JSX.Element => {
                     <View style={styles.itemActions}>
                         <IconButton
                             icon='email'
-                            color={Colors.green500}
+                            color={colors.primaryDark}
+                            rippleColor={colors.secondaryDark}
                             size={25}
                             onPress={(): void => sendEMail(item.email)}
                         />
@@ -191,7 +186,8 @@ const Details = (props: Props): JSX.Element => {
                     <IconButton
                         style={styles.button}
                         icon='account-edit'
-                        color={Colors.grey500}
+                        color={colors.icon}
+                        rippleColor={colors.secondaryDark}
                         size={50}
                         onPress={(): void => {
                             onEdit(id);
@@ -200,13 +196,20 @@ const Details = (props: Props): JSX.Element => {
                     <IconButton
                         style={styles.button}
                         icon='delete'
-                        color={Colors.grey500}
+                        color={colors.icon}
+                        rippleColor={colors.secondaryDark}
                         size={50}
                         onPress={(): void => {
                             createAlert();
                         }}
                     />
-                    <IconButton icon='account-group' color={Colors.grey500} size={50} onPress={onGroupList} />
+                    <IconButton
+                        icon='account-group'
+                        color={colors.icon}
+                        size={50}
+                        onPress={onGroupList}
+                        rippleColor={colors.secondaryDark}
+                    />
                 </View>
 
                 <SafeAreaView style={styles.container}>

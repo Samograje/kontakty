@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { TextInput, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
@@ -9,12 +9,11 @@ import GroupButton from './GroupButton';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import ProperAvatar from '../ProperAvatar';
 import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
-import { dimensions, fonts, margin, padding } from '../../styles/common';
+import { colors, dimensions, fonts, margin, padding } from '../../styles/common';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
     },
     avatarContainer: {
         marginTop: margin.md,
@@ -24,8 +23,8 @@ const styles = StyleSheet.create({
         fontSize: fonts.lg,
     },
     inputText: {
-        backgroundColor: 'white',
         flex: 2,
+        backgroundColor: colors.background,
     },
     menu: {
         paddingLeft: dimensions.fullWidth / 2 - 20,
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     icon: {
         alignSelf: 'center',
         paddingLeft: padding.sm,
-        paddingRight: padding.sm,
+        color: colors.icon,
     },
     snackbar: {
         position: 'absolute',
@@ -121,7 +120,7 @@ const AddEdit = (props: Props): JSX.Element => {
 
     const showIconOrEmptySpace = (condition: boolean, icon: string): JSX.Element => (
         <View style={styles.iconContainer}>
-            {condition && <MaterialCommunityIcons size={50} name={icon} style={styles.icon} />}
+            {condition && <MaterialCommunityIcons size={50} name={icon} style={styles.icon}  />}
         </View>
     );
 
@@ -133,6 +132,8 @@ const AddEdit = (props: Props): JSX.Element => {
             <TextInput
                 label={label}
                 value={value}
+                theme={{ colors: { primary: colors.primaryDark } }}
+                accessibilityIgnoresInvertColors={true}
                 style={styles.inputText}
                 onChangeText={(text): void => method(text)}
             />
@@ -155,6 +156,7 @@ const AddEdit = (props: Props): JSX.Element => {
                     label={label}
                     value={phoneOrEmail}
                     style={styles.inputText}
+                    theme={{ colors: { primary: colors.primaryDark } }}
                     onChangeText={(text): void => onChangeTextInput(label, text, index)}
                     keyboardType={isNumeric ? 'numeric' : 'email-address'}
                 />
@@ -163,6 +165,8 @@ const AddEdit = (props: Props): JSX.Element => {
                         <IconButton
                             icon='trash-can-outline'
                             size={30}
+                            color={colors.icon}
+                            rippleColor={colors.secondaryDark}
                             onPress={(): void => onDeleteTextInput(label, index)}
                         />
                     )}
@@ -209,7 +213,13 @@ const AddEdit = (props: Props): JSX.Element => {
 
     const plusButton = (label: string): JSX.Element => (
         <View style={styles.icon}>
-            <IconButton icon='plus' onPress={(): void => addInputField(label)} size={30} />
+            <IconButton
+                icon='plus'
+                onPress={(): void => addInputField(label)}
+                size={30}
+                color={colors.icon}
+                rippleColor={colors.secondaryDark}
+            />
         </View>
     );
 
