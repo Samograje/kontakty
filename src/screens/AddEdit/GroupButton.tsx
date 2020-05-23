@@ -2,30 +2,31 @@ import React from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import { colors, fonts, margin, padding, radius } from '../../styles/common';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignSelf: 'center',
         justifyContent: 'center',
-        backgroundColor: '#dcedc8',
-        marginBottom: 10,
-        borderRadius: 20,
+        backgroundColor: colors.secondaryDark,
+        marginBottom: margin.sm,
+        borderRadius: radius.md,
     },
     row: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         height: '100%',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingRight: 10,
+        paddingTop: padding.sm,
+        paddingBottom: padding.sm,
+        paddingRight: padding.sm,
     },
     text: {
         width: '80%',
         alignSelf: 'center',
-        fontSize: 15,
-        paddingLeft: 15,
+        fontSize: fonts.md,
+        paddingLeft: padding.sm,
     },
 });
 

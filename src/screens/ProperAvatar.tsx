@@ -1,6 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react';
 import { Avatar } from 'react-native-paper';
 import * as FileSystem from 'expo-file-system';
+import { colors } from '../styles/common';
 
 interface Props {
     path: string;
@@ -34,7 +35,7 @@ const ProperAvatar = (props: Props): ReactElement => {
         checkPath().then((response) => setFileExists(response));
     }, [checkPath]);
 
-    return fileExists ? <Avatar.Image size={size} source={{ uri: path }} /> : <Avatar.Text size={size} label={label} />;
+    return fileExists ? <Avatar.Image size={size} source={{ uri: path }} /> : <Avatar.Text size={size} label={label} style={{backgroundColor: colors.secondaryDark}} color={colors.text}/>;
 };
 
 export default ProperAvatar;
