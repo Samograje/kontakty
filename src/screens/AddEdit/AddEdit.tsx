@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     },
     snackbar: {
         position: 'absolute',
+        backgroundColor: colors.primaryDark,
         bottom: 0,
     },
     dropdown: {
@@ -120,7 +121,7 @@ const AddEdit = (props: Props): JSX.Element => {
 
     const showIconOrEmptySpace = (condition: boolean, icon: string): JSX.Element => (
         <View style={styles.iconContainer}>
-            {condition && <MaterialCommunityIcons size={50} name={icon} style={styles.icon}  />}
+            {condition && <MaterialCommunityIcons size={50} name={icon} style={styles.icon} />}
         </View>
     );
 
@@ -229,6 +230,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 visible={snackbar.isVisible}
                 style={styles.snackbar}
                 onDismiss={onDismissSnackbar}
+                theme={{ colors: { accent: colors.textWhite } }}
                 action={{
                     label: 'Undo',
                     onPress: (): void => onUndoPressed(snackbar.label),

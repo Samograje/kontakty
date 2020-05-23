@@ -14,6 +14,7 @@ export const colors = {
     secondaryLight: '#fff350',
     secondaryDark: '#c79100',
     text: '#000000',
+    textWhite: '#FFF',
     background: '#e0e0e0',
     tint: '#E8EAF6',
     icon: Colors.grey600,
