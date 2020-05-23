@@ -13,7 +13,6 @@ import ContactListItem from './ContactListItem';
 import ContactsListSectionHeader from './ContactsListSectionHeader';
 import ContactsListEmptyBanner from './ContactsListEmptyBanner';
 import HeaderBarWithSearch from './HeaderBarWithSearch';
-import { red500 } from 'react-native-paper/lib/typescript/src/styles/colors';
 
 interface Props {
     onCreate: () => void;
@@ -28,6 +27,9 @@ interface Props {
     searchText: string;
     onGroupList: () => void;
     forGroupModeEnabled: boolean;
+    onSwipeLeft: () => void;
+    onSwipeRight: () => void;
+    onItemSelect: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -62,21 +64,19 @@ const ContactsList = (props: Props): JSX.Element => {
         searchText,
         onGroupList,
         forGroupModeEnabled,
+        onSwipeLeft,
+        onSwipeRight,
+        onItemSelect,
     } = props;
-
-    const selectItem = (data) => {
-        data.item.isSelect = !data.item.isSelect;
-        data.item.selectedClass = data.item.isSelect ? styles.selected : styles.list;
-        console.log(data.item.isSelect);
-        data.color = Colors.red500;
-    };
 
     const keyExtractor = (item, index): string => item + index;
     const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
         <ContactListItem
             item={p.item}
             onClick={(): void => onView(p.item.id)}
-            onLongPress={(): void => selectItem(p)}
+            onLongPress={(): void => onItemSelect()}
+            onSwipeLeft={(): void => onSwipeLeft()}
+            onSwipeRight={(): void => onSwipeRight()}
         />
     );
 

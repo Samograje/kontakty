@@ -53,6 +53,18 @@ const groupContactsByFirstNameFirstLetter = (contacts: Contact[]): ContactsSecti
         }, []);
 };
 
+const sendMessage = (): void => {
+    console.log('sms')
+};
+
+const makeCall = (): void => {
+    console.log('call')
+};
+
+const selectItem = (): void => {
+    console.log('item selected');
+};
+
 const ContactsListScreen = ({ route }): ReactElement => {
     const { navigate } = useNavigation();
     const group: Group = useSelector(getGroups).filter((g: Group) => g.id === route.params?.groupId)[0];
@@ -69,6 +81,9 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const onGroupList = (): void => navigate('GroupsList');
     const onSearch = (query: string): void => setSearchText(query);
     const onClearSearch = (): void => setSearchText('');
+    const onSwipeLeft = (): void => sendMessage();
+    const onSwipeRight = (): void => makeCall();
+    const onItemSelect = (): void => selectItem();
 
     const contactsFiltered = searchContacts(contacts, searchText);
     const contactsSectioned = groupContactsByFirstNameFirstLetter(contactsFiltered);
@@ -84,6 +99,9 @@ const ContactsListScreen = ({ route }): ReactElement => {
             searchText={searchText}
             forGroupModeEnabled={!!group}
             onGroupList={onGroupList}
+            onSwipeLeft={onSwipeLeft}
+            onSwipeRight={onSwipeRight}
+            onItemSelect={onItemSelect}
         />
     );
 };

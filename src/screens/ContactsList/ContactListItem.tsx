@@ -3,12 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Colors, TouchableRipple } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ProperAvatar from '../ProperAvatar';
-import { red500 } from 'react-native-paper/lib/typescript/src/styles/colors';
+import GestureRecognizer from 'react-native-swipe-gestures';
 
 interface Props {
     item: Contact;
     onClick: (contact: Contact) => void;
     onLongPress: () => void;
+    onSwipeLeft: () => void;
+    onSwipeRight: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -35,16 +37,20 @@ const ContactListItem = (props: Props): ReactElement => {
 
     const onPress = (): void => props.onClick(props.item);
     const onLongPress = (): void => props.onLongPress();
+    const onSwipeLeft = (): void => props.onSwipeLeft();
+    const onSwipeRight = (): void => props.onSwipeRight();
 
     return (
-        <TouchableRipple style={styles.ripple} onPress={onPress} onLongPress={onLongPress}>
-            <View style={styles.container}>
-                <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
-                <Text style={styles.text}>
-                    {firstName} {lastName}
-                </Text>
-            </View>
-        </TouchableRipple>
+        <GestureRecognizer onSwipeLeft={(): void => onSwipeLeft()} onSwipeRight={(): void => onSwipeRight()}>
+            <TouchableRipple style={styles.ripple} onPress={onPress} onLongPress={onLongPress}>
+                <View style={styles.container}>
+                    <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
+                    <Text style={styles.text}>
+                        {firstName} {lastName}
+                    </Text>
+                </View>
+            </TouchableRipple>
+        </GestureRecognizer>
     );
 };
 
