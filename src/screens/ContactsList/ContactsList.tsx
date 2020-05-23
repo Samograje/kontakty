@@ -7,12 +7,13 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import { FAB } from 'react-native-paper';
+import { Colors, FAB } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ContactListItem from './ContactListItem';
 import ContactsListSectionHeader from './ContactsListSectionHeader';
 import ContactsListEmptyBanner from './ContactsListEmptyBanner';
 import HeaderBarWithSearch from './HeaderBarWithSearch';
+import { red500 } from 'react-native-paper/lib/typescript/src/styles/colors';
 
 interface Props {
     onCreate: () => void;
@@ -35,6 +36,9 @@ const styles = StyleSheet.create({
     },
     list: {
         flex: 1,
+    },
+    selected: {
+        color: Colors.red500,
     },
     fixedView: {
         position: 'absolute',
@@ -60,9 +64,20 @@ const ContactsList = (props: Props): JSX.Element => {
         forGroupModeEnabled,
     } = props;
 
+    const selectItem = (data) => {
+        data.item.isSelect = !data.item.isSelect;
+        data.item.selectedClass = data.item.isSelect ? styles.selected : styles.list;
+        console.log(data.item.isSelect);
+        data.color = Colors.red500;
+    };
+
     const keyExtractor = (item, index): string => item + index;
     const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
-        <ContactListItem item={p.item} onClick={(): void => onView(p.item.id)} />
+        <ContactListItem
+            item={p.item}
+            onClick={(): void => onView(p.item.id)}
+            onLongPress={(): void => selectItem(p)}
+        />
     );
 
     return (
