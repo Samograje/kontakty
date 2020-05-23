@@ -1,18 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import { fonts, margin } from '../../../styles/common';
 
 const styles = StyleSheet.create({
     informationContainer: {
         flex: 1,
-        marginBottom: 3,
-        margin: 5,
+        margin: margin.sm,
         justifyContent: 'center',
         alignItems: 'center',
     },
     message: {
-        fontSize: 18,
-        margin: 5,
+        fontSize: fonts.lg,
+        margin: margin.sm,
+        textAlign: 'center',
     },
 });
 
