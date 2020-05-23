@@ -231,6 +231,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 style={styles.snackbar}
                 onDismiss={onDismissSnackbar}
                 theme={{ colors: { accent: colors.textWhite } }}
+                duration={1500}
                 action={{
                     label: 'Undo',
                     onPress: (): void => onUndoPressed(snackbar.label),
@@ -239,7 +240,12 @@ const AddEdit = (props: Props): JSX.Element => {
                 {snackbar.message}
             </Snackbar>
         ) : (
-            <Snackbar visible={snackbar.isVisible} style={styles.snackbar} onDismiss={onDismissSnackbar}>
+            <Snackbar
+                visible={snackbar.isVisible}
+                style={styles.snackbar}
+                onDismiss={onDismissSnackbar}
+                duration={1500}
+            >
                 {snackbar.message}
             </Snackbar>
         );
