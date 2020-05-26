@@ -76,21 +76,22 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const selectItem = (itemId: number | null, selectedIds: []): void => {
         console.log('item selected');
         console.log(itemId)
+        const newSelectedIds = [...selectedIds];
         if (itemId != null) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
-            const i = selectedIds.indexOf(itemId);
+            const i = newSelectedIds.indexOf(itemId);
             if (i > -1) {
-                selectedIds.splice(i, 1);
-                console.log(selectedIds);
+                newSelectedIds.splice(i, 1);
+                console.log(newSelectedIds);
             } else {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
-                selectedIds.push(itemId);
-                console.log(selectedIds);
+                newSelectedIds.push(itemId);
+                console.log(newSelectedIds);
             }
         }
-    setSelectedIds(selectedIds);
+    setSelectedIds(newSelectedIds);
     };
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
