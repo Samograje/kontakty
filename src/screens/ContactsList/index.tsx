@@ -61,25 +61,6 @@ const makeCall = (): void => {
     console.log('call')
 };
 
-const selectItem = (itemId: number | null, selectedIds: []): void => {
-    console.log('item selected');
-    console.log(itemId)
-    if (itemId != null) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        const i = selectedIds.indexOf(itemId);
-        if (i > -1) {
-            selectedIds.splice(i, 1);
-            console.log(selectedIds);
-        } else {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            selectedIds.push(itemId);
-            console.log(selectedIds);
-        }
-    }
-};
-
 const ContactsListScreen = ({ route }): ReactElement => {
     const { navigate } = useNavigation();
     const group: Group = useSelector(getGroups).filter((g: Group) => g.id === route.params?.groupId)[0];
@@ -91,6 +72,26 @@ const ContactsListScreen = ({ route }): ReactElement => {
     }
     const [searchText, setSearchText] = useState('');
     const [selectedIds, setSelectedIds] = useState([]);
+
+    const selectItem = (itemId: number | null, selectedIds: []): void => {
+        console.log('item selected');
+        console.log(itemId)
+        if (itemId != null) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            const i = selectedIds.indexOf(itemId);
+            if (i > -1) {
+                selectedIds.splice(i, 1);
+                console.log(selectedIds);
+            } else {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore
+                selectedIds.push(itemId);
+                console.log(selectedIds);
+            }
+        }
+    setSelectedIds(selectedIds);
+    };
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
     const onDetails = (id: number | null): void => navigate('Details', { id, mode: modes.edit });

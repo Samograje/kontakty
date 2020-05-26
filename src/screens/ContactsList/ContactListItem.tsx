@@ -11,6 +11,7 @@ interface Props {
     onLongPress: () => void;
     onSwipeLeft: () => void;
     onSwipeRight: () => void;
+    isSelected: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
     },
     selected: {
+        flexDirection: 'row',
         color: Colors.red500,
     },
 });
@@ -39,11 +41,12 @@ const ContactListItem = (props: Props): ReactElement => {
     const onLongPress = (): void => props.onLongPress();
     const onSwipeLeft = (): void => props.onSwipeLeft();
     const onSwipeRight = (): void => props.onSwipeRight();
+    const isSelected = props.isSelected;
 
     return (
         <GestureRecognizer onSwipeLeft={(): void => onSwipeLeft()} onSwipeRight={(): void => onSwipeRight()}>
             <TouchableRipple style={styles.ripple} onPress={onPress} onLongPress={onLongPress}>
-                <View style={styles.container}>
+                <View style={[isSelected ? styles.selected : styles.container]}>
                     <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
                     <Text style={styles.text}>
                         {firstName} {lastName}

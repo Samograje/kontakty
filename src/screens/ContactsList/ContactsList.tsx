@@ -79,6 +79,7 @@ const ContactsList = (props: Props): JSX.Element => {
             onLongPress={(): void => onItemSelect(p.item.id, selectedIds)}
             onSwipeLeft={(): void => onSwipeLeft()}
             onSwipeRight={(): void => onSwipeRight()}
+            isSelected={selectedIds.includes(p.item.id)}
         />
     );
 
