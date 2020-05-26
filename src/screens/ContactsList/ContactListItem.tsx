@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
     selected: {
         flexDirection: 'row',
-        color: Colors.red500,
+        backgroundColor: Colors.red500,
     },
 });
 
