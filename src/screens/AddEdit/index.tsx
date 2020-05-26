@@ -248,11 +248,11 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         if (dataValidOk) {
             onShowSnackbar(true, 'Contact saved.', false, '');
         } else if (dataValid.nameOrOneNumberEmpty) {
-            onShowSnackbar(true, 'Please enter your name and at least one phone number', false, '');
+            onShowSnackbar(true, 'Please enter your name and at least one phone number.', false, '');
         } else if (dataValid.oneOfNumbersEmpty) {
-            onShowSnackbar(true, 'Fill out the fields with the phone number', false, '');
+            onShowSnackbar(true, 'Fill out the fields with the phone number.', false, '');
         } else if (dataValid.oneOfEmailsEmpty) {
-            onShowSnackbar(true, 'Fill out the fields with the email adress', false, '');
+            onShowSnackbar(true, 'Fill out the fields with the email adress.', false, '');
         }
     };
 
