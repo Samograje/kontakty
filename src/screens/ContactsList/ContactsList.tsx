@@ -29,7 +29,8 @@ interface Props {
     forGroupModeEnabled: boolean;
     onSwipeLeft: () => void;
     onSwipeRight: () => void;
-    onItemSelect: () => void;
+    onItemSelect: (itemId: number | null, selectedIds: []) => void;
+    selectedIds;
 }
 
 const styles = StyleSheet.create({
@@ -67,6 +68,7 @@ const ContactsList = (props: Props): JSX.Element => {
         onSwipeLeft,
         onSwipeRight,
         onItemSelect,
+        selectedIds,
     } = props;
 
     const keyExtractor = (item, index): string => item + index;
@@ -74,7 +76,7 @@ const ContactsList = (props: Props): JSX.Element => {
         <ContactListItem
             item={p.item}
             onClick={(): void => onView(p.item.id)}
-            onLongPress={(): void => onItemSelect()}
+            onLongPress={(): void => onItemSelect(p.item.id, selectedIds)}
             onSwipeLeft={(): void => onSwipeLeft()}
             onSwipeRight={(): void => onSwipeRight()}
         />

@@ -61,8 +61,23 @@ const makeCall = (): void => {
     console.log('call')
 };
 
-const selectItem = (): void => {
+const selectItem = (itemId: number | null, selectedIds: []): void => {
     console.log('item selected');
+    console.log(itemId)
+    if (itemId != null) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        const i = selectedIds.indexOf(itemId);
+        if (i > -1) {
+            selectedIds.splice(i, 1);
+            console.log(selectedIds);
+        } else {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            selectedIds.push(itemId);
+            console.log(selectedIds);
+        }
+    }
 };
 
 const ContactsListScreen = ({ route }): ReactElement => {
@@ -75,6 +90,7 @@ const ContactsListScreen = ({ route }): ReactElement => {
         contacts = contacts.filter((contact: Contact) => group.contactsIds.includes(contact.id));
     }
     const [searchText, setSearchText] = useState('');
+    const [selectedIds, setSelectedIds] = useState([]);
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
     const onDetails = (id: number | null): void => navigate('Details', { id, mode: modes.edit });
@@ -83,7 +99,7 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const onClearSearch = (): void => setSearchText('');
     const onSwipeLeft = (): void => sendMessage();
     const onSwipeRight = (): void => makeCall();
-    const onItemSelect = (): void => selectItem();
+    const onItemSelect = (itemId: number | null, selectedIds: []): void => selectItem(itemId, selectedIds);
 
     const contactsFiltered = searchContacts(contacts, searchText);
     const contactsSectioned = groupContactsByFirstNameFirstLetter(contactsFiltered);
@@ -102,6 +118,7 @@ const ContactsListScreen = ({ route }): ReactElement => {
             onSwipeLeft={onSwipeLeft}
             onSwipeRight={onSwipeRight}
             onItemSelect={onItemSelect}
+            selectedIds={selectedIds}
         />
     );
 };
