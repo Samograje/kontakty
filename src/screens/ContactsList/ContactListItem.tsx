@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
     },
     selected: {
         flexDirection: 'row',
-        backgroundColor: Colors.red500,
+        backgroundColor: Colors.red300,
+        borderRadius: 20,
     },
 });
 
