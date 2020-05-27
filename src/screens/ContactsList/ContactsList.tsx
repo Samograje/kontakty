@@ -7,6 +7,7 @@ import ContactsListSectionHeader from './ContactsListSectionHeader';
 import ContactsListEmptyBanner from './ContactsListEmptyBanner';
 import HeaderBarWithSearch from './HeaderBarWithSearch';
 import { colors } from '../../styles/common';
+import { makeCall, sendSMS } from '../../utils/actions';
 
 interface Props {
     onCreate: () => void;
@@ -21,8 +22,6 @@ interface Props {
     searchText: string;
     onGroupList: () => void;
     forGroupModeEnabled: boolean;
-    onSwipeLeft: () => void;
-    onSwipeRight: () => void;
     onItemSelect: (itemId: number | null) => void;
     selectedIds: number[];
 }
@@ -59,8 +58,6 @@ const ContactsList = (props: Props): JSX.Element => {
         searchText,
         onGroupList,
         forGroupModeEnabled,
-        onSwipeLeft,
-        onSwipeRight,
         onItemSelect,
         selectedIds,
     } = props;
@@ -71,8 +68,8 @@ const ContactsList = (props: Props): JSX.Element => {
             item={p.item}
             onClick={(): void => onView(p.item.id)}
             onLongPress={(): void => onItemSelect(p.item.id)}
-            onSwipeLeft={onSwipeLeft}
-            onSwipeRight={onSwipeRight}
+            onSwipeLeft={(): void => sendSMS(p.item.telNumbers[0]?.number)}
+            onSwipeRight={(): void => makeCall(p.item.telNumbers[0]?.number)}
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
             isSelected={selectedIds.includes(p.item.id)}

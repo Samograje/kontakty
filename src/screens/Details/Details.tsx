@@ -1,10 +1,10 @@
 import React from 'react';
-import { Alert, FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { IconButton, } from 'react-native-paper';
-import { Linking } from 'react-native';
+import { Alert, FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ProperAvatar from '../ProperAvatar';
 import { colors, fonts, margin, padding } from '../../styles/common';
+import { makeCall, sendEMail, sendSMS } from '../../utils/actions';
 
 interface Props {
     id: number;
@@ -57,52 +57,6 @@ const styles = StyleSheet.create({
 
 const Details = (props: Props): JSX.Element => {
     const { id, onEdit, onDelete, onGroupList, contact } = props;
-
-    function makeCall(phoneNumber: string): void {
-        if (phoneNumber !== null && phoneNumber !== 'undefined') {
-            if (Platform.OS === 'android') {
-                phoneNumber = 'tel:${phoneNumber}';
-            } else {
-                phoneNumber = 'telprompt:${phoneNumber}';
-            }
-            Linking.openURL(phoneNumber)
-                .then((r) => console.log(r))
-                .catch(function(error) {
-                    console.log('There has been a problem with operation: ' + error.message);
-                    // ADD THIS THROW error
-                    throw error;
-                });
-        }
-    }
-
-    function sendSMS(phoneNumber: string): void {
-        if (phoneNumber !== null && phoneNumber !== 'undefined') {
-            if (Platform.OS === 'android') {
-                phoneNumber = `tel:${phoneNumber}`;
-            } else {
-                phoneNumber = `telprompt:${phoneNumber}`;
-            }
-            Linking.openURL(`sms:&addresses=${phoneNumber}&body=`)
-                .then((r) => console.log(r))
-                .catch(function(error) {
-                    console.log('There has been a problem with operation: ' + error.message);
-                    // ADD THIS THROW error
-                    throw error;
-                });
-        }
-    }
-
-    function sendEMail(eMail: string): void {
-        if (eMail !== null && eMail !== 'undefined') {
-            Linking.openURL(`mailto:${eMail}?subject=&body=`)
-                .then((r) => console.log(r))
-                .catch(function(error) {
-                    console.log('There has been a problem with your fetch operation: ' + error.message);
-                    // ADD THIS THROW error
-                    throw error;
-                });
-        }
-    }
 
     function PhoneNumberItem({ item }): JSX.Element {
         return (
