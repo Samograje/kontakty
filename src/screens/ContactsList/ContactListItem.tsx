@@ -45,15 +45,12 @@ const styles = StyleSheet.create({
 
 const ContactListItem = (props: Props): ReactElement => {
     const { firstName, lastName, photoUrl } = props.item;
+    const { onClick, onLongPress, onSwipeLeft, onSwipeRight, isSelected } = props;
 
-    const onPress = (): void => props.onClick(props.item);
-    const onLongPress = (): void => props.onLongPress();
-    const onSwipeLeft = (): void => props.onSwipeLeft();
-    const onSwipeRight = (): void => props.onSwipeRight();
-    const isSelected = props.isSelected;
+    const onPress = (): void => onClick(props.item);
 
     return (
-        <GestureRecognizer onSwipeLeft={(): void => onSwipeLeft()} onSwipeRight={(): void => onSwipeRight()}>
+        <GestureRecognizer onSwipeLeft={onSwipeLeft} onSwipeRight={onSwipeRight}>
             <TouchableRipple
                 style={styles.ripple}
                 onPress={onPress}
