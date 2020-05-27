@@ -8,7 +8,7 @@ import { colors, fonts, margin } from '../../styles/common';
 
 interface Props {
     item: Contact;
-    onClick: (contact: Contact) => void;
+    onPress: () => void;
     onLongPress: () => void;
     onSwipeLeft: () => void;
     onSwipeRight: () => void;
@@ -45,9 +45,7 @@ const styles = StyleSheet.create({
 
 const ContactListItem = (props: Props): ReactElement => {
     const { firstName, lastName, photoUrl } = props.item;
-    const { onClick, onLongPress, onSwipeLeft, onSwipeRight, isSelected } = props;
-
-    const onPress = (): void => onClick(props.item);
+    const { onPress, onLongPress, onSwipeLeft, onSwipeRight, isSelected } = props;
 
     return (
         <GestureRecognizer onSwipeLeft={onSwipeLeft} onSwipeRight={onSwipeRight}>

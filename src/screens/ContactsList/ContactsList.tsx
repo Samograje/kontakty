@@ -73,7 +73,7 @@ const ContactsList = (props: Props): JSX.Element => {
         return (
             <ContactListItem
                 item={p.item}
-                onClick={(): void => onView(p.item.id)}
+                onPress={(): void => onView(p.item.id)}
                 onLongPress={(): void => onItemSelect(p.item.id)}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
