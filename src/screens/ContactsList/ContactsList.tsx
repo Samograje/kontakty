@@ -6,6 +6,7 @@ import ContactListItem from './ContactListItem';
 import ContactsListSectionHeader from './ContactsListSectionHeader';
 import ContactsListEmptyBanner from './ContactsListEmptyBanner';
 import HeaderBarWithSearch from './HeaderBarWithSearch';
+import HeaderBarWithMultipleChoice from './HeaderBarWithMultipleChoice';
 import { colors } from '../../styles/common';
 import { makeCall, sendSMS } from '../../utils/actions';
 
@@ -92,12 +93,18 @@ const ContactsList = (props: Props): JSX.Element => {
         <View style={styles.container}>
             {!forGroupModeEnabled && (
                 <>
-                    <HeaderBarWithSearch
-                        totalElements={totalElements}
-                        searchText={searchText}
-                        onSearch={onSearch}
-                        onClearSearch={onClearSearch}
-                    />
+                    {/* eslint-disable-next-line */}
+                    {!!selectedIds.length && (
+                        <HeaderBarWithMultipleChoice elementsCount={selectedIds.length} />
+                    )}
+                    {!selectedIds.length && (
+                        <HeaderBarWithSearch
+                            totalElements={totalElements}
+                            searchText={searchText}
+                            onSearch={onSearch}
+                            onClearSearch={onClearSearch}
+                        />
+                    )}
                     <ContactListItem
                         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                         // @ts-ignore
