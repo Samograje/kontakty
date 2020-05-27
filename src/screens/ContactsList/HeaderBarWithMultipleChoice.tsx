@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 const HeaderBarWithMultipleChoice = (props: Props): ReactElement => {
     return (
         <View style={styles.container}>
-            <Text>{props.elementsCount} items selected</Text>
+            <Text>{props.elementsCount} item(s) selected</Text>
         </View>
     );
 };
