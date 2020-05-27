@@ -31,8 +31,11 @@ const styles = StyleSheet.create({
     },
     selected: {
         flexDirection: 'row',
-        backgroundColor: Colors.red300,
+        backgroundColor: Colors.grey500,
         borderRadius: 20,
+        padding: 10,
+        marginLeft: margin.sm,
+        marginRight: margin.sm,
     },
 });
 
