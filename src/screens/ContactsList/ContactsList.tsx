@@ -63,18 +63,26 @@ const ContactsList = (props: Props): JSX.Element => {
     } = props;
 
     const keyExtractor = (item, index): string => item + index;
-    const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => (
-        <ContactListItem
-            item={p.item}
-            onClick={(): void => onView(p.item.id)}
-            onLongPress={(): void => onItemSelect(p.item.id)}
-            onSwipeLeft={(): void => sendSMS(p.item.telNumbers[0]?.number)}
-            onSwipeRight={(): void => makeCall(p.item.telNumbers[0]?.number)}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            isSelected={selectedIds.includes(p.item.id)}
-        />
-    );
+    const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => {
+        let onSwipeLeft;
+        let onSwipeRight;
+        if (selectedIds.length === 0) {
+            onSwipeLeft = (): void => sendSMS(p.item.telNumbers[0]?.number);
+            onSwipeRight = (): void => makeCall(p.item.telNumbers[0]?.number);
+        }
+        return (
+            <ContactListItem
+                item={p.item}
+                onClick={(): void => onView(p.item.id)}
+                onLongPress={(): void => onItemSelect(p.item.id)}
+                onSwipeLeft={onSwipeLeft}
+                onSwipeRight={onSwipeRight}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore
+                isSelected={selectedIds.includes(p.item.id)}
+            />
+        );
+    };
 
     return (
         <View style={styles.container}>
