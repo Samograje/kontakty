@@ -24,12 +24,6 @@ const styles = StyleSheet.create({
         marginLeft: margin.md,
         marginRight: margin.md,
     },
-    text: {
-        marginLeft: margin.md,
-        height: '100%',
-        fontSize: fonts.md,
-        textAlignVertical: 'center',
-    },
     selected: {
         flexDirection: 'row',
         backgroundColor: Colors.grey500,
@@ -40,6 +34,12 @@ const styles = StyleSheet.create({
         margin: margin.sm / 2,
         marginLeft: margin.md / 2,
         marginRight: margin.md / 2,
+    },
+    text: {
+        marginLeft: margin.md,
+        height: '100%',
+        fontSize: fonts.md,
+        textAlignVertical: 'center',
     },
 });
 
