@@ -1,11 +1,5 @@
 import React, { ReactElement } from 'react';
-import {
-    SectionList,
-    SectionListRenderItem,
-    SectionListRenderItemInfo,
-    StyleSheet,
-    View,
-} from 'react-native';
+import { SectionList, SectionListRenderItem, SectionListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { Colors, FAB } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ContactListItem from './ContactListItem';
@@ -29,8 +23,8 @@ interface Props {
     forGroupModeEnabled: boolean;
     onSwipeLeft: () => void;
     onSwipeRight: () => void;
-    onItemSelect: (itemId: number | null, selectedIds: []) => void;
-    selectedIds;
+    onItemSelect: (itemId: number | null) => void;
+    selectedIds: number[];
 }
 
 const styles = StyleSheet.create({
@@ -76,9 +70,11 @@ const ContactsList = (props: Props): JSX.Element => {
         <ContactListItem
             item={p.item}
             onClick={(): void => onView(p.item.id)}
-            onLongPress={(): void => onItemSelect(p.item.id, selectedIds)}
+            onLongPress={(): void => onItemSelect(p.item.id)}
             onSwipeLeft={onSwipeLeft}
             onSwipeRight={onSwipeRight}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
             isSelected={selectedIds.includes(p.item.id)}
         />
     );
@@ -104,7 +100,7 @@ const ContactsList = (props: Props): JSX.Element => {
                         onClick={onGroupList}
                     />
                     <View style={styles.fixedView}>
-                        <FAB style={styles.fab} icon='plus' onPress={onCreate} color={colors.text}/>
+                        <FAB style={styles.fab} icon='plus' onPress={onCreate} color={colors.text} />
                     </View>
                 </>
             )}

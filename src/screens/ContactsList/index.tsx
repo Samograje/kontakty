@@ -73,9 +73,7 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const [searchText, setSearchText] = useState('');
     const [selectedIds, setSelectedIds] = useState([]);
 
-    const selectItem = (itemId: number | null, selectedIds: []): void => {
-        console.log('item selected');
-        console.log(itemId)
+    const selectItem = (itemId: number | null): void => {
         const newSelectedIds = [...selectedIds];
         if (itemId != null) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -83,15 +81,13 @@ const ContactsListScreen = ({ route }): ReactElement => {
             const i = newSelectedIds.indexOf(itemId);
             if (i > -1) {
                 newSelectedIds.splice(i, 1);
-                console.log(newSelectedIds);
             } else {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 newSelectedIds.push(itemId);
-                console.log(newSelectedIds);
             }
         }
-    setSelectedIds(newSelectedIds);
+        setSelectedIds(newSelectedIds);
     };
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
@@ -101,7 +97,6 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const onClearSearch = (): void => setSearchText('');
     const onSwipeLeft = (): void => sendMessage();
     const onSwipeRight = (): void => makeCall();
-    const onItemSelect = (itemId: number | null, selectedIds: []): void => selectItem(itemId, selectedIds);
 
     const contactsFiltered = searchContacts(contacts, searchText);
     const contactsSectioned = groupContactsByFirstNameFirstLetter(contactsFiltered);
@@ -119,7 +114,7 @@ const ContactsListScreen = ({ route }): ReactElement => {
             onGroupList={onGroupList}
             onSwipeLeft={onSwipeLeft}
             onSwipeRight={onSwipeRight}
-            onItemSelect={onItemSelect}
+            onItemSelect={selectItem}
             selectedIds={selectedIds}
         />
     );
