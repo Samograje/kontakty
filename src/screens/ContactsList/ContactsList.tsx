@@ -26,6 +26,7 @@ interface Props {
     onItemSelect: (itemId: number | null) => void;
     selectedIds: number[];
     onDeleteContacts: () => void;
+    onClearSelection: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -63,6 +64,7 @@ const ContactsList = (props: Props): JSX.Element => {
         onItemSelect,
         selectedIds,
         onDeleteContacts,
+        onClearSelection,
     } = props;
 
     const keyExtractor = (item, index): string => item + index;
@@ -98,7 +100,7 @@ const ContactsList = (props: Props): JSX.Element => {
                     {!!selectedIds.length && (
                         <HeaderBarWithMultipleChoice
                             elementsCount={selectedIds.length}
-                            onClearSelection={onClearSearch}
+                            onClearSelection={onClearSelection}
                             onDeleteContacts={onDeleteContacts}
                         />
                     )}
