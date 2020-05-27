@@ -16,12 +16,13 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-    ripple: {
-        padding: padding.sm,
-        paddingLeft: padding.md,
-    },
-    container: {
+    ripple: {},
+    unselected: {
         flexDirection: 'row',
+        padding: 0,
+        margin: margin.sm,
+        marginLeft: margin.md,
+        marginRight: margin.md,
     },
     text: {
         marginLeft: margin.md,
@@ -33,9 +34,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: Colors.grey500,
         borderRadius: 20,
-        padding: 10,
-        marginLeft: margin.sm,
-        marginRight: margin.sm,
+        padding: margin.sm / 2,
+        paddingLeft: margin.md / 2,
+        paddingRight: margin.md / 2,
+        margin: margin.sm / 2,
+        marginLeft: margin.md / 2,
+        marginRight: margin.md / 2,
     },
 });
 
@@ -56,7 +60,7 @@ const ContactListItem = (props: Props): ReactElement => {
                 onLongPress={onLongPress}
                 rippleColor={colors.secondaryDark}
             >
-                <View style={[isSelected ? styles.selected : styles.container]}>
+                <View style={[isSelected ? styles.selected : styles.unselected]}>
                     <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
                     <Text style={styles.text}>
                         {firstName} {lastName}
