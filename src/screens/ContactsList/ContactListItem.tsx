@@ -4,7 +4,7 @@ import { Colors, TouchableRipple } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ProperAvatar from '../ProperAvatar';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import { colors, fonts, margin, padding } from '../../styles/common';
+import { colors, fonts, margin } from '../../styles/common';
 
 interface Props {
     item: Contact;
