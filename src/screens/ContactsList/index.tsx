@@ -87,6 +87,10 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const onGroupList = (): void => navigate('GroupsList');
     const onSearch = (query: string): void => setSearchText(query);
     const onClearSearch = (): void => setSearchText('');
+    const deleteContacts = (): void => {
+        // TODO: remove contacts
+        console.log('are you 100% sure you won\'t miss those people????');
+    };
 
     const contactsFiltered = searchContacts(contacts, searchText);
     const contactsSectioned = groupContactsByFirstNameFirstLetter(contactsFiltered);
@@ -104,6 +108,7 @@ const ContactsListScreen = ({ route }): ReactElement => {
             onGroupList={onGroupList}
             onItemSelect={selectItem}
             selectedIds={selectedIds}
+            onDeleteContacts={deleteContacts}
         />
     );
 };

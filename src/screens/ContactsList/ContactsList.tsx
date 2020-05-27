@@ -25,6 +25,7 @@ interface Props {
     forGroupModeEnabled: boolean;
     onItemSelect: (itemId: number | null) => void;
     selectedIds: number[];
+    onDeleteContacts: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -61,6 +62,7 @@ const ContactsList = (props: Props): JSX.Element => {
         forGroupModeEnabled,
         onItemSelect,
         selectedIds,
+        onDeleteContacts,
     } = props;
 
     const keyExtractor = (item, index): string => item + index;
@@ -93,9 +95,12 @@ const ContactsList = (props: Props): JSX.Element => {
         <View style={styles.container}>
             {!forGroupModeEnabled && (
                 <>
-                    {/* eslint-disable-next-line */}
                     {!!selectedIds.length && (
-                        <HeaderBarWithMultipleChoice elementsCount={selectedIds.length} />
+                        <HeaderBarWithMultipleChoice
+                            elementsCount={selectedIds.length}
+                            onClearSelection={onClearSearch}
+                            onDeleteContacts={onDeleteContacts}
+                        />
                     )}
                     {!selectedIds.length && (
                         <HeaderBarWithSearch
