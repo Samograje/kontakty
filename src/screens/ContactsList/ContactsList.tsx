@@ -70,11 +70,15 @@ const ContactsList = (props: Props): JSX.Element => {
             onSwipeLeft = (): void => sendSMS(p.item.telNumbers[0]?.number);
             onSwipeRight = (): void => makeCall(p.item.telNumbers[0]?.number);
         }
+        let onLongPress;
+        if (!searchText) {
+            onLongPress = (): void => onItemSelect(p.item.id);
+        }
         return (
             <ContactListItem
                 item={p.item}
                 onPress={(): void => onView(p.item.id)}
-                onLongPress={(): void => onItemSelect(p.item.id)}
+                onLongPress={onLongPress}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
                 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
