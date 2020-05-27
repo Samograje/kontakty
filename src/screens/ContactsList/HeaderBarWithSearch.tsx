@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { colors, fonts, margin, padding } from '../../styles/common';
 
 interface Props {
     totalElements: number;
@@ -12,16 +13,14 @@ interface Props {
 const styles = StyleSheet.create({
     container: {
         height: 56,
-        backgroundColor: 'darkgreen',
-        padding: 6,
-        paddingLeft: 10,
-        paddingRight: 10,
+        backgroundColor: colors.primaryDark,
+        padding: 5,
+        paddingHorizontal: padding.sm,
     },
     searchBar: {
         flex: 1,
         elevation: 10,
-        paddingLeft: 15,
-        paddingRight: 15,
+        paddingHorizontal: padding.md,
         borderRadius: 2,
         backgroundColor: 'whitesmoke',
         flexDirection: 'row',
@@ -30,9 +29,9 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
     },
     input: {
-        marginLeft: 15,
+        marginLeft: margin.md,
         flex: 1,
-        fontSize: 18,
+        fontSize: fonts.md,
     },
     clearButton: {
         justifyContent: 'center',

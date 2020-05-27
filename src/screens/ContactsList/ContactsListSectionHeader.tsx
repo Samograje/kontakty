@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { SectionListData, StyleSheet, Text } from 'react-native';
 import { Contact } from '../../redux/reducers/ContactsReducer';
+import { colors, fonts, margin } from '../../styles/common';
 
 interface Props {
     section: SectionListData<Contact>;
@@ -9,10 +10,10 @@ interface Props {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        color: 'darkgreen',
-        fontSize: 24,
-        marginTop: 30,
-        marginLeft: 30,
+        color: colors.primaryDark,
+        fontSize: fonts.lg,
+        marginTop: margin.lg,
+        marginLeft: margin.lg,
         marginBottom: 0,
     },
 });

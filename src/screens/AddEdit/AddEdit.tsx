@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { TextInput, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -11,26 +11,26 @@ import GroupButton from './GroupButton';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import ProperAvatar from '../ProperAvatar';
 import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
+import { colors, dimensions, fonts, margin, padding } from '../../styles/common';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
     },
     avatarContainer: {
-        marginTop: 25,
+        marginTop: margin.md,
         alignItems: 'center',
     },
     headerText: {
-        fontSize: 30,
+        fontSize: fonts.lg,
     },
     inputText: {
-        backgroundColor: 'white',
         flex: 2,
+        backgroundColor: colors.background,
     },
     menu: {
-        paddingLeft: Dimensions.get('window').width / 2 - 20,
-        paddingTop: 50,
+        paddingLeft: dimensions.fullWidth / 2 - 20,
+        paddingTop: padding.xl,
         justifyContent: 'center',
     },
     row: {
@@ -43,11 +43,12 @@ const styles = StyleSheet.create({
     },
     icon: {
         alignSelf: 'center',
-        paddingLeft: 5,
-        paddingRight: 5,
+        paddingLeft: padding.sm,
+        color: colors.icon,
     },
     snackbar: {
         position: 'absolute',
+        backgroundColor: colors.primaryDark,
         bottom: 0,
     },
     dropdown: {
@@ -132,6 +133,8 @@ const AddEdit = (props: Props): JSX.Element => {
             <TextInput
                 label={label}
                 value={value}
+                theme={{ colors: { primary: colors.primaryDark } }}
+                accessibilityIgnoresInvertColors={true}
                 style={styles.inputText}
                 onChangeText={(text): void => method(text)}
             />
@@ -154,6 +157,7 @@ const AddEdit = (props: Props): JSX.Element => {
                     label={label}
                     value={phoneOrEmail}
                     style={styles.inputText}
+                    theme={{ colors: { primary: colors.primaryDark } }}
                     onChangeText={(text): void => onChangeTextInput(label, text, index)}
                     keyboardType={isNumeric ? 'numeric' : 'email-address'}
                 />
@@ -162,6 +166,8 @@ const AddEdit = (props: Props): JSX.Element => {
                         <IconButton
                             icon='trash-can-outline'
                             size={30}
+                            color={colors.icon}
+                            rippleColor={colors.secondaryDark}
                             onPress={(): void => onDeleteTextInput(label, index)}
                         />
                     )}
@@ -208,7 +214,13 @@ const AddEdit = (props: Props): JSX.Element => {
 
     const plusButton = (label: string): JSX.Element => (
         <View style={styles.icon}>
-            <IconButton icon='plus' onPress={(): void => addInputField(label)} size={30} />
+            <IconButton
+                icon='plus'
+                onPress={(): void => addInputField(label)}
+                size={30}
+                color={colors.icon}
+                rippleColor={colors.secondaryDark}
+            />
         </View>
     );
 
@@ -218,6 +230,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 visible={snackbar.isVisible}
                 style={styles.snackbar}
                 onDismiss={onDismissSnackbar}
+                theme={{ colors: { accent: colors.textWhite } }}
                 action={{
                     label: 'Undo',
                     onPress: (): void => onUndoPressed(snackbar.label),
@@ -226,7 +239,12 @@ const AddEdit = (props: Props): JSX.Element => {
                 {snackbar.message}
             </Snackbar>
         ) : (
-            <Snackbar visible={snackbar.isVisible} style={styles.snackbar} onDismiss={onDismissSnackbar}>
+            <Snackbar
+                visible={snackbar.isVisible}
+                style={styles.snackbar}
+                onDismiss={onDismissSnackbar}
+                theme={{ colors: { accent: colors.textWhite } }}
+            >
                 {snackbar.message}
             </Snackbar>
         );

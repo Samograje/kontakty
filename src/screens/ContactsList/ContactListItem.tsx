@@ -4,6 +4,7 @@ import { Colors, TouchableRipple } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ProperAvatar from '../ProperAvatar';
 import GestureRecognizer from 'react-native-swipe-gestures';
+import { colors, fonts, margin, padding } from '../../styles/common';
 
 interface Props {
     item: Contact;
@@ -16,16 +17,16 @@ interface Props {
 
 const styles = StyleSheet.create({
     ripple: {
-        padding: 10,
-        paddingLeft: 20,
+        padding: padding.sm,
+        paddingLeft: padding.md,
     },
     container: {
         flexDirection: 'row',
     },
     text: {
-        marginLeft: 20,
+        marginLeft: margin.md,
         height: '100%',
-        fontSize: 20,
+        fontSize: fonts.md,
         textAlignVertical: 'center',
     },
     selected: {
@@ -46,7 +47,12 @@ const ContactListItem = (props: Props): ReactElement => {
 
     return (
         <GestureRecognizer onSwipeLeft={(): void => onSwipeLeft()} onSwipeRight={(): void => onSwipeRight()}>
-            <TouchableRipple style={styles.ripple} onPress={onPress} onLongPress={onLongPress}>
+            <TouchableRipple
+                style={styles.ripple}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                rippleColor={colors.secondaryDark}
+            >
                 <View style={[isSelected ? styles.selected : styles.container]}>
                     <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
                     <Text style={styles.text}>

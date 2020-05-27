@@ -12,6 +12,8 @@ import AddEditScreen from './src/screens/AddEdit';
 import GroupsScreen from './src/screens/Groups';
 import configureStore from './src/redux/Store';
 import GroupsListScreen from './src/screens/GroupsList';
+import { colors } from './src/styles/common';
+import { StatusBar } from 'react-native';
 
 const Stack = createStackNavigator();
 const store = configureStore();
@@ -22,14 +24,19 @@ const App = (): ReactElement => {
         <Provider store={store}>
             <PersistGate persistor={persistedStore} loading={null}>
                 <PaperProvider>
+                <StatusBar backgroundColor={colors.primaryDark} />
                 <NavigationContainer>
                     <Stack.Navigator
                         initialRouteName='List'
                         screenOptions={{
-                            headerStyle: {
-                                backgroundColor: 'darkgreen',
+                            cardStyle: {
+                                //Styl całego widoku
+                                backgroundColor: colors.background,
                             },
-                            headerTintColor: 'white',
+                            headerStyle: {
+                                backgroundColor: colors.primaryDark,
+                            },
+                            headerTintColor: colors.tint,
                         }}
                     >
                         <Stack.Screen
