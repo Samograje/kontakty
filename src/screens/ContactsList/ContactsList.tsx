@@ -73,7 +73,7 @@ const ContactsList = (props: Props): JSX.Element => {
         let onSwipeRight;
         if (selectedIds.length === 0) {
             onSwipeLeft = (): void => sendSMS(p.item.telNumbers[0]?.number);
-            onSwipeRight = (): void => makeCall(p.item.telNumbers[0]?.number);
+            onSwipeRight = (): Promise<any> => makeCall(p.item.telNumbers[0]?.number);
         }
         let onLongPress;
         if (!searchText) {
@@ -96,7 +96,7 @@ const ContactsList = (props: Props): JSX.Element => {
     const createAlert = (): void =>
         Alert.alert(
             'Operation Confirm',
-            'Are you sure you want to delete this contact?',
+            'Are you sure you want to delete selected contacts?',
             [
                 {
                     text: 'Cancel',
