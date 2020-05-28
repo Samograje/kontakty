@@ -93,13 +93,12 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const onClearSearch = (): void => setSearchText('');
     const onClearSelection = (): void => setSelectedIds([]);
     const deleteContacts = (): void => {
-        // TODO: remove contacts
-        console.log('are you 100% sure you won\'t miss those people????');
         selectedIds.forEach(id => {
             const contactGroups = groups.filter((g) => g.contactsIds.includes(id));
             dispatch(removeContact(id));
             contactGroups.forEach((g) => dispatch(removeContactFromGroup(id, g.id)));
-        })
+        });
+        onClearSelection();
     };
 
     const contactsFiltered = searchContacts(contacts, searchText);
