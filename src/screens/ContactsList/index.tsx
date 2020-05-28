@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React, { ReactElement, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ContactsList from './ContactsList';
 import { getContacts, getGroups } from '../../redux/selectors/Selectors';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { modes } from '../StringsHelper';
+import { removeContact, removeContactFromGroup } from '../../redux/actions/ActionCreators';
 
 interface ContactsSection {
     title: string;
@@ -55,8 +56,11 @@ const groupContactsByFirstNameFirstLetter = (contacts: Contact[]): ContactsSecti
 
 const ContactsListScreen = ({ route }): ReactElement => {
     const { navigate } = useNavigation();
+    const dispatch = useDispatch();
     const group: Group = useSelector(getGroups).filter((g: Group) => g.id === route.params?.groupId)[0];
     let contacts = useSelector(getContacts);
+    const groups = useSelector(getGroups);
+
     if (group) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
@@ -91,6 +95,11 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const deleteContacts = (): void => {
         // TODO: remove contacts
         console.log('are you 100% sure you won\'t miss those people????');
+        selectedIds.forEach(id => {
+            const contactGroups = groups.filter((g) => g.contactsIds.includes(id));
+            dispatch(removeContact(id));
+            contactGroups.forEach((g) => dispatch(removeContactFromGroup(id, g.id)));
+        })
     };
 
     const contactsFiltered = searchContacts(contacts, searchText);

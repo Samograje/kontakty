@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { SectionList, SectionListRenderItem, SectionListRenderItemInfo, StyleSheet, View } from 'react-native';
+import { Alert, SectionList, SectionListRenderItem, SectionListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { Colors, FAB } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ContactListItem from './ContactListItem';
@@ -93,6 +93,21 @@ const ContactsList = (props: Props): JSX.Element => {
         );
     };
 
+    const createAlert = (): void =>
+        Alert.alert(
+            'Operation Confirm',
+            'Are you sure you want to delete this contact?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: (): void => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: (): void => onDeleteContacts() },
+            ],
+            { cancelable: false },
+        );
+
     return (
         <View style={styles.container}>
             {!forGroupModeEnabled && (
@@ -101,7 +116,7 @@ const ContactsList = (props: Props): JSX.Element => {
                         <HeaderBarWithMultipleChoice
                             elementsCount={selectedIds.length}
                             onClearSelection={onClearSelection}
-                            onDeleteContacts={onDeleteContacts}
+                            onDeleteContacts={createAlert}
                         />
                     )}
                     {!selectedIds.length && (
