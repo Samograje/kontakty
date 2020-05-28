@@ -72,7 +72,9 @@ const ContactsList = (props: Props): JSX.Element => {
         let onSwipeLeft;
         let onSwipeRight;
         if (selectedIds.length === 0) {
-            onSwipeLeft = (): void => sendSMS(p.item.telNumbers[0]?.number);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onSwipeLeft = (): Promise<any> => sendSMS(p.item.telNumbers[0]?.number);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onSwipeRight = (): Promise<any> => makeCall(p.item.telNumbers[0]?.number);
         }
         let onLongPress;

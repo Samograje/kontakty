@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
 const Details = (props: Props): JSX.Element => {
     const { id, onEdit, onDelete, onGroupList, contact } = props;
 
+    // TODO
     function PhoneNumberItem({ item }): JSX.Element {
         return (
             <View style={styles.details}>
@@ -71,14 +72,14 @@ const Details = (props: Props): JSX.Element => {
                         color={colors.primaryDark}
                         rippleColor={colors.secondaryDark}
                         size={25}
-                        onPress={(): void => makeCall(item.number)}
+                        onPress: ={(): Promise<any> => makeCall(item.number)}
                     />
                     <IconButton
                         icon='message'
                         color={colors.primaryDark}
                         rippleColor={colors.secondaryDark}
                         size={25}
-                        onPress={(): void => sendSMS(item.number)}
+                        onPress={(): Promise<any> => sendSMS(item.number)}
                     />
                 </View>
             </View>
