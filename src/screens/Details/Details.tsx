@@ -72,14 +72,18 @@ const Details = (props: Props): JSX.Element => {
                         color={colors.primaryDark}
                         rippleColor={colors.secondaryDark}
                         size={25}
-                        onPress: ={(): Promise<any> => makeCall(item.number)}
+                        onPress={() => {
+                            makeCall(item.number);
+                        }}
                     />
                     <IconButton
                         icon='message'
                         color={colors.primaryDark}
                         rippleColor={colors.secondaryDark}
                         size={25}
-                        onPress={(): Promise<any> => sendSMS(item.number)}
+                        onPress={() => {
+                            sendSMS(item.number);
+                        }}
                     />
                 </View>
             </View>
