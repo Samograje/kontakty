@@ -66,6 +66,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         oneOfNumbersEmpty: true,
         oneOfEmailsEmpty: true
     });
+    const [isSubmiting, setIsSubmiting] = useState(false);
 
 
     const filterGroupsForContact = (): Group[] => {
@@ -98,6 +99,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     }
     const onGroups = (): void => {
         navigate('Groups', {id, mode});
+    };
+    const onMain = (): void => {
+        navigate('List');
     };
     const onChangeName = (value: string): void => {
         setFirstName(value);
@@ -261,6 +265,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         try{
             const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
             if (dataValidOk) {
+                setIsSubmiting(true);
                 if (mode === modes.create) {
                     dispatch(createContact(buildContactObject()));
                     dispatch(addNewestContactToGroup(tempGroupsIds));
@@ -269,6 +274,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
                 }
             }
             saveMessage(dataValidOk);
+            onMain();
         } catch (e) {
             console.log(e);
         }
@@ -371,6 +377,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
             useCamera={useCamera}
+            isSubmiting={isSubmiting}
         />
     );
 };

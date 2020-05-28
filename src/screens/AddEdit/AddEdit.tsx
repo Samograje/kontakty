@@ -81,6 +81,7 @@ interface Props {
     onDismissSnackbar: () => void;
     onUndoPressed: (label: string) => void;
     useCamera: () => void;
+    isSubmiting: boolean;
 }
 
 const AddEdit = (props: Props): JSX.Element => {
@@ -108,16 +109,23 @@ const AddEdit = (props: Props): JSX.Element => {
         onDismissSnackbar,
         onUndoPressed,
         useCamera,
+        isSubmiting,
     } = props;
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             title: mode === modes.edit ? 'Edit contact' : 'Create contact',
             headerRight: (): JSX.Element => (
-                <IconButton icon='check' size={40} color={'white'} onPress={(): void => onSaveContact()} />
+                <IconButton
+                    icon='check'
+                    size={40}
+                    color={'white'}
+                    onPress={(): void => onSaveContact()}
+                    disabled={isSubmiting}
+                />
             ),
         });
-    }, [navigation, onSaveContact, contact.id, mode]);
+    }, [navigation, onSaveContact, contact.id, mode, isSubmiting]);
 
     const showIconOrEmptySpace = (condition: boolean, icon: string): JSX.Element => (
         <View style={styles.iconContainer}>
