@@ -13,16 +13,16 @@ const styles = StyleSheet.create({
 });
 
 export const SnackbarCustom = (): JSX.Element => {
-    const { toast, hide } = useContext(SnackbarContext);
+    const { snackbar, hide } = useContext(SnackbarContext);
 
     return (
         <Snackbar
-            visible={toast.visible}
+            visible={snackbar.visible}
             style={styles.snackbar}
             onDismiss={(): void => hide()}
             theme={{ colors: { accent: colors.textWhite } }}
         >
-            {toast.message}
+            {snackbar.message}
         </Snackbar>
     );
 };

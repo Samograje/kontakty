@@ -14,7 +14,7 @@ import configureStore from './src/redux/Store';
 import GroupsListScreen from './src/screens/GroupsList';
 import { colors } from './src/styles/common';
 import { StatusBar } from 'react-native';
-import { SnackbarProvider } from './src/screens/ToastContent';
+import { SnackbarProvider } from './src/screens/SnackbarContent';
 import SnackbarCustom from './src/screens/SnackbarCustom';
 
 const Stack = createStackNavigator();
