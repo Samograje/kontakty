@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { SnackbarContext } from './ToastContent';
+import { SnackbarContext } from './SnackbarContent';
 import { StyleSheet } from 'react-native';
 import { Snackbar } from 'react-native-paper';
 import { colors } from '../styles/common';
@@ -15,20 +15,7 @@ const styles = StyleSheet.create({
 export const SnackbarCustom = (): JSX.Element => {
     const { toast, hide } = useContext(SnackbarContext);
 
-    return toast.isActionVisible ? (
-        <Snackbar
-            visible={toast.visible}
-            style={styles.snackbar}
-            onDismiss={(): void => hide()}
-            theme={{ colors: { accent: colors.textWhite } }}
-            action={{
-                label: 'Undo',
-                onPress: (): void => console.log('UNDO'),
-            }}
-        >
-            {toast.message}
-        </Snackbar>
-    ) : (
+    return (
         <Snackbar
             visible={toast.visible}
             style={styles.snackbar}
