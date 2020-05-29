@@ -14,6 +14,8 @@ import configureStore from './src/redux/Store';
 import GroupsListScreen from './src/screens/GroupsList';
 import { colors } from './src/styles/common';
 import { StatusBar } from 'react-native';
+import { SnackbarProvider } from './src/screens/SnackbarContent';
+import SnackbarCustom from './src/screens/SnackbarCustom';
 
 const Stack = createStackNavigator();
 const store = configureStore();
@@ -22,58 +24,62 @@ const persistedStore = persistStore(store);
 const App = (): ReactElement => {
     return (
         <Provider store={store}>
-            <PersistGate persistor={persistedStore} loading={null}>
-                <PaperProvider>
-                <StatusBar backgroundColor={colors.primaryDark} />
-                <NavigationContainer>
-                    <Stack.Navigator
-                        initialRouteName='List'
-                        screenOptions={{
-                            cardStyle: {
-                                //Styl całego widoku
-                                backgroundColor: colors.background,
-                            },
-                            headerStyle: {
-                                backgroundColor: colors.primaryDark,
-                            },
-                            headerTintColor: colors.tint,
-                        }}
-                    >
-                        <Stack.Screen
-                            name='List'
-                            component={ContactsListScreen}
-                            options={{ headerShown: false }}
-                        />
-                        <Stack.Screen
-                            name='Details'
-                            component={DetailsScreen}
-                            options={{ title: 'Details' }}
-                        />
-                        <Stack.Screen
-                            name='AddEdit'
-                            component={AddEditScreen}
-                            options={{ title: 'New contact/Edit Contact' }}
-                        />
-                        <Stack.Screen
-                            name='Groups'
-                            component={GroupsScreen}
-                            options={{ title: 'Select groups' }}
-                        />
-                        <Stack.Screen
-                            name='GroupsList'
-                            component={GroupsListScreen}
-                            options={{ title: 'My groups' }}
-                        />
-                        <Stack.Screen
-                            name='ContactsListForGroup'
-                            component={ContactsListScreen}
-                            options={{ title: 'Contacts in group' }}
-                        />
-                    </Stack.Navigator>
-                </NavigationContainer>
-                </PaperProvider>
-            </PersistGate>
+            <SnackbarProvider>
+                <PersistGate persistor={persistedStore} loading={null}>
+                    <PaperProvider>
+                        <StatusBar backgroundColor={colors.primaryDark} />
+                        <NavigationContainer>
+                            <Stack.Navigator
+                                initialRouteName='List'
+                                screenOptions={{
+                                    cardStyle: {
+                                        //Styl całego widoku
+                                        backgroundColor: colors.background,
+                                    },
+                                    headerStyle: {
+                                        backgroundColor: colors.primaryDark,
+                                    },
+                                    headerTintColor: colors.tint,
+                                }}
+                            >
+                                <Stack.Screen
+                                    name='List'
+                                    component={ContactsListScreen}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name='Details'
+                                    component={DetailsScreen}
+                                    options={{ title: 'Details' }}
+                                />
+                                <Stack.Screen
+                                    name='AddEdit'
+                                    component={AddEditScreen}
+                                    options={{ title: 'New contact/Edit Contact' }}
+                                />
+                                <Stack.Screen
+                                    name='Groups'
+                                    component={GroupsScreen}
+                                    options={{ title: 'Select groups' }}
+                                />
+                                <Stack.Screen
+                                    name='GroupsList'
+                                    component={GroupsListScreen}
+                                    options={{ title: 'My groups' }}
+                                />
+                                <Stack.Screen
+                                    name='ContactsListForGroup'
+                                    component={ContactsListScreen}
+                                    options={{ title: 'Contacts in group' }}
+                                />
+                            </Stack.Navigator>
+                        </NavigationContainer>
+                    </PaperProvider>
+                </PersistGate>
+                <SnackbarCustom />
+            </SnackbarProvider>
         </Provider>
+
     );
 };
 

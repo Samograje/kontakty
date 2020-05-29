@@ -37,6 +37,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
     },
+    snackbar: {
+        position: 'absolute',
+        backgroundColor: colors.primaryDark,
+        bottom: 0,
+    },
     iconContainer: {
         width: 60,
         alignItems: 'center',
@@ -45,11 +50,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingLeft: padding.sm,
         color: colors.icon,
-    },
-    snackbar: {
-        position: 'absolute',
-        backgroundColor: colors.primaryDark,
-        bottom: 0,
     },
     dropdown: {
         width: '45%',
@@ -81,6 +81,7 @@ interface Props {
     onDismissSnackbar: () => void;
     onUndoPressed: (label: string) => void;
     useCamera: () => void;
+    isSubmiting: boolean;
 }
 
 const AddEdit = (props: Props): JSX.Element => {
@@ -108,16 +109,23 @@ const AddEdit = (props: Props): JSX.Element => {
         onDismissSnackbar,
         onUndoPressed,
         useCamera,
+        isSubmiting,
     } = props;
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             title: mode === modes.edit ? 'Edit contact' : 'Create contact',
             headerRight: (): JSX.Element => (
-                <IconButton icon='check' size={40} color={'white'} onPress={(): void => onSaveContact()} />
+                <IconButton
+                    icon='check'
+                    size={40}
+                    color={'white'}
+                    onPress={(): void => onSaveContact()}
+                    disabled={isSubmiting}
+                />
             ),
         });
-    }, [navigation, onSaveContact, contact.id, mode]);
+    }, [navigation, onSaveContact, contact.id, mode, isSubmiting]);
 
     const showIconOrEmptySpace = (condition: boolean, icon: string): JSX.Element => (
         <View style={styles.iconContainer}>
@@ -225,7 +233,7 @@ const AddEdit = (props: Props): JSX.Element => {
     );
 
     const showSnackbar = (): JSX.Element =>
-        snackbar.isActionVisible ? (
+        snackbar.isValidationMsg && snackbar.isActionVisible ? (
             <Snackbar
                 visible={snackbar.isVisible}
                 style={styles.snackbar}
@@ -233,7 +241,7 @@ const AddEdit = (props: Props): JSX.Element => {
                 theme={{ colors: { accent: colors.textWhite } }}
                 action={{
                     label: 'Undo',
-                    onPress: (): void => onUndoPressed(snackbar.label),
+                    onPress: (): void => onUndoPressed(snackbar.message.split(' ')[0]),
                 }}
             >
                 {snackbar.message}
