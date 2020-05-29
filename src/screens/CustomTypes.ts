@@ -1,10 +1,3 @@
-export type snackbarT = {
-    isVisible: boolean;
-    message: string;
-    isActionVisible: boolean;
-    label: string;
-};
-
 export type navigationT = {
     setOptions(param: { headerRight: () => JSX.Element; title: string }): void;
 };

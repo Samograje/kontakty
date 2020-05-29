@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useContext } from 'react';
 import AddEdit from './AddEdit';
 import { getContacts, getGroups, getTempGroupsIds } from '../../redux/selectors/Selectors';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +12,7 @@ import { Group } from '../../redux/reducers/GroupsReducer';
 import { createContact, removeTempGroups, updateContact } from '../../redux/actions/ActionCreators';
 import { Contact, ContactEmail, ContactNumber } from '../../redux/reducers/ContactsReducer';
 import addNewestContactToGroup from '../../redux/actions/addNewestContactToGroups';
+import { SnackbarContext } from '../ToastContent';
 
 const showDeclinedPermissionAlert = (): void => {
     Alert.alert(
@@ -28,6 +29,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     //wartości początkowe
     const { navigate } = useNavigation();
     const { id, mode } = route.params;
+    const { show } = useContext(SnackbarContext);
     const contacts = useSelector(getContacts);
     const groups = useSelector(getGroups);
     const tempGroupsIds = useSelector(getTempGroupsIds);
@@ -59,7 +61,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         category: defaultCathegory
     }]));
     const [deletedEmail, setDeletedEmail] = useState({ index: -1, delEmail: { email: '', category: '' } });
-    const [snackbar, setSnackbar] = useState({ isVisible: false, message: '', isActionVisible: false, label: '' });
     const [isDeleteClicked, setIsDeleteClicked] = useState(false); //Logika pomagająca przy procesie usuwania/cofania usunięcia,
     const [dataValid, setDataValid] = useState({
         nameOrOneNumberEmpty: true,
@@ -112,11 +113,8 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const onChangeLastName = (value: string): void => {
         setSurname(value);
     };
-    const onDismissSnackbar = (): void => {
-        setSnackbar({ isVisible: false, message: '', isActionVisible: false, label: '' });
-    };
-    const onShowSnackbar = (isVisible: true, message: string, isActionVisible: boolean, label: string): void => {
-        setSnackbar({ isVisible: true, message: message, isActionVisible: isActionVisible, label: label });
+    const onShowSnackbar = (message: string, isActionVisible: boolean): void => {
+        show({message: message, isActionVisible: isActionVisible});
     };
 
     const checkDataValidation = (): validationT => {
@@ -165,13 +163,12 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         } else if (label === formLabels.email) {
             setEmails([...emails, { email: '', category: defaultCathegory }]);
         } else {
-            onShowSnackbar(true, 'Something went wrong.', false, '');
+            onShowSnackbar( 'Something went wrong.', false);
             console.log('Błąd podczas dodawania nowego pola, nieznana etykieta.');
         }
     };
 
     const onChangeTextInput = (label: string, value: string, index: number): void => {
-        onDismissSnackbar();
         let tmpData;
         if (label === formLabels.number) {
             tmpData = [...numbers];
@@ -184,14 +181,13 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             setEmails(tmpData);
             setDeletedEmail({ index, delEmail: tmpData[index] });
         } else {
-            onShowSnackbar(true, 'Something went wrong.', false, '');
+            onShowSnackbar( 'Something went wrong.', false);
             console.log('Błąd pdczas zmiany danych w polu tekstowym, nieznana etykieta.');
         }
     };
 
     const onChangeDropdown = (label: string, value: string, index: number): void => {
         if (!isDeleteClicked) {
-            onDismissSnackbar();
             let tmpData;
             if (label === formLabels.number) {
                 tmpData = [...numbers];
@@ -204,7 +200,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
                 setEmails(tmpData);
                 setDeletedEmail({ index, delEmail: tmpData[index] });
             } else {
-                onShowSnackbar(true, 'Something went wrong.', false, '');
+                onShowSnackbar( 'Something went wrong.', false);
                 console.log('Błąd podczas zmiany danych w rozwijanym menu, nieznana etykieta.');
             }
         }
@@ -219,15 +215,15 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             tmpData = [...numbers];
             tmpData.splice(index, 1);
             setNumbers(tmpData);
-            onShowSnackbar(true, 'Number deleted.', true, label);
+            onShowSnackbar( 'Number deleted.', true);
         } else if (label === formLabels.email) {
             setDeletedEmail({ index, delEmail: emails[index] });
             tmpData = [...emails];
             tmpData.splice(index, 1);
             setEmails(tmpData);
-            onShowSnackbar(true, 'Email deleted.', true, label);
+            onShowSnackbar( 'Email deleted.', true);
         } else {
-            onShowSnackbar(true, 'Something went wrong.', false, '');
+            onShowSnackbar( 'Something went wrong.', false);
             console.log('Błąd podczas usuwania pola tekstowego, nieznana etykieta.');
         }
     };
@@ -244,19 +240,19 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             tmpData.splice(deletedEmail.index, 0, deletedEmail.delEmail);
             setEmails(tmpData);
         } else {
-            onShowSnackbar(true, 'Undo action failed. Something went wrong.', false, '');
+            onShowSnackbar( 'Undo action failed. Something went wrong.', false);
         }
     };
 
     const saveMessage = (dataValidOk: boolean): void => {
         if (dataValidOk) {
-            onShowSnackbar(true, 'Contact saved.', false, '');
+            onShowSnackbar( 'Contact saved.', false );
         } else if (dataValid.nameOrOneNumberEmpty) {
-            onShowSnackbar(true, 'Please enter your name and at least one phone number.', false, '');
+            onShowSnackbar( 'Please enter your name and at least one phone number.', false);
         } else if (dataValid.oneOfNumbersEmpty) {
-            onShowSnackbar(true, 'Fill out the fields with the phone number.', false, '');
+            onShowSnackbar( 'Fill out the fields with the phone number.', false);
         } else if (dataValid.oneOfEmailsEmpty) {
-            onShowSnackbar(true, 'Fill out the fields with the email adress.', false, '');
+            onShowSnackbar( 'Fill out the fields with the email adress.', false);
         }
     };
 
@@ -272,9 +268,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
                 } else if (mode === modes.edit && id !== null) {
                     dispatch(updateContact(buildContactObject(), id));
                 }
+                onMain();
             }
             saveMessage(dataValidOk);
-            onMain();
         } catch (e) {
             console.log(e);
         }
@@ -364,7 +360,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             pickImage={pickImage}
             setImage={setImage}
             setIsMenuVisible={setIsMenuVisible}
-            snackbar={snackbar}
             onGroups={onGroups}
             onChangeName={onChangeName}
             onChangeSecondName={onChangeSecondName}
@@ -374,7 +369,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
             onDeleteTextInput={onDeleteTextInput}
             addInputField={addInputField}
             onChangeDropdown={onChangeDropdown}
-            onDismissSnackbar={onDismissSnackbar}
             onUndoPressed={onUndoPressed}
             useCamera={useCamera}
             isSubmiting={isSubmiting}

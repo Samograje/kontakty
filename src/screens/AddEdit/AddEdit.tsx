@@ -1,12 +1,12 @@
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { TextInput, IconButton, Snackbar, Menu, Divider } from 'react-native-paper';
+import { TextInput, IconButton, Menu, Divider } from 'react-native-paper';
 import { icons, formLabels, modes, contactLabels } from '../StringsHelper';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
-import { navigationT, snackbarT } from '../CustomTypes';
+import { navigationT } from '../CustomTypes';
 import GroupButton from './GroupButton';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import ProperAvatar from '../ProperAvatar';
@@ -46,11 +46,6 @@ const styles = StyleSheet.create({
         paddingLeft: padding.sm,
         color: colors.icon,
     },
-    snackbar: {
-        position: 'absolute',
-        backgroundColor: colors.primaryDark,
-        bottom: 0,
-    },
     dropdown: {
         width: '45%',
     },
@@ -68,7 +63,6 @@ interface Props {
     pickImage: () => void;
     setImage: (string) => void;
     setIsMenuVisible: (boolean) => void;
-    snackbar: snackbarT;
     onGroups: (id: number | null) => void;
     onChangeName: (name: string) => void;
     onChangeSecondName: (secondName: string) => void;
@@ -78,7 +72,6 @@ interface Props {
     onDeleteTextInput: (label: string, index: number) => void;
     addInputField: (label: string) => void;
     onChangeDropdown: (label: string, test: string, index: number) => void;
-    onDismissSnackbar: () => void;
     onUndoPressed: (label: string) => void;
     useCamera: () => void;
     isSubmiting: boolean;
@@ -96,7 +89,6 @@ const AddEdit = (props: Props): JSX.Element => {
         isMenuVisible,
         pickImage,
         setIsMenuVisible,
-        snackbar,
         onGroups,
         onChangeName,
         onChangeSecondName,
@@ -106,8 +98,6 @@ const AddEdit = (props: Props): JSX.Element => {
         onDeleteTextInput,
         addInputField,
         onChangeDropdown,
-        onDismissSnackbar,
-        onUndoPressed,
         useCamera,
         isSubmiting,
     } = props;
@@ -232,31 +222,6 @@ const AddEdit = (props: Props): JSX.Element => {
         </View>
     );
 
-    const showSnackbar = (): JSX.Element =>
-        snackbar.isActionVisible ? (
-            <Snackbar
-                visible={snackbar.isVisible}
-                style={styles.snackbar}
-                onDismiss={onDismissSnackbar}
-                theme={{ colors: { accent: colors.textWhite } }}
-                action={{
-                    label: 'Undo',
-                    onPress: (): void => onUndoPressed(snackbar.label),
-                }}
-            >
-                {snackbar.message}
-            </Snackbar>
-        ) : (
-            <Snackbar
-                visible={snackbar.isVisible}
-                style={styles.snackbar}
-                onDismiss={onDismissSnackbar}
-                theme={{ colors: { accent: colors.textWhite } }}
-            >
-                {snackbar.message}
-            </Snackbar>
-        );
-
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -305,7 +270,6 @@ const AddEdit = (props: Props): JSX.Element => {
                     <GroupButton onGroups={onGroups} groups={groups} id={contact.id} />
                 </View>
             </ScrollView>
-            {showSnackbar()}
         </View>
     );
 };
