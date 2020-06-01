@@ -3,15 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Colors, TouchableRipple } from 'react-native-paper';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import ProperAvatar from '../ProperAvatar';
-import GestureRecognizer from 'react-native-swipe-gestures';
 import { colors, fonts, margin } from '../../styles/common';
 
 interface Props {
     item: Contact;
     onPress: () => void;
     onLongPress: () => void;
-    onSwipeLeft: () => void;
-    onSwipeRight: () => void;
     isSelected: boolean;
 }
 
@@ -45,24 +42,22 @@ const styles = StyleSheet.create({
 
 const ContactListItem = (props: Props): ReactElement => {
     const { firstName, lastName, photoUrl } = props.item;
-    const { onPress, onLongPress, onSwipeLeft, onSwipeRight, isSelected } = props;
+    const { onPress, onLongPress, isSelected } = props;
 
     return (
-        <GestureRecognizer onSwipeLeft={onSwipeLeft} onSwipeRight={onSwipeRight}>
-            <TouchableRipple
-                style={styles.ripple}
-                onPress={onPress}
-                onLongPress={onLongPress}
-                rippleColor={colors.secondaryDark}
-            >
-                <View style={[isSelected ? styles.selected : styles.unselected]}>
-                    <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
-                    <Text style={styles.text}>
-                        {firstName} {lastName}
-                    </Text>
-                </View>
-            </TouchableRipple>
-        </GestureRecognizer>
+        <TouchableRipple
+            style={styles.ripple}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            rippleColor={colors.secondaryDark}
+        >
+            <View style={[isSelected ? styles.selected : styles.unselected]}>
+                <ProperAvatar path={photoUrl} firstName={firstName} lastName={lastName} size={40} />
+                <Text style={styles.text}>
+                    {firstName} {lastName}
+                </Text>
+            </View>
+        </TouchableRipple>
     );
 };
 
