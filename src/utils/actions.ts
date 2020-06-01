@@ -17,11 +17,6 @@ export const makeCall = (phoneNumber: string): Promise<any> => {
 
 export const sendSMS = (phoneNumber: string): Promise<any> => {
     const body = 'Hello';
-    if (Platform.OS === 'android') {
-        phoneNumber = `tel:${phoneNumber}`;
-    } else {
-        phoneNumber = `telprompt:${phoneNumber}`;
-    }
     return Linking.openURL(`smsto:${phoneNumber}?sms_body=${body}`)
         .then((r) => console.log(r))
         .catch((error) => {
