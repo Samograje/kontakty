@@ -5,7 +5,7 @@ import { getContacts, getGroups, getTempGroupsIds } from '../../redux/selectors/
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
-import { defaultCathegory, formLabels, modes } from '../StringsHelper';
+import { contactLabels, defaultCathegory, formLabels, modes } from '../StringsHelper';
 import { validationT } from '../CustomTypes';
 import { Alert } from 'react-native';
 import { Group } from '../../redux/reducers/GroupsReducer';
@@ -201,8 +201,42 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         }
     };
 
+    const isMainCategoryUsed = (label: string): boolean => {
+        let counterMain = 0;
+        let tmpData;
+        if(label === formLabels.number) {
+            tmpData = [...numbers];
+            tmpData.forEach((number) => {
+                if(number.category === 'main') {
+                    counterMain++;
+                }
+            });
+            if(counterMain >= 1) {
+                return true;
+            }
+        } else if (label === formLabels.email) {
+            tmpData = [...emails];
+            tmpData.forEach((email) => {
+                if(email.category === 'main') {
+                    counterMain++;
+                }
+            });
+            if(counterMain >= 1) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     const onChangeDropdown = (label: string, value: string, index: number): void => {
-        onDismissSnackbar();
+        console.log('xd');
+        const isMainCategoryUded = isMainCategoryUsed(label);
+        if(isMainCategoryUded && value === 'main') {
+            onShowSnackbar(true, "Main number may be only one", false, true);
+            return;
+        }
+
         if (!isDeleteClicked) {
             let tmpData;
             if (label === formLabels.number) {
@@ -220,6 +254,7 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
                 console.log('Błąd podczas zmiany danych w rozwijanym menu, nieznana etykieta.');
             }
         }
+
         setIsDeleteClicked(false)
     };
 
