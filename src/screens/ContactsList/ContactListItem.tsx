@@ -1,12 +1,13 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors, TouchableRipple } from 'react-native-paper';
-import { Contact } from '../../redux/reducers/ContactsReducer';
 import ProperAvatar from '../ProperAvatar';
 import { colors, fonts, margin } from '../../styles/common';
 
 interface Props {
-    item: Contact;
+    firstName: string;
+    lastName: string;
+    photoUrl: string;
     onPress: () => void;
     onLongPress: () => void;
     isSelected: boolean;
@@ -41,8 +42,7 @@ const styles = StyleSheet.create({
 });
 
 const ContactListItem = (props: Props): ReactElement => {
-    const { firstName, lastName, photoUrl } = props.item;
-    const { onPress, onLongPress, isSelected } = props;
+    const { firstName, lastName, photoUrl, onPress, onLongPress, isSelected } = props;
 
     return (
         <TouchableRipple

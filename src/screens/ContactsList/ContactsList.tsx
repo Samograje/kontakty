@@ -132,7 +132,9 @@ const ContactsList = (props: Props): JSX.Element => {
                 onRightActionComplete={onSwipeRight}
             >
                 <ContactListItem
-                    item={p.item}
+                    firstName={p.item.firstName}
+                    lastName={p.item.lastName}
+                    photoUrl={p.item.photoUrl}
                     onPress={(): void => onView(p.item.id)}
                     onLongPress={onLongPress}
                     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -178,14 +180,14 @@ const ContactsList = (props: Props): JSX.Element => {
                         />
                     )}
                     <ContactListItem
+                        firstName='My'
+                        lastName='groups'
+                        photoUrl=''
+                        onPress={onGroupList}
+                        isSelected={false}
                         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                         // @ts-ignore
-                        item={{
-                            firstName: 'My',
-                            lastName: 'groups',
-                            photoUrl: '',
-                        }}
-                        onClick={onGroupList}
+                        onLongPress={null}
                     />
                     <View style={styles.fixedView}>
                         <FAB style={styles.fab} icon='plus' onPress={onCreate} color={colors.text} />
