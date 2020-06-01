@@ -95,21 +95,23 @@ const ContactsList = (props: Props): JSX.Element => {
 
     const keyExtractor = (item, index): string => item + index;
 
-    const renderItem: SectionListRenderItem<Contact> = (p: SectionListRenderItemInfo<Contact>): ReactElement => {
+    const renderItem: SectionListRenderItem<Contact> = (
+        contactInfo: SectionListRenderItemInfo<Contact>,
+    ): ReactElement => {
         let onSwipeLeft;
         let onSwipeRight;
         if (selectedIds.length === 0) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onSwipeLeft = (): Promise<any> => sendSMS(p.item.telNumbers[0]?.number);
+            onSwipeLeft = (): Promise<any> => sendSMS(contactInfo.item.telNumbers[0]?.number);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onSwipeRight = (): Promise<any> => makeCall(p.item.telNumbers[0]?.number);
+            onSwipeRight = (): Promise<any> => makeCall(contactInfo.item.telNumbers[0]?.number);
         }
         let onLongPress;
         if (!searchText) {
-            onLongPress = (): void => onItemSelect(p.item.id);
+            onLongPress = (): void => onItemSelect(contactInfo.item.id);
         }
 
-        const key = p.item.id || -1;
+        const key = contactInfo.item.id || -1;
 
         const leftContent = (
             <Text style={[styles.swipeItemText, styles.textAlignRight]} key={key}>
@@ -133,14 +135,14 @@ const ContactsList = (props: Props): JSX.Element => {
                 onRightActionComplete={onSwipeRight}
             >
                 <ContactListItem
-                    firstName={p.item.firstName}
-                    lastName={p.item.lastName}
-                    photoUrl={p.item.photoUrl}
-                    onPress={(): void => onView(p.item.id)}
+                    firstName={contactInfo.item.firstName}
+                    lastName={contactInfo.item.lastName}
+                    photoUrl={contactInfo.item.photoUrl}
+                    onPress={(): void => onView(contactInfo.item.id)}
                     onLongPress={onLongPress}
                     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
-                    isSelected={selectedIds.includes(p.item.id)}
+                    isSelected={selectedIds.includes(contactInfo.item.id)}
                 />
             </Swipeable>
         );
