@@ -21,6 +21,7 @@ export const colors = {
 };
 
 export const padding = {
+    xs: 5,
     sm: 10,
     md: 20,
     lg: 30,

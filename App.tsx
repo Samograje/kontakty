@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { ReactElement } from 'react';
+import { StatusBar, YellowBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
@@ -13,7 +14,6 @@ import GroupsScreen from './src/screens/Groups';
 import configureStore from './src/redux/Store';
 import GroupsListScreen from './src/screens/GroupsList';
 import { colors } from './src/styles/common';
-import { StatusBar } from 'react-native';
 import { SnackbarProvider } from './src/screens/SnackbarContent';
 import SnackbarCustom from './src/screens/SnackbarCustom';
 
@@ -82,6 +82,10 @@ const App = (): ReactElement => {
 
     );
 };
+
+YellowBox.ignoreWarnings([
+   'Please update the following components: Swipeable',
+]);
 
 // noinspection JSUnusedGlobalSymbols
 export default App;

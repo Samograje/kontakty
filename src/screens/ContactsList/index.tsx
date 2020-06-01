@@ -1,12 +1,15 @@
 /* eslint-disable prettier/prettier */
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ContactsList from './ContactsList';
 import { getContacts, getGroups } from '../../redux/selectors/Selectors';
 import { Contact } from '../../redux/reducers/ContactsReducer';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { modes } from '../StringsHelper';
+import { removeContact, removeContactFromGroup } from '../../redux/actions/ActionCreators';
+import { SnackbarContext } from '../SnackbarContent';
+import { makeCall, sendSMS } from '../../utils/actions';
 
 interface ContactsSection {
     title: string;
@@ -53,22 +56,77 @@ const groupContactsByFirstNameFirstLetter = (contacts: Contact[]): ContactsSecti
         }, []);
 };
 
+const getNumberWithMainCategory = (contact: Contact): string => {
+    return contact.telNumbers.filter((number) => number.category === 'main')[0]?.number;
+}
+
 const ContactsListScreen = ({ route }): ReactElement => {
     const { navigate } = useNavigation();
+    const { show } = useContext(SnackbarContext);
+    const dispatch = useDispatch();
     const group: Group = useSelector(getGroups).filter((g: Group) => g.id === route.params?.groupId)[0];
     let contacts = useSelector(getContacts);
+    const groups = useSelector(getGroups);
+
     if (group) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         contacts = contacts.filter((contact: Contact) => group.contactsIds.includes(contact.id));
     }
     const [searchText, setSearchText] = useState('');
+    const [selectedIds, setSelectedIds] = useState([]);
+
+    const selectItem = (itemId: number | null): void => {
+        const newSelectedIds = [...selectedIds];
+        if (itemId != null) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            const i = newSelectedIds.indexOf(itemId);
+            if (i > -1) {
+                newSelectedIds.splice(i, 1);
+            } else {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore
+                newSelectedIds.push(itemId);
+            }
+        }
+        setSelectedIds(newSelectedIds);
+    };
 
     const onCreate = (): void => navigate('AddEdit', { mode: 'create' });
     const onDetails = (id: number | null): void => navigate('Details', { id, mode: modes.edit });
     const onGroupList = (): void => navigate('GroupsList');
     const onSearch = (query: string): void => setSearchText(query);
     const onClearSearch = (): void => setSearchText('');
+    const onClearSelection = (): void => setSelectedIds([]);
+
+    const onSendSms = (contact: Contact): void => {
+        const mainNumber = getNumberWithMainCategory(contact);
+        if (!mainNumber) {
+            show({ message: 'No main number specified' });
+            return;
+        }
+        sendSMS(mainNumber);
+    };
+
+    const onMakeCall = (contact: Contact): void => {
+        const mainNumber = getNumberWithMainCategory(contact);
+        if (!mainNumber) {
+            show({ message: 'No main number specified' });
+            return;
+        }
+        makeCall(mainNumber);
+    }
+
+    const deleteContacts = (): void => {
+        selectedIds.forEach(id => {
+            const contactGroups = groups.filter((g) => g.contactsIds.includes(id));
+            dispatch(removeContact(id));
+            contactGroups.forEach((g) => dispatch(removeContactFromGroup(id, g.id)));
+        });
+        show({ message: 'Contacts removed' });
+        onClearSelection();
+    };
 
     const contactsFiltered = searchContacts(contacts, searchText);
     const contactsSectioned = groupContactsByFirstNameFirstLetter(contactsFiltered);
@@ -84,6 +142,12 @@ const ContactsListScreen = ({ route }): ReactElement => {
             searchText={searchText}
             forGroupModeEnabled={!!group}
             onGroupList={onGroupList}
+            onItemSelect={selectItem}
+            selectedIds={selectedIds}
+            onDeleteContacts={deleteContacts}
+            onClearSelection={onClearSelection}
+            onSendSms={onSendSms}
+            onMakeCall={onMakeCall}
         />
     );
 };
