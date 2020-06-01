@@ -35,8 +35,8 @@ interface Props {
     selectedIds: number[];
     onDeleteContacts: () => void;
     onClearSelection: () => void;
-    onMakeCall: (contact: Contact) => Promise<unknown>;
-    onSendSms: (contact: Contact) => Promise<unknown>;
+    onMakeCall: (contact: Contact) => void;
+    onSendSms: (contact: Contact) => void;
 }
 
 const styles = StyleSheet.create({
@@ -126,8 +126,8 @@ const ContactsList = (props: Props): JSX.Element => {
                 rightContent={rightContent}
                 leftActionActivationDistance={200}
                 rightActionActivationDistance={200}
-                onLeftActionComplete={(): Promise<unknown> => onSendSms(contactInfo.item)}
-                onRightActionComplete={(): Promise<unknown> => onMakeCall(contactInfo.item)}
+                onLeftActionComplete={(): void => onSendSms(contactInfo.item)}
+                onRightActionComplete={(): void => onMakeCall(contactInfo.item)}
             >
                 <ContactListItem
                     firstName={contactInfo.item.firstName}

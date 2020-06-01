@@ -56,6 +56,10 @@ const groupContactsByFirstNameFirstLetter = (contacts: Contact[]): ContactsSecti
         }, []);
 };
 
+const getNumberWithMainCategory = (contact: Contact): string => {
+    return contact.telNumbers.filter((number) => number.category === 'main')[0]?.number;
+}
+
 const ContactsListScreen = ({ route }): ReactElement => {
     const { navigate } = useNavigation();
     const { show } = useContext(SnackbarContext);
@@ -96,12 +100,22 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const onClearSearch = (): void => setSearchText('');
     const onClearSelection = (): void => setSelectedIds([]);
 
-    const onSendSms = (contact: Contact): Promise<unknown> => {
-        return sendSMS(contact.telNumbers[0]?.number);
+    const onSendSms = (contact: Contact): void => {
+        const mainNumber = getNumberWithMainCategory(contact);
+        if (!mainNumber) {
+            show({ message: 'No main number specified' });
+            return;
+        }
+        sendSMS(mainNumber);
     };
 
-    const onMakeCall = (contact: Contact): Promise<unknown> => {
-        return makeCall(contact.telNumbers[0]?.number);
+    const onMakeCall = (contact: Contact): void => {
+        const mainNumber = getNumberWithMainCategory(contact);
+        if (!mainNumber) {
+            show({ message: 'No main number specified' });
+            return;
+        }
+        makeCall(mainNumber);
     }
 
     const deleteContacts = (): void => {
