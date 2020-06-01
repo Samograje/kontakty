@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import ContactsList from './ContactsList';
@@ -8,6 +8,7 @@ import { Contact } from '../../redux/reducers/ContactsReducer';
 import { Group } from '../../redux/reducers/GroupsReducer';
 import { modes } from '../StringsHelper';
 import { removeContact, removeContactFromGroup } from '../../redux/actions/ActionCreators';
+import { SnackbarContext } from '../SnackbarContent';
 
 interface ContactsSection {
     title: string;
@@ -56,6 +57,7 @@ const groupContactsByFirstNameFirstLetter = (contacts: Contact[]): ContactsSecti
 
 const ContactsListScreen = ({ route }): ReactElement => {
     const { navigate } = useNavigation();
+    const { show } = useContext(SnackbarContext);
     const dispatch = useDispatch();
     const group: Group = useSelector(getGroups).filter((g: Group) => g.id === route.params?.groupId)[0];
     let contacts = useSelector(getContacts);
@@ -98,6 +100,7 @@ const ContactsListScreen = ({ route }): ReactElement => {
             dispatch(removeContact(id));
             contactGroups.forEach((g) => dispatch(removeContactFromGroup(id, g.id)));
         });
+        show({ message: 'Contacts removed' });
         onClearSelection();
     };
 
