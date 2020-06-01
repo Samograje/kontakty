@@ -13,7 +13,7 @@ import GroupsScreen from './src/screens/Groups';
 import configureStore from './src/redux/Store';
 import GroupsListScreen from './src/screens/GroupsList';
 import { colors } from './src/styles/common';
-import { StatusBar } from 'react-native';
+import { StatusBar, YellowBox } from 'react-native';
 
 const Stack = createStackNavigator();
 const store = configureStore();
@@ -76,6 +76,10 @@ const App = (): ReactElement => {
         </Provider>
     );
 };
+
+YellowBox.ignoreWarnings([
+   'Please update the following components: Swipeable',
+]);
 
 // noinspection JSUnusedGlobalSymbols
 export default App;
