@@ -61,11 +61,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingHorizontal: padding.md,
-        backgroundColor: colors.primaryDark,
+        backgroundColor: colors.secondaryDark,
         textAlign: 'right',
         textAlignVertical: 'center',
         fontSize: fonts.md,
         fontWeight: '900',
+        borderRadius: 5,
     },
     textAlignRight: {
         textAlign: 'right',
