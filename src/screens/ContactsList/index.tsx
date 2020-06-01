@@ -9,6 +9,7 @@ import { Group } from '../../redux/reducers/GroupsReducer';
 import { modes } from '../StringsHelper';
 import { removeContact, removeContactFromGroup } from '../../redux/actions/ActionCreators';
 import { SnackbarContext } from '../SnackbarContent';
+import { makeCall, sendSMS } from '../../utils/actions';
 
 interface ContactsSection {
     title: string;
@@ -94,6 +95,15 @@ const ContactsListScreen = ({ route }): ReactElement => {
     const onSearch = (query: string): void => setSearchText(query);
     const onClearSearch = (): void => setSearchText('');
     const onClearSelection = (): void => setSelectedIds([]);
+
+    const onSendSms = (contact: Contact): Promise<unknown> => {
+        return sendSMS(contact.telNumbers[0]?.number);
+    };
+
+    const onMakeCall = (contact: Contact): Promise<unknown> => {
+        return makeCall(contact.telNumbers[0]?.number);
+    }
+
     const deleteContacts = (): void => {
         selectedIds.forEach(id => {
             const contactGroups = groups.filter((g) => g.contactsIds.includes(id));
@@ -122,6 +132,8 @@ const ContactsListScreen = ({ route }): ReactElement => {
             selectedIds={selectedIds}
             onDeleteContacts={deleteContacts}
             onClearSelection={onClearSelection}
+            onSendSms={onSendSms}
+            onMakeCall={onMakeCall}
         />
     );
 };

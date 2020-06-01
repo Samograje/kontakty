@@ -17,7 +17,6 @@ import ContactsListEmptyBanner from './ContactsListEmptyBanner';
 import HeaderBarWithSearch from './HeaderBarWithSearch';
 import HeaderBarWithMultipleChoice from './HeaderBarWithMultipleChoice';
 import { colors, fonts, padding } from '../../styles/common';
-import { makeCall, sendSMS } from '../../utils/actions';
 
 interface Props {
     onCreate: () => void;
@@ -36,6 +35,8 @@ interface Props {
     selectedIds: number[];
     onDeleteContacts: () => void;
     onClearSelection: () => void;
+    onMakeCall: (contact: Contact) => Promise<unknown>;
+    onSendSms: (contact: Contact) => Promise<unknown>;
 }
 
 const styles = StyleSheet.create({
@@ -91,6 +92,8 @@ const ContactsList = (props: Props): JSX.Element => {
         selectedIds,
         onDeleteContacts,
         onClearSelection,
+        onMakeCall,
+        onSendSms,
     } = props;
 
     const keyExtractor = (item, index): string => item + index;
@@ -98,14 +101,6 @@ const ContactsList = (props: Props): JSX.Element => {
     const renderItem: SectionListRenderItem<Contact> = (
         contactInfo: SectionListRenderItemInfo<Contact>,
     ): ReactElement => {
-        let onSwipeLeft;
-        let onSwipeRight;
-        if (selectedIds.length === 0) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onSwipeLeft = (): Promise<any> => sendSMS(contactInfo.item.telNumbers[0]?.number);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onSwipeRight = (): Promise<any> => makeCall(contactInfo.item.telNumbers[0]?.number);
-        }
         let onLongPress;
         if (!searchText) {
             onLongPress = (): void => onItemSelect(contactInfo.item.id);
@@ -131,8 +126,8 @@ const ContactsList = (props: Props): JSX.Element => {
                 rightContent={rightContent}
                 leftActionActivationDistance={200}
                 rightActionActivationDistance={200}
-                onLeftActionComplete={onSwipeLeft}
-                onRightActionComplete={onSwipeRight}
+                onLeftActionComplete={(): Promise<unknown> => onSendSms(contactInfo.item)}
+                onRightActionComplete={(): Promise<unknown> => onMakeCall(contactInfo.item)}
             >
                 <ContactListItem
                     firstName={contactInfo.item.firstName}
