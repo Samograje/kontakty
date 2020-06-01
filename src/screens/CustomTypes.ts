@@ -2,7 +2,7 @@ export type snackbarT = {
     isVisible: boolean;
     message: string;
     isActionVisible: boolean;
-    label: string;
+    isValidationMsg: boolean,
 };
 
 export type navigationT = {
