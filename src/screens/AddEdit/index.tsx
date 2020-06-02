@@ -48,26 +48,28 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     const [firstName, setFirstName] = useState(isEdit ? contact.firstName : '');
     const [secondName, setSecondName] = useState(isEdit ? contact.secondName : '');
     const [lastName, setSurname] = useState(isEdit ? contact.lastName : '');
+    const [dataValid, setDataValid] = useState({
+        nameOrOneNumberEmpty: true,
+        oneOfNumbersEmpty: true,
+        oneOfEmailsEmpty: true,
+        isOneMainNumber: false,
+        isOneMainEmail: false,
+    });
     const [numbers, setNumbers] = useState(isEdit ? (contact.telNumbers) : ([{
         number: '',
-        category: defaultCathegory
+        category: defaultCathegory,
     }]));
     const [deletedNumber, setDeletedNumber] = useState({ index: -1, delNumber: { number: '', category: '' } });
     const [emails, setEmails] = useState(isEdit ? (contact.emails != null ? (contact.emails) : ([{
         email: '',
-        category: defaultCathegory
+        category: defaultCathegory,
     }])) : ([{
         email: '',
-        category: defaultCathegory
+        category: defaultCathegory,
     }]));
     const [deletedEmail, setDeletedEmail] = useState({ index: -1, delEmail: { email: '', category: '' } });
     const [snackbar, setSnackbar] = useState({ isVisible: false, message: '', isActionVisible: false, isValidationMsg: true });
     const [isDeleteClicked, setIsDeleteClicked] = useState(false); //Logika pomagająca przy procesie usuwania/cofania usunięcia,
-    const [dataValid, setDataValid] = useState({
-        nameOrOneNumberEmpty: true,
-        oneOfNumbersEmpty: true,
-        oneOfEmailsEmpty: true
-    });
     const [isSubmiting, setIsSubmiting] = useState(false);
 
 
@@ -158,7 +160,23 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         } else {
             emailsEmpty = false;
         }
-        return {nameOrOneNumberEmpty: !nameAndOneNumberEmpty, oneOfNumbersEmpty: numbersEmpty, oneOfEmailsEmpty: emailsEmpty};
+
+        let mainNumberUsed = false;
+        tmpNumbers.forEach((row) => {
+            if(row.category === defaultCathegory) {
+                mainNumberUsed = true;
+                return true;
+            }
+        });
+        let mainEmailUsed = false;
+        tmpEmails.forEach((row) => {
+            if(row.category === defaultCathegory) {
+                mainEmailUsed = true;
+                return true;
+            }
+        });
+
+        return {nameOrOneNumberEmpty: !nameAndOneNumberEmpty, oneOfNumbersEmpty: numbersEmpty, oneOfEmailsEmpty: emailsEmpty, isOneMainEmail: mainEmailUsed, isOneMainNumber: mainNumberUsed};
     };
 
     //Nie mogę przekazać w deeps nazwy metody, bo robi się nieskończona pętla
@@ -173,9 +191,9 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     //metody
     const addInputField = (label: string): void => {
         if (label === formLabels.number) {
-            setNumbers([...numbers, { number: '', category: defaultCathegory }]);
+            setNumbers([...numbers, { number: '', category: null }]);
         } else if (label === formLabels.email) {
-            setEmails([...emails, { email: '', category: defaultCathegory }]);
+            setEmails([...emails, { email: '', category: null }]);
         } else {
             onShowSnackbar(true, 'Something went wrong.', false, true);
             console.log('Błąd podczas dodawania nowego pola, nieznana etykieta.');
@@ -230,7 +248,6 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
     };
 
     const onChangeDropdown = (label: string, value: string, index: number): void => {
-        console.log('xd');
         const isMainCategoryUded = isMainCategoryUsed(label);
         if(isMainCategoryUded && value === 'main') {
             onShowSnackbar(true, "Main number may be only one", false, true);
@@ -299,18 +316,22 @@ const AddEditScreen = ({ route, navigation }): JSX.Element => {
         if (dataValidOk) {
             onShowSnackbar(true, 'Contact saved.', false, false);
         } else if (dataValid.nameOrOneNumberEmpty) {
-            onShowSnackbar(true, 'Please enter your name and at least one phone number.', false, true);
+            onShowSnackbar(true, 'Please enter your name and at least one main phone number.', false, true);
         } else if (dataValid.oneOfNumbersEmpty) {
             onShowSnackbar(true, 'Fill out the fields with the phone number.', false, true);
         } else if (dataValid.oneOfEmailsEmpty) {
             onShowSnackbar(true, 'Fill out the fields with the email adress.', false, true);
+        } else if (!dataValid.isOneMainNumber) {
+            onShowSnackbar(true, 'Set one number as main.', false, true);
+        } else if (!dataValid.isOneMainEmail) {
+            onShowSnackbar(true, 'Set one email as main.', false, true);
         }
     };
 
     const onSaveContact = (): void => {
         //Walidacja odbywa się przy pomocy metody checkDataValidation
         try{
-            const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty;
+            const dataValidOk = !dataValid.nameOrOneNumberEmpty && !dataValid.oneOfNumbersEmpty && !dataValid.oneOfEmailsEmpty && dataValid.isOneMainEmail && dataValid.isOneMainNumber;
             if (dataValidOk) {
                 setIsSubmiting(true);
                 if (mode === modes.create) {

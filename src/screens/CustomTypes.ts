@@ -13,4 +13,6 @@ export type validationT = {
     nameOrOneNumberEmpty: boolean;
     oneOfNumbersEmpty: boolean;
     oneOfEmailsEmpty: boolean;
+    isOneMainNumber: boolean;
+    isOneMainEmail: boolean;
 };
